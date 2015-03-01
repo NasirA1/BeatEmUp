@@ -59,13 +59,16 @@
     <None Include="resources\walkright.png">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\rock.png">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="resources\knightwalk_left.png">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resources\knightwalk_right.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\rock.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\rock2.png">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

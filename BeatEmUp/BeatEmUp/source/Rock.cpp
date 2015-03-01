@@ -45,5 +45,5 @@ Rock::~Rock()
 		texture = NULL;
 	}
 
-	logPrintf("Enemy object released");
+	logPrintf("Rock object released");
 }
