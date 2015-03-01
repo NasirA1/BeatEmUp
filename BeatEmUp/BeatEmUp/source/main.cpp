@@ -3,7 +3,7 @@
 #include "SDLApp.h"
 #include "Background.h"
 #include "Player.h"
-#include "Enemy.h"
+#include "Rock.h"
 
 
 const int SCREEN_WIDTH = 800;
@@ -15,6 +15,18 @@ const int SCREEN_HEIGHT = 600;
 //Nasir 2015.03.01
 class Game : public SDLApp
 {
+private:
+	GameObjectList gameObjects;
+	Background* bg;
+	Player* player;
+	Rock* rock;
+
+	bool leftDown;
+	bool rightDown;
+	bool upDown;
+	bool downDown;
+
+
 public:
 	Game() 
 		: SDLApp(SCREEN_WIDTH
@@ -40,7 +52,7 @@ public:
 
 		bg = new Background(clientWidth_, clientHeight_, renderer_);
 		player = new Player(renderer_);
-		rock = new Enemy("resources/rock.png", renderer_);
+		rock = new Rock("resources/rock.png", renderer_);
 
 		gameObjects.push_back(bg);
 		gameObjects.push_back(player);
@@ -72,11 +84,13 @@ public:
 				break;
 			case SDLK_UP:
 				upDown = true;
-				bg->SetScroll(player->GetDirection() == Right ? Left : Right);
+				bg->SetScroll(player->GetDirection() == Right? 
+					Left : Right);
 				break;
 			case SDLK_DOWN:
 				downDown = true;
-				bg->SetScroll(player->GetDirection() == Right ? Left : Right);
+				bg->SetScroll(player->GetDirection() == Right?
+					Left : Right);
 				break;
 			case SDLK_SPACE:
 				player->Jump(0.5, 20);
@@ -142,16 +156,6 @@ public:
 		bg->Stop();
 	}
 
-private:
-	GameObjectList gameObjects;
-	Background* bg;
-	Player* player;
-	Enemy* rock;
-
-	bool leftDown;
-	bool rightDown;
-	bool upDown;
-	bool downDown;
 };
 
 

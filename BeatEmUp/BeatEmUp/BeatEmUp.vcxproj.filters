@@ -36,7 +36,7 @@
     <ClCompile Include="source\GameObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\Enemy.cpp">
+    <ClCompile Include="source\Rock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,6 +62,12 @@
     <None Include="resources\rock.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\knightwalk_left.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\knightwalk_right.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">
@@ -82,7 +88,7 @@
     <ClInclude Include="include\Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\Enemy.h">
+    <ClInclude Include="include\Rock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

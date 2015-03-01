@@ -9,13 +9,12 @@ const float Player::WalkVel(0.5f);
 
 
 Player::Player(SDL_Renderer* const renderer)
-	: GameObject(10)	
+	: GameObject(10, Right)	
 	, walkRight(NULL)
 	, walkLeft(NULL)
 	, current(NULL)
 	, xVel(0)
 	, yVel(0)
-	, direction(Right)
 	, jumpState(JS_Ground)
 {
 	position.x  = 100, position.y = 400, position.w = 76, position.h = 120; 
@@ -50,7 +49,7 @@ void Player::Update()
 		if(position.y < jumpLocation.y)
 		{
 			yVel += Gravity;
-			xVel += direction == Right? 0.1f: -0.1f;
+			xVel += GetDirection() == Right? 0.1f: -0.1f;
 			Translate(false);
 		}
 		//On the ground now...
@@ -87,9 +86,9 @@ Player::~Player()
 
 void Player::SetDirection(Directions dir)
 {
-	direction = dir;
-	if (direction == Right) current = walkRight;
-	else if(direction == Left) current = walkLeft;
+	GameObject::SetDirection(dir);
+	if (GetDirection() == Right) current = walkRight;
+	else if(GetDirection() == Left) current = walkLeft;
 }
 
 
@@ -100,7 +99,7 @@ void Player::Jump(float xForce, float yForce)
 
 	jumpLocation.x = position.x;
 	jumpLocation.y = position.y;
-	xVel = direction == Right? xForce: -xForce;
+	xVel = GetDirection() == Right? xForce: -xForce;
 	yVel = -yForce;
 	jumpState = JS_Jumped;
 }

@@ -9,10 +9,8 @@ public:
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Player();
+	virtual void SetDirection(Directions dir) override;
 
-	//Accessors
-	__forceinline Directions GetDirection() const { return direction; }
-	__forceinline RectF& Position() { return position; }
 
 enum JumpState
 {
@@ -27,7 +25,6 @@ public:
 	void GoDown();
 	void GoRight();
 	void GoLeft();
-	void SetDirection(Directions dir);
 	void Jump(float xForce, float yForce);
 
 private:
@@ -41,7 +38,6 @@ private:
 
 	float xVel, yVel;
 	SDL_Rect moveBounds;
-	Directions direction;
 	JumpState jumpState;
 	VectF jumpLocation;
 	static const float Gravity;

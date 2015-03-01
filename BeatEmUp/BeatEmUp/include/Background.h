@@ -16,7 +16,7 @@ public:
 
 public:
 	float XVel;
-	Directions ScrollDirection;
+
 
 private:
 	SDL_Texture* texture;
@@ -40,11 +40,10 @@ public:
 	//Getters/Setters
 	__forceinline bool IsScrolling() const { return scroll; }
 	__forceinline void Stop() { scroll = false; }
-	__forceinline void SetScroll(Directions dir) { scrollDirection = dir; scroll = true; }
+	__forceinline void SetScroll(Directions dir) { SetDirection(dir); scroll = true; }
 	__forceinline void SetScroll(bool enabled) { scroll = enabled; }
 
 private:
   bool scroll;
-  Directions scrollDirection;
   GameObjectList layers;
 };

@@ -16,15 +16,22 @@ enum Directions
 class GameObject
 {
 public:
-	GameObject(int health_) : health(health_){}
+	GameObject(int health_, Directions initialDirection = Right) 
+		: health(health_), direction(initialDirection), angle(0)
+	{}
 
 	virtual void Update() = 0;
 	virtual void Draw(SDL_Renderer* const renderer) const = 0;
 	virtual ~GameObject(){}
 
-	__forceinline bool IsDead() const { return health <= 0; }
-	__forceinline void SetHealth(int value) { health = value; }
+	//Accessors
 	__forceinline RectF& Position() { return position; }
+	__forceinline Directions GetDirection() const { return direction; }
+	__forceinline bool IsDead() const { return health <= 0; }
+
+	//Mutators
+	__forceinline void SetHealth(int value) { health = value; }
+	__forceinline virtual void SetDirection(Directions dir) { direction = dir; }
 
 	//Rectangle-based collision detection
 	bool CollidesWith(const GameObject& other) const;
@@ -32,9 +39,11 @@ public:
 
 protected:
 	RectF position;
+	double angle; //rotation angle
 
 private:
 	int health;
+	Directions direction;
 };
 
 

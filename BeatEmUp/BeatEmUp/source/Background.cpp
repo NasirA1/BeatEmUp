@@ -6,9 +6,8 @@ using namespace util;
 
 
 Background::Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer)
-	: GameObject(1)
+	: GameObject(1, Left)
 	, scroll(false)
-	, scrollDirection(Left)
 {
 	BackgroundLayer* bg1 = new BackgroundLayer("resources/bg1.gif", renderer, clientWidth, clientHeight, 0.25f); 
 	BackgroundLayer* bg2 = new BackgroundLayer("resources/bg2.gif", renderer, clientWidth, clientHeight, 2.0f); 
@@ -29,7 +28,7 @@ void Background::Update()
 	for(GameObjectList::iterator it = layers.begin(); it != layers.end(); ++it)
 	{
 		BackgroundLayer& layer = dynamic_cast<BackgroundLayer&>(**it); 
-		layer.ScrollDirection = scrollDirection;
+		layer.SetDirection(GetDirection());
 		layer.Update();
 	}
 }
@@ -53,7 +52,7 @@ Background::~Background()
 
 BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer* const renderer,
 	int _screenWidth, int _screenHeight, float xVel)
-	: GameObject(1)
+	: GameObject(1, Left)
 {
 	SDLSurfaceFromFile fileSurface(filename);
 	texture = SDL_CreateTextureFromSurface(renderer, fileSurface.surface);
@@ -72,7 +71,6 @@ BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer* cons
 		pos2.x = pos2.w, pos2.y = 0;
 		
 		XVel = xVel;
-		ScrollDirection = Left;
 	}
 }
 
@@ -91,15 +89,15 @@ BackgroundLayer::~BackgroundLayer()
 
 void BackgroundLayer::Update()
 {
-	if (ScrollDirection == Left) pos1.x -= XVel, pos2.x -= XVel;
-	else if (ScrollDirection == Right) pos1.x += XVel, pos2.x += XVel;
+	if (GetDirection() == Left) pos1.x -= XVel, pos2.x -= XVel;
+	else if (GetDirection() == Right) pos1.x += XVel, pos2.x += XVel;
 
 	//std::stringstream ss;
 	//ss << "pos1 {"<< pos1.x << ","<< pos1.y << ","<< pos1.w << "," << pos1.h << "}" << "  " 
 	//	 << "pos2 {"<< pos2.x << ","<< pos2.y << ","<< pos2.w << "," << pos2.h << "}" << "  ";
 	//logPrintf("%s", ss.str().c_str());
 
-	if(ScrollDirection == Left)
+	if(GetDirection() == Left)
 	{
 		if(pos1.x <= -pos1.w)
 		{
@@ -111,7 +109,7 @@ void BackgroundLayer::Update()
 			pos2.x = pos1.x + pos1.w;
 		}
 	}
-	else if(ScrollDirection == Right)
+	else if(GetDirection() == Right)
 	{
 		if(pos1.x >= pos1.w)
 		{

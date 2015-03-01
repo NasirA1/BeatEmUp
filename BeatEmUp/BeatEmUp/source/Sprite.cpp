@@ -5,7 +5,7 @@
 
 Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer, 
 	int frameWidth, int frameHeight, int frameSpeed_, int stillFrame_)
-	: GameObject(1)
+	: GameObject(1, Right)
 	, sheet(NULL)
 	, frameSpeed(frameSpeed_)
 	, stillFrame(stillFrame_)
