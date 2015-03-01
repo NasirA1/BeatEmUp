@@ -5,7 +5,7 @@
 
 const float Player::Gravity(2.0f);
 const int Player::JumpHeight(50);
-const float Player::WalkVel(0.0f);
+const float Player::WalkVel(0.5f);
 
 
 Player::Player(SDL_Renderer* const renderer)
