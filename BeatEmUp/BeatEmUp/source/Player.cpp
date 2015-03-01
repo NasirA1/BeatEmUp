@@ -2,6 +2,12 @@
 #include "Util.h"
 
 
+
+const float Player::Gravity(2.0f);
+const int Player::JumpHeight(50);
+const float Player::WalkVel(0.0f);
+
+
 Player::Player(SDL_Renderer* const renderer)
 	: GameObject(10)	
 	, walkRight(NULL)
@@ -12,7 +18,7 @@ Player::Player(SDL_Renderer* const renderer)
 	, direction(Right)
 	, jumpState(JS_Ground)
 {
-	position.x  = 300, position.y = 400, position.w = 76, position.h = 120; 
+	position.x  = 100, position.y = 400, position.w = 76, position.h = 120; 
 	moveBounds.x = 0, moveBounds.y = 370;
 	moveBounds.w = 800 - position.w, moveBounds.h = position.h;
 
@@ -22,9 +28,6 @@ Player::Player(SDL_Renderer* const renderer)
 	if(walkRight) SetDirection(Right);
 }
 
-
-const float Player::Gravity(2.0f);
-const int Player::JumpHeight(50);
 
 
 void Player::Update()
@@ -90,7 +93,7 @@ void Player::SetDirection(Directions dir)
 }
 
 
-void Player::Jump(int xForce, int yForce)
+void Player::Jump(float xForce, float yForce)
 {
 	//Can only jump whilst on the ground
 	if(jumpState != JS_Ground) return;
@@ -117,7 +120,7 @@ void Player::GoUp()
 	if(jumpState != JS_Ground) return;
 
 	if (position.y >= moveBounds.y) 
-		yVel = -1;
+		yVel = -WalkVel;
 	else 
 		yVel = 0;
 	Translate();
@@ -129,7 +132,7 @@ void Player::GoDown()
 	if(jumpState != JS_Ground) return;
 	
 	if (position.y <= moveBounds.y + moveBounds.h) 
-		yVel = 1;
+		yVel = WalkVel;
 	else 
 		yVel = 0;
 	Translate();        
@@ -141,7 +144,7 @@ void Player::GoRight()
 	if(jumpState != JS_Ground) return;
 
 	if (position.x <= moveBounds.x + moveBounds.w) 
-		xVel = 1;
+		xVel = WalkVel;
 	else 
 		xVel = 0;
 
@@ -155,7 +158,7 @@ void Player::GoLeft()
 	if(jumpState != JS_Ground) return;
 	
 	if (position.x >= moveBounds.x) 
-		xVel = -1;
+		xVel = -WalkVel;
 	else 
 		xVel = 0;
 

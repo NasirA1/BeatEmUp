@@ -3,7 +3,7 @@
 #include "SDLApp.h"
 #include "Background.h"
 #include "Player.h"
-#include "Rock.h"
+#include "Enemy.h"
 
 
 const int SCREEN_WIDTH = 800;
@@ -40,7 +40,7 @@ public:
 
 		bg = new Background(clientWidth_, clientHeight_, renderer_);
 		player = new Player(renderer_);
-		rock = new Rock("resources/rock.png", renderer_);
+		rock = new Enemy("resources/rock.png", renderer_);
 
 		gameObjects.push_back(bg);
 		gameObjects.push_back(player);
@@ -79,7 +79,7 @@ public:
 				bg->SetScroll(player->GetDirection() == Right ? Left : Right);
 				break;
 			case SDLK_SPACE:
-				player->Jump(1, 20);
+				player->Jump(0.5, 20);
 				break;
 			}
 		}
@@ -146,7 +146,7 @@ private:
 	GameObjectList gameObjects;
 	Background* bg;
 	Player* player;
-	Rock* rock;
+	Enemy* rock;
 
 	bool leftDown;
 	bool rightDown;

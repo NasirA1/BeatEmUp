@@ -28,7 +28,7 @@ public:
 	void GoRight();
 	void GoLeft();
 	void SetDirection(Directions dir);
-	void Jump(int xForce, int yForce);
+	void Jump(float xForce, float yForce);
 
 private:
 	void Translate(bool anim = true);
@@ -46,4 +46,5 @@ private:
 	VectF jumpLocation;
 	static const float Gravity;
 	static const int JumpHeight;
+	static const float WalkVel;
 };

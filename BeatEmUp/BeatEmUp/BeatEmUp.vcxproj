@@ -14,7 +14,7 @@
     <ClCompile Include="source\Background.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\Player.cpp" />
-    <ClCompile Include="source\Rock.cpp" />
+    <ClCompile Include="source\Enemy.cpp" />
     <ClCompile Include="source\SDLApp.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Sprite.cpp" />
@@ -32,7 +32,7 @@
   <ItemGroup>
     <ClInclude Include="include\Background.h" />
     <ClInclude Include="include\Player.h" />
-    <ClInclude Include="include\Rock.h" />
+    <ClInclude Include="include\Enemy.h" />
     <ClInclude Include="include\SDLApp.h" />
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\Sprite.h" />
