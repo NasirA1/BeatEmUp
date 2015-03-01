@@ -24,6 +24,16 @@ public:
 
 	__forceinline bool IsDead() const { return health <= 0; }
 	__forceinline void SetHealth(int value) { health = value; }
+	__forceinline RectF& Position() { return position; }
+
+	//Fast rectangle-based collision detection
+	bool CollidesWith(const GameObject& other) const;
+	//More precise (but slower) per-pixel collision detection
+	bool CollidesWith2(const GameObject& other) const;
+
+
+protected:
+	RectF position;
 
 private:
 	int health;

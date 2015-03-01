@@ -14,6 +14,5 @@ public:
 
 private:
 	SDL_Texture* texture;
-	RectF position;
 	double angle; //rotation angle
 };

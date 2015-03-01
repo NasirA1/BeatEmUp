@@ -18,6 +18,9 @@ namespace util
 		float x, y, w, h;
 		RectF(float x_ = 0.0f, float y_ = 0.0f, float w_ = 0.0f, float h_ = 0.0f)
 		 : x(x_), y(y_), w(w_), h(h_){}
+
+		__forceinline float rt() const { return x + w; }
+		__forceinline float bm() const { return y + h; }
 	};
 
 	

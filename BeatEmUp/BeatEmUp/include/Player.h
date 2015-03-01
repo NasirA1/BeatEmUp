@@ -42,8 +42,8 @@ private:
 	float xVel, yVel;
 	SDL_Rect moveBounds;
 	Directions direction;
-	RectF position;
 	JumpState jumpState;
 	VectF jumpLocation;
 	static const float Gravity;
+	static const int JumpHeight;
 };

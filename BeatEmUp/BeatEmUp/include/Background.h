@@ -22,8 +22,6 @@ private:
 	SDL_Texture* texture;
 	RectF pos1;
 	RectF pos2;
-	//SDL_Rect pos1;
-	//SDL_Rect pos2;
 	int screenWidth;
 	int screenHeight;
 };

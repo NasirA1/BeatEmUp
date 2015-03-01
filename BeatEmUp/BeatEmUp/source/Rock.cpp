@@ -22,7 +22,7 @@ void Rock::Update()
 	position.x-=5;
 
 	//remove when out of view
-	if(position.x + position.w < 0)
+	if(position.rt() < 0)
 	{
 		SetHealth(0);
 	}

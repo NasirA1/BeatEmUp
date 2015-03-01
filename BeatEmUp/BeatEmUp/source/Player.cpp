@@ -24,19 +24,23 @@ Player::Player(SDL_Renderer* const renderer)
 
 
 const float Player::Gravity(2.0f);
+const int Player::JumpHeight(150);
 
 
 void Player::Update()
 {
 	//Jump start..
+	//Shoot up (y) and sway horizontally a bit (x)
 	if(jumpState == JS_Jumped)
 	{
 		yVel++;
-		if(position.y > jumpLocation.y - 150) Translate(false);
-		else jumpState = JS_Landing;
+		if(position.y > jumpLocation.y - JumpHeight) 
+			Translate(false);
+		else 
+			jumpState = JS_Landing;
 	}
 
-	//Jumping (in the air)..
+	//Landing (in the air)..
 	else if(jumpState == JS_Landing)
 	{
 		//Not landed yet..
@@ -56,7 +60,7 @@ void Player::Update()
 		}
 	}
 
-	//Movement.. propagate to active sprite
+	//Propagate to the underlying currently active sprite
 	current->Pos().x = position.x;
 	current->Pos().y = position.y;
 	current->Update();
