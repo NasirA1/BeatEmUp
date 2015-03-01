@@ -12,6 +12,7 @@ const int SCREEN_HEIGHT = 600;
 
 //Game class
 //High level game logic
+//Nasir 2015.03.01
 class Game : public SDLApp
 {
 public:
