@@ -13,6 +13,9 @@
 
 namespace util
 {
+
+	//Float rectangle (useful for more precise calculations)
+	//e.g. move by 2.5 pixels
 	struct RectF
 	{
 		float x, y, w, h;
@@ -26,6 +29,7 @@ namespace util
 	};
 
 	
+	//Converts a float rectangle to an int rectangle (useful in rendering)
 	inline void Convert(const RectF& rectF, SDL_Rect& rect)
 	{
 		rect.x = rectF.x;
@@ -42,6 +46,7 @@ namespace util
 	};
 
 
+	//Singleton pseudo-random number generator
 	struct Random
 	{
 		Random()
@@ -62,7 +67,7 @@ namespace util
 	};
 
 
-	inline Uint32 get_pixel32( SDL_Surface *surface, int x, int y )
+	static inline Uint32 get_pixel32( SDL_Surface *surface, int x, int y )
 	{
 		//Convert the pixels to 32 bit
 		Uint32 *pixels = (Uint32 *)surface->pixels;
@@ -71,12 +76,36 @@ namespace util
 	}
 
 
-	inline void put_pixel32( SDL_Surface *surface, int x, int y, Uint32 pixel )
+	static inline void put_pixel32( SDL_Surface *surface, int x, int y, Uint32 pixel )
 	{
 		//Convert the pixels to 32 bit
 		Uint32 *pixels = (Uint32 *)surface->pixels;
 		//Set the pixel
 		pixels[ ( y * surface->w ) + x ] = pixel;
+	}
+
+
+	static inline bool IntersectsPixel(const SDL_Rect& r1, const SDL_Rect& r2
+		, const SDL_Colour* const data1, const SDL_Colour* const data2)
+	{
+		int top = SDL_max(r1.y, r2.y);
+		int bottom = SDL_min(r1.y + r1.h, r2.y + r2.h);
+		int left = SDL_max(r1.x, r2.x);
+		int right = SDL_min(r1.x + r1.w, r2.x + r2.w);
+
+		for(int y = top; y < bottom; y++)
+		{
+			for(int x = left; x < right; x++)
+			{
+				SDL_Colour c1 = data1[ (x - r1.x) + (y - r1.y) * r1.w ];
+				SDL_Colour c2 = data2[ (x - r2.x) + (y - r2.y) * r2.w ];
+
+				//if the two colours are not transparent
+				if(c1.a != 0 && c2.a != 0) return true;
+			}
+		}
+
+		return false;
 	}
 
 	

@@ -26,10 +26,8 @@ public:
 	__forceinline void SetHealth(int value) { health = value; }
 	__forceinline RectF& Position() { return position; }
 
-	//Fast rectangle-based collision detection
+	//Rectangle-based collision detection
 	bool CollidesWith(const GameObject& other) const;
-	//More precise (but slower) per-pixel collision detection
-	bool CollidesWith2(const GameObject& other) const;
 
 
 protected:
@@ -43,33 +41,9 @@ private:
 class GameObjectList : public vector<GameObject*>
 {
 public:
-	void Update(bool removeDead = true)
-	{
-		for (vector<GameObject*>::iterator it = begin(); it != end(); )
-		{
-			if((*it)->IsDead())
-			{
-				util::Delete(*it);
-				it = erase(it);
-			}
-			else
-			{
-				(*it)->Update();
-				++it;
-			}
-		}
-	}
-
-	void Draw(SDL_Renderer* const renderer) const
-	{
-		for (vector<GameObject*>::const_iterator it = begin(); it != end(); ++it)
-			(*it)->Draw(renderer);
-	}
-
-	~GameObjectList()
-	{
-		while(!empty()) delete back(), pop_back();
-	}
+	void Update(bool removeDead = true);
+	void Draw(SDL_Renderer* const renderer) const;
+	~GameObjectList();
 };
 
 
