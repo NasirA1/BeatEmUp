@@ -24,7 +24,7 @@ Player::Player(SDL_Renderer* const renderer)
 
 
 const float Player::Gravity(2.0f);
-const int Player::JumpHeight(150);
+const int Player::JumpHeight(50);
 
 
 void Player::Update()
@@ -33,7 +33,7 @@ void Player::Update()
 	//Shoot up (y) and sway horizontally a bit (x)
 	if(jumpState == JS_Jumped)
 	{
-		yVel++;
+		yVel += Gravity/(float)JumpHeight;
 		if(position.y > jumpLocation.y - JumpHeight) 
 			Translate(false);
 		else 

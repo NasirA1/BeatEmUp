@@ -40,10 +40,11 @@ public:
 
 		bg = new Background(clientWidth_, clientHeight_, renderer_);
 		player = new Player(renderer_);
+		rock = new Rock("resources/rock.png", renderer_);
+
 		gameObjects.push_back(bg);
 		gameObjects.push_back(player);
-
-		gameObjects.push_back(new Rock("resources/rock.png", renderer_));
+		gameObjects.push_back(rock);
 
 		return true;
 	}
@@ -115,6 +116,13 @@ public:
 		if (leftDown) player->GoLeft();
 		bg->SetScroll(upDown || downDown || rightDown || leftDown);
 
+		//Collision detection
+		if(player->CollidesWith(*rock))
+		{
+			logPrintf("COLLISION!");
+			rock->Position().x = 900;
+		}
+
 		//Other game logic
 		gameObjects.Update();
 	}
@@ -138,6 +146,7 @@ private:
 	GameObjectList gameObjects;
 	Background* bg;
 	Player* player;
+	Rock* rock;
 
 	bool leftDown;
 	bool rightDown;

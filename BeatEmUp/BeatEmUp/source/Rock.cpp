@@ -19,10 +19,10 @@ Rock::Rock(const string& file, SDL_Renderer* const renderer)
 void Rock::Update()
 {
 	angle-=10;
-	position.x-=5;
+	position.x-=10;
 
 	//remove when out of view
-	if(position.rt() < 0)
+	if(position.right() < 0)
 	{
 		SetHealth(0);
 	}
