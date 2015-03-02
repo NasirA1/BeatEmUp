@@ -60,8 +60,8 @@ Knight::Knight(SDL_Renderer* const renderer)
 	moveBounds.x = 0, moveBounds.y = 370;
 	moveBounds.w = 800 - position.w, moveBounds.h = position.h;
 
-	walkRight = Sprite::FromFile("resources/knightwalk_right.png", renderer, 128, 128, 5, 15);
-	walkLeft = Sprite::FromFile("resources/knightwalk_left.png", renderer, 128, 128, 5, 3);
+	walkRight = Sprite::FromFile("resources/knightwalk_right.png", renderer, 128, 128, 4, 15);
+	walkLeft = Sprite::FromFile("resources/knightwalk_left.png", renderer, 128, 128, 4, 3);
 
 	if(walkRight) SetDirection(Left);
 }
@@ -124,20 +124,21 @@ void Knight::Follow(const Player& p)
 
 	if( distX > 50)
 	{
-		xVel=-1;
+		xVel=-5;
 		SetDirection(Left);
 		Translate(true);
 	}
 	else if(distX < -50)
 	{
-		xVel=1;
+		xVel=5;
 		SetDirection(Right);
 		Translate(true);
 	}
 	else
 	{
 		xVel=0;
-		SetDirection(p.GetDirection());
+		if(position.x < p.Position().x) SetDirection(Right);
+		else SetDirection(Left);
 		Translate(p.isMoving());
 	}
 
