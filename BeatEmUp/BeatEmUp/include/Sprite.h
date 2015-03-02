@@ -40,9 +40,10 @@ public:
 	__forceinline void SetStill() { currentFrame = stillFrame; animationRunning = false; }
 
 	static inline Sprite* FromFile(string filename, SDL_Renderer* const renderer, 
-		int frameWidth, int frameHeight, int frameSpeed, int stillFrame)
+		int frameWidth, int frameHeight, int frameSpeed, int stillFrame
+		, Uint8 colKeyR = 0x00, Uint8 colKeyG = 0x00, Uint8 colKeyB = 0x00)
 	{
-		util::SDLSurfaceFromFile surface(filename, true, 0xFF, 0x40, 0x40);
+		util::SDLSurfaceFromFile surface(filename, true, colKeyR, colKeyG, colKeyB);
 		return new Sprite(surface.surface, renderer, frameWidth, frameHeight, frameSpeed, stillFrame);
 	}
 

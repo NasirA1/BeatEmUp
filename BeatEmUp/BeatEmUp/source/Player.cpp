@@ -13,16 +13,16 @@ Player::Player(SDL_Renderer* const renderer)
 	, walkRight(NULL)
 	, walkLeft(NULL)
 	, current(NULL)
-	, xVel(0)
-	, yVel(0)
 	, jumpState(JS_Ground)
 {
 	position.x  = 100, position.y = 400, position.w = 76, position.h = 120; 
 	moveBounds.x = 0, moveBounds.y = 370;
 	moveBounds.w = 800 - position.w, moveBounds.h = position.h;
 
-	walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1);
-	walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1);
+	walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
+	walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
+	//walkRight = Sprite::FromFile("resources/knightwalk_right.png", renderer, 128, 128, 5, 15);
+	//walkLeft = Sprite::FromFile("resources/knightwalk_left.png", renderer, 128, 128, 5, 3);
 
 	if(walkRight) SetDirection(Right);
 }

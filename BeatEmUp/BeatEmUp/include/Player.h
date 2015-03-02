@@ -36,8 +36,6 @@ private:
 	Sprite* walkLeft;
 	Sprite* current;
 
-	float xVel, yVel;
-	SDL_Rect moveBounds;
 	JumpState jumpState;
 	VectF jumpLocation;
 	static const float Gravity;

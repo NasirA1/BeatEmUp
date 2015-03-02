@@ -20,6 +20,7 @@ private:
 	Background* bg;
 	Player* player;
 	Rock* rock;
+	Knight* knight;
 
 	bool leftDown;
 	bool rightDown;
@@ -53,10 +54,12 @@ public:
 		bg = new Background(clientWidth_, clientHeight_, renderer_);
 		player = new Player(renderer_);
 		rock = new Rock("resources/rock.png", renderer_);
+		knight = new Knight(renderer_);
 
 		gameObjects.push_back(bg);
 		gameObjects.push_back(player);
 		gameObjects.push_back(rock);
+		gameObjects.push_back(knight);
 
 		return true;
 	}
@@ -134,7 +137,13 @@ public:
 		if(player->CollidesWith(*rock))
 		{
 			logPrintf("COLLISION!");
-			rock->Position().x = 900;
+			//rock->Position().x = 900;
+		}
+
+		//knight follows player
+		if(knight)
+		{
+			knight->Follow(*player);
 		}
 
 		//Other game logic

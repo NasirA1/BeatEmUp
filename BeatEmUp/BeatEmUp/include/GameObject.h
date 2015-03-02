@@ -16,8 +16,12 @@ enum Directions
 class GameObject
 {
 public:
-	GameObject(int health_, Directions initialDirection = Right) 
-		: health(health_), direction(initialDirection), angle(0)
+	GameObject(int health_ = 1, Directions initialDirection = Right) 
+		: health(health_)
+		, direction(initialDirection)
+		, xVel(0)
+		, yVel(0)
+		, angle(0)
 	{}
 
 	virtual void Update() = 0;
@@ -25,7 +29,7 @@ public:
 	virtual ~GameObject(){}
 
 	//Accessors
-	__forceinline RectF& Position() { return position; }
+	__forceinline const RectF& Position() const { return position; }
 	__forceinline Directions GetDirection() const { return direction; }
 	__forceinline bool IsDead() const { return health <= 0; }
 
@@ -39,7 +43,9 @@ public:
 
 protected:
 	RectF position;
+	float xVel, yVel;
 	double angle; //rotation angle
+	SDL_Rect moveBounds;
 
 private:
 	int health;
