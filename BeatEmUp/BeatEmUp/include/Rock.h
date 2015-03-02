@@ -16,9 +16,7 @@ private:
 };
 
 
-#pragma once
-#include "Sprite.h"
-
+#include "Player.h"
 
 class Knight : public GameObject
 {
@@ -29,7 +27,7 @@ public:
 	virtual ~Knight();
 	virtual void SetDirection(Directions dir) override;
 
-	void Follow(const GameObject& followed);
+	void Follow(const Player& p);
 	void Stop();
 
 private:

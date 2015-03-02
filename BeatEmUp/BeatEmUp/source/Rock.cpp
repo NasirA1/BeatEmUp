@@ -70,8 +70,8 @@ Knight::Knight(SDL_Renderer* const renderer)
 
 void Knight::Update()
 {
-	xVel = -1;
-	Translate(true);
+	//xVel = -1;
+	//Translate(true);
 
 	//Propagate to the underlying currently active sprite
 	current->Pos().x = position.x;
@@ -105,18 +105,57 @@ void Knight::SetDirection(Directions dir)
 
 void Knight::Stop()
 {
-	position.x -= xVel;
-	position.y -= yVel;
-	xVel = yVel = 0;
-	current->SetStill();
+	//position.x -= xVel;
+	//position.y -= yVel;
+	//xVel = yVel = 0;
+	//current->SetStill();
 }
 
-
-void Knight::Follow(const GameObject& followed)
+int distance2(int a, int b)
 {
-	//position.x = followed.Position().x + 10;
-	//position.y = followed.Position().y - 10;
-	Translate();
+	return a - b;
+}
+
+void Knight::Follow(const Player& p)
+{
+	int distX = distance2(position.x, p.Position().x);
+	int distY = distance2(position.y, p.Position().y);
+	
+
+	if( distX > 50)
+	{
+		xVel=-1;
+		SetDirection(Left);
+		Translate(true);
+	}
+	else if(distX < -50)
+	{
+		xVel=1;
+		SetDirection(Right);
+		Translate(true);
+	}
+	else
+	{
+		xVel=0;
+		SetDirection(p.GetDirection());
+		Translate(p.isMoving());
+	}
+
+	//if( distY > 20)
+	//{
+	//	yVel=-1;
+	//	Translate(true);
+	//}
+	//else if(distY <= -20)
+	//{
+	//	yVel=1;
+	//	Translate(true);
+	//}
+	//else
+	//{
+	//	yVel=0;
+	//	Translate(true);
+	//}
 }
 
 

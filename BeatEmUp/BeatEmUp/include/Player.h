@@ -25,6 +25,12 @@ public:
 	void GoDown();
 	void GoRight();
 	void GoLeft();
+	
+	__forceinline bool isMoving() const 
+	{ 
+		return current->IsAnimationRunning(); 
+	}
+	
 	void Jump(float xForce, float yForce);
 
 private:
