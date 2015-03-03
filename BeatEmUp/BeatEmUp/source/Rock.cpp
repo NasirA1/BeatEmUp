@@ -59,8 +59,6 @@ Knight::Knight(SDL_Renderer* const renderer)
 	, current(NULL)
 {
 	position.x  = 1000, position.y = 400, position.w = 128, position.h = 128; 
-	moveBounds.x = 0, moveBounds.y = 370;
-	moveBounds.w = 800 - position.w, moveBounds.h = position.h;
 
 	walkRight = Sprite::FromFile("resources/knightwalk_right.png", renderer, 128, 128, 4, 15);
 	walkLeft = Sprite::FromFile("resources/knightwalk_left.png", renderer, 128, 128, 4, 3);

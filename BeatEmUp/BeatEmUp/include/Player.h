@@ -21,10 +21,10 @@ enum JumpState
 
 public:
 	void Stop();
-	void GoUp();
-	void GoDown();
-	void GoRight();
-	void GoLeft();
+	void GoUp(Game& world);
+	void GoDown(Game& world);
+	void GoRight(Game& world);
+	void GoLeft(Game& world);
 	
 	__forceinline bool isMoving() const 
 	{ 

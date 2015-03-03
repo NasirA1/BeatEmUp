@@ -2,7 +2,7 @@
 
 
 //Penetration threshold
-const int PenThreshold(20);
+const int PenThreshold(25);
 
 
 bool GameObject::CollidesWith(const GameObject& other) const

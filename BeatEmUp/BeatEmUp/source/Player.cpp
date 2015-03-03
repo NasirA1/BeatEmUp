@@ -17,9 +17,6 @@ Player::Player(SDL_Renderer* const renderer)
 	, jumpState(JS_Ground)
 {
 	position.x  = 100, position.y = 400, position.w = 76, position.h = 120; 
-	moveBounds.x = 0, moveBounds.y = 370;
-	moveBounds.w = 800 - position.w, moveBounds.h = position.h;
-
 	walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	if(walkRight) SetDirection(Right);
@@ -119,11 +116,11 @@ void Player::Stop()
 }
 
 
-void Player::GoUp()
+void Player::GoUp(Game& world)
 {
 	if(jumpState != JS_Ground) return;
 
-	if (position.y >= moveBounds.y) 
+	if (position.y >= world.MoveBounds().y) 
 		yVel = -WalkVel;
 	else 
 		yVel = 0;
@@ -131,11 +128,11 @@ void Player::GoUp()
 }
 
 
-void Player::GoDown()
+void Player::GoDown(Game& world)
 {
 	if(jumpState != JS_Ground) return;
 	
-	if (position.y <= moveBounds.y + moveBounds.h) 
+	if (position.y <= world.MoveBounds().bottom()) 
 		yVel = WalkVel;
 	else 
 		yVel = 0;
@@ -143,11 +140,11 @@ void Player::GoDown()
 }
 
 
-void Player::GoRight()
+void Player::GoRight(Game& world)
 {
 	if(jumpState != JS_Ground) return;
 
-	if (position.x <= moveBounds.x + moveBounds.w) 
+	if (position.x <= world.MoveBounds().right() - position.w) 
 		xVel = WalkVel;
 	else 
 		xVel = 0;
@@ -157,11 +154,11 @@ void Player::GoRight()
 }
 
 
-void Player::GoLeft()
+void Player::GoLeft(Game& world)
 {
 	if(jumpState != JS_Ground) return;
 	
-	if (position.x >= moveBounds.x) 
+	if (position.x >= world.MoveBounds().x) 
 		xVel = -WalkVel;
 	else 
 		xVel = 0;

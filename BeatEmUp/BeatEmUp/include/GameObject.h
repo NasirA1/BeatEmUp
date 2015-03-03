@@ -48,7 +48,6 @@ protected:
 	RectF position;
 	float xVel, yVel;
 	double angle; //rotation angle
-	SDL_Rect moveBounds;
 
 private:
 	int health;

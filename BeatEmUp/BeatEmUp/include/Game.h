@@ -27,6 +27,7 @@ private:
 	bool rightDown;
 	bool upDown;
 	bool downDown;
+	RectF moveBounds;
 
 
 public:
@@ -40,6 +41,8 @@ public:
 		, upDown(false)
 		, downDown(false)
 	{
+		moveBounds.x = 0, moveBounds.y = 370;
+		moveBounds.w = SCREEN_WIDTH, moveBounds.h = 120;
 	}
 
 	virtual ~Game()
@@ -128,10 +131,10 @@ public:
 	virtual void Update() override
 	{
 		//Update movement vectors
-		if (upDown) player->GoUp();
-		if (downDown) player->GoDown();
-		if (rightDown) player->GoRight();
-		if (leftDown) player->GoLeft();
+		if (upDown) player->GoUp(*this);
+		if (downDown) player->GoDown(*this);
+		if (rightDown) player->GoRight(*this);
+		if (leftDown) player->GoLeft(*this);
 		bg->SetScroll(upDown || downDown || rightDown || leftDown);
 
 		//Other game logic
@@ -147,6 +150,14 @@ public:
 		SDL_RenderPresent( renderer_ );
 	}
 
+
+	const RectF& MoveBounds() const
+	{
+		return moveBounds;
+	}
+
+
+private:
 	void Stop()
 	{
 		player->Stop();
