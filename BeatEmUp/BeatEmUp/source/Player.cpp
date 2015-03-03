@@ -44,7 +44,7 @@ void Player::Update(Game& world)
 		if(position.y < jumpLocation.y)
 		{
 			yVel += Gravity;
-			xVel += GetDirection() == Right? 0.1f: -0.1f;
+			xVel += GetDirection() == Right? 0.15f: -0.15f;
 			Translate(false);
 		}
 		//On the ground now...

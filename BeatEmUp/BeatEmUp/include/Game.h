@@ -100,7 +100,7 @@ public:
 					Left : Right);
 				break;
 			case SDLK_SPACE:
-				player->Jump(0.5, 20);
+				player->Jump(1, 20);
 				break;
 			}
 		}

@@ -48,7 +48,9 @@ void Sprite::Draw(SDL_Renderer* const renderer) const
 	int row = currentFrame / framesPerRow;
 	int col = currentFrame % framesPerRow;
 	SDL_Rect src = { col * pos.w, row * pos.h, pos.w, pos.h };
-	SDL_RenderCopy(renderer, sheet, &src, &pos); 
+
+	SDL_RenderCopyEx(renderer, sheet, &src, &pos, GetAngle(), NULL, SDL_FLIP_NONE);
+	//SDL_RenderCopy(renderer, sheet, &src, &pos); 
 }
 
 

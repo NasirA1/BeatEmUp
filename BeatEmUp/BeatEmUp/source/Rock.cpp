@@ -19,8 +19,8 @@ Rock::Rock(const string& file, SDL_Renderer* const renderer)
 
 void Rock::Update(Game& world)
 {
-	angle-=10;
-	position.x-=10;
+	SetAngle(GetAngle() - 10);
+	position.x -= 10;
 
 	//remove when out of view
 	if(position.right() < 0)
@@ -35,7 +35,7 @@ void Rock::Draw(SDL_Renderer* const renderer) const
 {
 	SDL_Rect nPos;
 	util::Convert(position, nPos);
-	SDL_RenderCopyEx(renderer, texture, NULL, &nPos, angle, NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(renderer, texture, NULL, &nPos, GetAngle(), NULL, SDL_FLIP_NONE);
 }
 
 

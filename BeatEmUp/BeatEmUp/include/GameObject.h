@@ -27,14 +27,17 @@ protected:
 	{}
 
 public:
+	virtual ~GameObject(){}
 	virtual void Update(Game& world) = 0;
 	virtual void Draw(SDL_Renderer* const renderer) const = 0;
-	virtual ~GameObject(){}
+	virtual void SetAngle(double theta) { angle = theta; }
 
 	//Accessors
 	__forceinline const RectF& Position() const { return position; }
 	__forceinline Directions GetDirection() const { return direction; }
+	__forceinline double GetAngle() const { return angle; }
 	__forceinline bool IsDead() const { return health <= 0; }
+
 
 	//Mutators
 	__forceinline void SetHealth(int value) { health = value; }
@@ -47,11 +50,11 @@ public:
 protected:
 	RectF position;
 	float xVel, yVel;
-	double angle; //rotation angle
 
 private:
 	int health;
 	Directions direction;
+	double angle; //rotation angle
 };
 
 
