@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Background.cpp" />
+    <ClCompile Include="source\Game.cpp" />
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\Player.cpp" />
     <ClCompile Include="source\Rock.cpp" />
