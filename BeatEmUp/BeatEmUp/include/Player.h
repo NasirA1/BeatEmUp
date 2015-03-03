@@ -6,11 +6,11 @@ class Player : public GameObject
 {
 public:
 	Player(SDL_Renderer* const renderer);
+	virtual ~Player();
 	virtual void Update(Game& world) override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
-	virtual ~Player();
 	virtual void SetDirection(Directions dir) override;
-
+	virtual void SetAngle(double theta) override;
 
 enum JumpState
 {

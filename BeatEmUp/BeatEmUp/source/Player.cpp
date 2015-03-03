@@ -26,6 +26,11 @@ Player::Player(SDL_Renderer* const renderer)
 
 void Player::Update(Game& world)
 {
+	//Jump rotation...
+	if(jumpState == JS_Jumped || jumpState == JS_Landing)
+			SetAngle(GetAngle() + (GetDirection()==Right? 13: -13));
+	else SetAngle(0);
+
 	//Jump start..
 	//Shoot up (y) and sway horizontally a bit (x)
 	if(jumpState == JS_Jumped)
@@ -63,7 +68,7 @@ void Player::Update(Game& world)
 	current->Update(world);
 
 	//Collision detection
-	if(world.rock && CollidesWith(*world.rock))
+	if(CollidesWith(world.rock))
 	{
 		logPrintf("COLLISION!");
 		//rock->Position().x = 900;
@@ -91,6 +96,13 @@ void Player::SetDirection(Directions dir)
 	GameObject::SetDirection(dir);
 	if (GetDirection() == Right) current = walkRight;
 	else if(GetDirection() == Left) current = walkLeft;
+}
+
+
+void Player::SetAngle(double theta)
+{
+	GameObject::SetAngle(theta);
+	current->SetAngle(theta);
 }
 
 

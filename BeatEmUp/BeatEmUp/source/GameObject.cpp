@@ -5,13 +5,16 @@
 const int PenThreshold(25);
 
 
-bool GameObject::CollidesWith(const GameObject& other) const
+bool GameObject::CollidesWith(const GameObject* const other) const
 {
+	//null case
+	if(!other) return false;
+
 	//If any of the sides from A are outside of B
-	if(position.bottom() - PenThreshold <= other.position.top()) return false;
-	if(position.top() + PenThreshold >= other.position.bottom()) return false;
-	if(position.right() - PenThreshold <= other.position.left()) return false;
-	if(position.left() + PenThreshold >= other.position.right()) return false;
+	if(position.bottom() - PenThreshold <= other->position.top()) return false;
+	if(position.top() + PenThreshold >= other->position.bottom()) return false;
+	if(position.right() - PenThreshold <= other->position.left()) return false;
+	if(position.left() + PenThreshold >= other->position.right()) return false;
 	return true;
 }
 

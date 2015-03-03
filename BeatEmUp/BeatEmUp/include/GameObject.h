@@ -44,7 +44,7 @@ public:
 	__forceinline virtual void SetDirection(Directions dir) { direction = dir; }
 
 	//Rectangle-based collision detection
-	bool CollidesWith(const GameObject& other) const;
+	bool CollidesWith(const GameObject* const other) const;
 
 
 protected:

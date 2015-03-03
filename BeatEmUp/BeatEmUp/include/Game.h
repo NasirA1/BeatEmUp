@@ -35,7 +35,8 @@ public:
 		: SDLApp(SCREEN_WIDTH
 		, SCREEN_HEIGHT
 		, "Nasir's Beat 'em Up Game")
-		, bg(NULL) 
+		, bg(NULL)
+		, player(NULL)
 		, leftDown(false)
 		, rightDown(false)
 		, upDown(false)
