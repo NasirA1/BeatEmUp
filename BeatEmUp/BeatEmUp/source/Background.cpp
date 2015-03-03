@@ -18,7 +18,7 @@ Background::Background(int clientWidth, int clientHeight, SDL_Renderer* const re
 }
 
 
-void Background::Update()
+void Background::Update(Game& world)
 {
 	if (!scroll)
 	{
@@ -29,7 +29,7 @@ void Background::Update()
 	{
 		BackgroundLayer& layer = dynamic_cast<BackgroundLayer&>(**it); 
 		layer.SetDirection(GetDirection());
-		layer.Update();
+		layer.Update(world);
 	}
 }
 
@@ -87,7 +87,7 @@ BackgroundLayer::~BackgroundLayer()
 }
 
 
-void BackgroundLayer::Update()
+void BackgroundLayer::Update(Game& world)
 {
 	if (GetDirection() == Left) pos1.x -= XVel, pos2.x -= XVel;
 	else if (GetDirection() == Right) pos1.x += XVel, pos2.x += XVel;

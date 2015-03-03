@@ -6,7 +6,7 @@ class Player : public GameObject
 {
 public:
 	Player(SDL_Renderer* const renderer);
-	virtual void Update() override;
+	virtual void Update(Game& world) override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Player();
 	virtual void SetDirection(Directions dir) override;

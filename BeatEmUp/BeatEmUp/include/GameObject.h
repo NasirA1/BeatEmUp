@@ -13,6 +13,7 @@ enum Directions
 };
 
 
+class Game;
 
 class GameObject
 {
@@ -26,7 +27,7 @@ protected:
 	{}
 
 public:
-	virtual void Update() = 0;
+	virtual void Update(Game& world) = 0;
 	virtual void Draw(SDL_Renderer* const renderer) const = 0;
 	virtual ~GameObject(){}
 
@@ -58,7 +59,7 @@ private:
 class GameObjectList : public vector<GameObject*>
 {
 public:
-	void Update(bool removeDead = true);
+	void Update(Game& world, bool removeDead = true);
 	void Draw(SDL_Renderer* const renderer) const;
 	~GameObjectList();
 };

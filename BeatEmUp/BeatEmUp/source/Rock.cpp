@@ -1,4 +1,6 @@
 #include "Rock.h"
+#include "Game.h"
+#include "Player.h"
 
 
 Rock::Rock(const string& file, SDL_Renderer* const renderer)
@@ -15,7 +17,7 @@ Rock::Rock(const string& file, SDL_Renderer* const renderer)
 }
 
 
-void Rock::Update()
+void Rock::Update(Game& world)
 {
 	angle-=10;
 	position.x-=10;
@@ -67,57 +69,18 @@ Knight::Knight(SDL_Renderer* const renderer)
 }
 
 
-
-void Knight::Update()
-{
-	//xVel = -1;
-	//Translate(true);
-
-	//Propagate to the underlying currently active sprite
-	current->Pos().x = position.x;
-	current->Pos().y = position.y;
-	current->Update();
-}
-
-
-void Knight::Draw(SDL_Renderer* const renderer) const
-{
-	current->Draw(renderer);
-}
-
-
-Knight::~Knight()
-{
-	util::Delete(walkRight);
-	util::Delete(walkLeft);
-
-	logPrintf("Knight object released");
-}
-
-
-void Knight::SetDirection(Directions dir)
-{
-	GameObject::SetDirection(dir);
-	if (GetDirection() == Right) current = walkRight;
-	else if(GetDirection() == Left) current = walkLeft;
-}
-
-
-void Knight::Stop()
-{
-	//position.x -= xVel;
-	//position.y -= yVel;
-	//xVel = yVel = 0;
-	//current->SetStill();
-}
-
 int distance2(int a, int b)
 {
 	return a - b;
 }
 
-void Knight::Follow(const Player& p)
+
+void Knight::Update(Game& world)
 {
+	//xVel = -1;
+	//Translate(true);
+	Player& p = *world.player;
+
 	int distX = distance2(position.x, p.Position().x);
 	int distY = distance2(position.y, p.Position().y);
 	
@@ -157,6 +120,44 @@ void Knight::Follow(const Player& p)
 	//	yVel=0;
 	//	Translate(true);
 	//}
+
+
+	//Propagate to the underlying currently active sprite
+	current->Pos().x = position.x;
+	current->Pos().y = position.y;
+	current->Update(world);
+}
+
+
+void Knight::Draw(SDL_Renderer* const renderer) const
+{
+	current->Draw(renderer);
+}
+
+
+Knight::~Knight()
+{
+	util::Delete(walkRight);
+	util::Delete(walkLeft);
+
+	logPrintf("Knight object released");
+}
+
+
+void Knight::SetDirection(Directions dir)
+{
+	GameObject::SetDirection(dir);
+	if (GetDirection() == Right) current = walkRight;
+	else if(GetDirection() == Left) current = walkLeft;
+}
+
+
+void Knight::Stop()
+{
+	//position.x -= xVel;
+	//position.y -= yVel;
+	//xVel = yVel = 0;
+	//current->SetStill();
 }
 
 

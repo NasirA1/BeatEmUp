@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "Util.h"
-
+#include "Game.h"
+#include "Rock.h"
 
 
 const float Player::Gravity(2.0f);
@@ -21,15 +22,12 @@ Player::Player(SDL_Renderer* const renderer)
 
 	walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
-	//walkRight = Sprite::FromFile("resources/knightwalk_right.png", renderer, 128, 128, 5, 15);
-	//walkLeft = Sprite::FromFile("resources/knightwalk_left.png", renderer, 128, 128, 5, 3);
-
 	if(walkRight) SetDirection(Right);
 }
 
 
 
-void Player::Update()
+void Player::Update(Game& world)
 {
 	//Jump start..
 	//Shoot up (y) and sway horizontally a bit (x)
@@ -65,7 +63,14 @@ void Player::Update()
 	//Propagate to the underlying currently active sprite
 	current->Pos().x = position.x;
 	current->Pos().y = position.y;
-	current->Update();
+	current->Update(world);
+
+	//Collision detection
+	if(world.rock && CollidesWith(*world.rock))
+	{
+		logPrintf("COLLISION!");
+		//rock->Position().x = 900;
+	}
 }
 
 

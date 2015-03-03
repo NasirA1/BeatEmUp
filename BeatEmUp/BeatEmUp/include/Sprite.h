@@ -21,7 +21,7 @@ private:
 public:
 	Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer, 
 		int frameWidth, int frameHeight, int frameSpeed_, int stillFrame_);
-	virtual void Update() override;
+	virtual void Update(Game& world) override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Sprite();
 

@@ -9,7 +9,7 @@ class BackgroundLayer : public GameObject
 
 public:
 	BackgroundLayer(const std::string& filename, SDL_Renderer* const renderer, int _screenWidth, int _screenHeight, float xVel);
-	virtual void Update() override;
+	virtual void Update(Game& world) override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~BackgroundLayer();
 
@@ -33,7 +33,7 @@ class Background : public GameObject
 
 public:
 	Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer);
-	virtual void Update() override;
+	virtual void Update(Game& world) override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Background();
 

@@ -34,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Background.h" />
+    <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\Rock.h" />
     <ClInclude Include="include\SDLApp.h" />

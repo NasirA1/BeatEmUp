@@ -7,7 +7,7 @@ class Rock : public GameObject
 public:
 	Rock(const string& file, SDL_Renderer* const renderer);
 	virtual ~Rock(void);
-	virtual void Update() override;
+	virtual void Update(Game& world) override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 
 
@@ -16,18 +16,15 @@ private:
 };
 
 
-#include "Player.h"
 
 class Knight : public GameObject
 {
 public:
 	Knight(SDL_Renderer* const renderer);
-	virtual void Update() override;
+	virtual void Update(Game& world) override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Knight();
 	virtual void SetDirection(Directions dir) override;
-
-	void Follow(const Player& p);
 	void Stop();
 
 private:
