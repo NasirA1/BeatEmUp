@@ -71,8 +71,8 @@ void Player::Update()
 	//Collision detection
 	if(CollidesWith(GAME.rock))
 	{
-		logPrintf("COLLISION!");
-		//rock->Position().x = 900;
+		//got hit by rock!
+		Jump(-10, -30);
 	}
 }
 
