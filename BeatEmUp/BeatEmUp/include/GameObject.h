@@ -33,7 +33,7 @@ public:
 	virtual void SetAngle(double theta) { angle = theta; }
 
 	//Accessors
-	__forceinline const RectF& Position() const { return position; }
+	__forceinline RectF& Position() { return position; }
 	__forceinline Directions GetDirection() const { return direction; }
 	__forceinline double GetAngle() const { return angle; }
 	__forceinline bool IsDead() const { return health <= 0; }

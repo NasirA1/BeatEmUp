@@ -17,7 +17,7 @@ Player::Player(SDL_Renderer* const renderer)
 	, jumpState(JS_Ground)
 {
 	position.x  = 100 , position.w = 76, position.h = 120;
-	position.y = GAME.MidSectionY(position.h);
+	position.y = (int)GAME.MidSectionY(position.h);
 	walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	if(walkRight) SetDirection(Right);
@@ -64,8 +64,8 @@ void Player::Update()
 	}
 
 	//Propagate to the underlying currently active sprite
-	current->Pos().x = position.x;
-	current->Pos().y = position.y;
+	current->Position().x = position.x;
+	current->Position().y = position.y;
 	current->Update();
 
 	//Collision detection

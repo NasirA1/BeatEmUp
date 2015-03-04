@@ -16,7 +16,6 @@ private:
 	int counter;
 	bool animationRunning;
 	int stillFrame;
-	SDL_Rect pos;
 
 public:
 	Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer, 
@@ -26,7 +25,6 @@ public:
 	virtual ~Sprite();
 
 	//Getters
-	__forceinline SDL_Rect& Pos() { return pos; }
 	__forceinline bool IsAnimationRunning() const { return animationRunning; }
 	__forceinline int GetCurrentFrame() const { return currentFrame; }
 	__forceinline int GetStillFrame() const { return stillFrame; }

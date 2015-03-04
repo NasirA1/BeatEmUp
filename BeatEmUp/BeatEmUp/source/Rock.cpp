@@ -82,7 +82,8 @@ Roamer::Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	, roamMinX(roamMinX_)
 	, roamMaxX(roamMaxX_)
 {
-	position.x = posX, position.y = posY, position.w = (float)walkLeft->Pos().w, position.h = (float)walkLeft->Pos().h; 
+	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
+	position.h = (float)walkLeft->Position().h; 
 }
 
 
@@ -103,8 +104,8 @@ void Roamer::Update()
 	Translate(true);
 
 	//Propagate to the underlying currently active sprite
-	current->Pos().x = (int)position.x;
-	current->Pos().y = (int)position.y;
+	current->Position().x = (int)position.x;
+	current->Position().y = (int)position.y;
 	current->Update();
 }
 

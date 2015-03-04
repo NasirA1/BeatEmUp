@@ -14,9 +14,8 @@ Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer,
 {
 	if(!spriteSheet || !renderer) return;
 
-	memset(&pos, 0, sizeof(SDL_Rect));
-	pos.x = 100, pos.y = 400;
-	pos.w = frameWidth, pos.h = frameHeight;
+	position.x = 100, position.y = 400;
+	position.w = (float)frameWidth, position.h = (float)frameHeight;
 	framesPerRow = (int)SDL_floor((double)spriteSheet->w / frameWidth);
 	rowCount = (int)SDL_floor((double)spriteSheet->h / frameHeight);
 	frameCount = framesPerRow * rowCount;
@@ -47,10 +46,11 @@ void Sprite::Draw(SDL_Renderer* const renderer) const
 {
 	int row = currentFrame / framesPerRow;
 	int col = currentFrame % framesPerRow;
-	SDL_Rect src = { col * pos.w, row * pos.h, pos.w, pos.h };
+	SDL_Rect src = { col * position.w, row * position.h, position.w, position.h };
 
-	SDL_RenderCopyEx(renderer, sheet, &src, &pos, GetAngle(), NULL, SDL_FLIP_NONE);
-	//SDL_RenderCopy(renderer, sheet, &src, &pos); 
+	SDL_Rect nPos;
+	util::Convert(position, nPos);
+	SDL_RenderCopyEx(renderer, sheet, &src, &nPos, GetAngle(), NULL, SDL_FLIP_NONE);
 }
 
 
