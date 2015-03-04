@@ -46,7 +46,8 @@ void Sprite::Draw(SDL_Renderer* const renderer) const
 {
 	int row = currentFrame / framesPerRow;
 	int col = currentFrame % framesPerRow;
-	SDL_Rect src = { col * position.w, row * position.h, position.w, position.h };
+	SDL_Rect src = { (int)((float)col * position.w), (int)((float)row * position.h)
+		, (int)position.w, (int)position.h };
 
 	SDL_Rect nPos;
 	util::Convert(position, nPos);
