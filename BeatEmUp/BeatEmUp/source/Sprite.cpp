@@ -66,4 +66,3 @@ Sprite::~Sprite()
 	logPrintf("Sprite object released");
 }
 
-
