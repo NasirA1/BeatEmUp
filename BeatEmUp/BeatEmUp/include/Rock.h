@@ -7,9 +7,8 @@ class Rock : public GameObject
 public:
 	Rock(const string& file, SDL_Renderer* const renderer);
 	virtual ~Rock(void);
-	virtual void Update(Game& world) override;
+	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
-
 
 private:
 	SDL_Texture* texture;
@@ -17,13 +16,14 @@ private:
 
 
 
-class Knight : public GameObject
+class Roamer : public GameObject
 {
 public:
-	Knight(SDL_Renderer* const renderer);
-	virtual void Update(Game& world) override;
+	Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
+		, float posX, float posY, float roamMinX_, float roamMaxX_);
+	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
-	virtual ~Knight();
+	virtual ~Roamer();
 	virtual void SetDirection(Directions dir) override;
 	void Stop();
 
@@ -35,4 +35,6 @@ private:
 	Sprite* walkRight;
 	Sprite* walkLeft;
 	Sprite* current;
+	float roamMinX;
+	float roamMaxX;
 };

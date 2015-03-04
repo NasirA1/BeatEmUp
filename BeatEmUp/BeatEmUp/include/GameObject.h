@@ -28,7 +28,7 @@ protected:
 
 public:
 	virtual ~GameObject(){}
-	virtual void Update(Game& world) = 0;
+	virtual void Update() = 0;
 	virtual void Draw(SDL_Renderer* const renderer) const = 0;
 	virtual void SetAngle(double theta) { angle = theta; }
 
@@ -37,6 +37,8 @@ public:
 	__forceinline Directions GetDirection() const { return direction; }
 	__forceinline double GetAngle() const { return angle; }
 	__forceinline bool IsDead() const { return health <= 0; }
+	__forceinline float XVel() const { return xVel; }
+	__forceinline float YVel() const { return yVel; }
 
 
 	//Mutators
@@ -45,7 +47,6 @@ public:
 
 	//Rectangle-based collision detection
 	bool CollidesWith(const GameObject* const other) const;
-
 
 protected:
 	RectF position;
@@ -61,7 +62,7 @@ private:
 class GameObjectList : public vector<GameObject*>
 {
 public:
-	void Update(Game& world, bool removeDead = true);
+	void Update(bool removeDead = true);
 	void Draw(SDL_Renderer* const renderer) const;
 	~GameObjectList();
 };

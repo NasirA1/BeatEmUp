@@ -16,7 +16,8 @@ Player::Player(SDL_Renderer* const renderer)
 	, current(NULL)
 	, jumpState(JS_Ground)
 {
-	position.x  = 100, position.y = 400, position.w = 76, position.h = 120; 
+	position.x  = 100 , position.w = 76, position.h = 120;
+	position.y = GAME.MidSectionY(position.h);
 	walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	if(walkRight) SetDirection(Right);
@@ -24,7 +25,7 @@ Player::Player(SDL_Renderer* const renderer)
 
 
 
-void Player::Update(Game& world)
+void Player::Update()
 {
 	//Jump rotation...
 	if(jumpState == JS_Jumped || jumpState == JS_Landing)
@@ -65,10 +66,10 @@ void Player::Update(Game& world)
 	//Propagate to the underlying currently active sprite
 	current->Pos().x = position.x;
 	current->Pos().y = position.y;
-	current->Update(world);
+	current->Update();
 
 	//Collision detection
-	if(CollidesWith(world.rock))
+	if(CollidesWith(GAME.rock))
 	{
 		logPrintf("COLLISION!");
 		//rock->Position().x = 900;
@@ -128,11 +129,11 @@ void Player::Stop()
 }
 
 
-void Player::GoUp(Game& world)
+void Player::GoUp()
 {
 	if(jumpState != JS_Ground) return;
 
-	if (position.y >= world.MoveBounds().y) 
+	if (position.y >= GAME.MoveBounds.y) 
 		yVel = -WalkVel;
 	else 
 		yVel = 0;
@@ -140,11 +141,11 @@ void Player::GoUp(Game& world)
 }
 
 
-void Player::GoDown(Game& world)
+void Player::GoDown()
 {
 	if(jumpState != JS_Ground) return;
 	
-	if (position.y <= world.MoveBounds().bottom()) 
+	if (position.y <= GAME.MoveBounds.bottom()) 
 		yVel = WalkVel;
 	else 
 		yVel = 0;
@@ -152,11 +153,11 @@ void Player::GoDown(Game& world)
 }
 
 
-void Player::GoRight(Game& world)
+void Player::GoRight()
 {
 	if(jumpState != JS_Ground) return;
 
-	if (position.x <= world.MoveBounds().right() - position.w) 
+	if (position.x <= GAME.MoveBounds.right() - position.w) 
 		xVel = WalkVel;
 	else 
 		xVel = 0;
@@ -166,11 +167,11 @@ void Player::GoRight(Game& world)
 }
 
 
-void Player::GoLeft(Game& world)
+void Player::GoLeft()
 {
 	if(jumpState != JS_Ground) return;
 	
-	if (position.x >= world.MoveBounds().x) 
+	if (position.x >= GAME.MoveBounds.x) 
 		xVel = -WalkVel;
 	else 
 		xVel = 0;
@@ -187,4 +188,3 @@ void Player::Translate(bool anim)
 	position.y += yVel;
 	//logPrintf("Translate: Pos {%d, %d}", position.x, position.y); 
 }
-

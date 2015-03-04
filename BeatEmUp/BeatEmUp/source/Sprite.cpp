@@ -26,7 +26,7 @@ Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer,
 }
 
 
-void Sprite::Update(Game& world)
+void Sprite::Update()
 {
 	if (!animationRunning)
 	{

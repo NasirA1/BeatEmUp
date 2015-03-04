@@ -9,13 +9,9 @@ class BackgroundLayer : public GameObject
 
 public:
 	BackgroundLayer(const std::string& filename, SDL_Renderer* const renderer, int _screenWidth, int _screenHeight, float xVel);
-	virtual void Update(Game& world) override;
+	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~BackgroundLayer();
-
-
-public:
-	float XVel;
 
 
 private:
@@ -33,7 +29,7 @@ class Background : public GameObject
 
 public:
 	Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer);
-	virtual void Update(Game& world) override;
+	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Background();
 
@@ -43,7 +39,15 @@ public:
 	__forceinline void SetScroll(Directions dir) { SetDirection(dir); scroll = true; }
 	__forceinline void SetScroll(bool enabled) { scroll = enabled; }
 
+	__forceinline const BackgroundLayer& Bg1() const { return *bg1; }
+	__forceinline const BackgroundLayer& Bg2() const { return *bg2; }
+	__forceinline const BackgroundLayer& Bg3() const { return *bg3; }
+
+
 private:
   bool scroll;
   GameObjectList layers;
+	BackgroundLayer* bg1;
+	BackgroundLayer* bg2;
+	BackgroundLayer* bg3;
 };

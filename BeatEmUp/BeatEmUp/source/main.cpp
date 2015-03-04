@@ -7,11 +7,9 @@ int main( int argc, char* args[] )
 {
 
 	{
-		Game game;
-
-		if(game.Init())
+		if(Game::Instance().Init())
 		{
-			game.Run();
+			Game::Instance().Run();
 		}
 	}
 	

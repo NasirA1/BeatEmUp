@@ -8,17 +8,17 @@ using namespace util;
 Background::Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer)
 	: GameObject(1, Left)
 	, scroll(false)
+	, bg1(new BackgroundLayer("resources/bg1.gif", renderer, clientWidth, clientHeight, 0.25f))
+	, bg2(new BackgroundLayer("resources/bg2.gif", renderer, clientWidth, clientHeight, 2.0f))
+	, bg3(new BackgroundLayer("resources/bg3.gif", renderer, clientWidth, clientHeight, 3.0f))
 {
-	BackgroundLayer* bg1 = new BackgroundLayer("resources/bg1.gif", renderer, clientWidth, clientHeight, 0.25f); 
-	BackgroundLayer* bg2 = new BackgroundLayer("resources/bg2.gif", renderer, clientWidth, clientHeight, 2.0f); 
-	BackgroundLayer* bg3 = new BackgroundLayer("resources/bg3.gif", renderer, clientWidth, clientHeight, 3.0f); 
 	layers.push_back(bg1);
 	layers.push_back(bg2);
 	layers.push_back(bg3);
 }
 
 
-void Background::Update(Game& world)
+void Background::Update()
 {
 	if (!scroll)
 	{
@@ -29,7 +29,7 @@ void Background::Update(Game& world)
 	{
 		BackgroundLayer& layer = dynamic_cast<BackgroundLayer&>(**it); 
 		layer.SetDirection(GetDirection());
-		layer.Update(world);
+		layer.Update();
 	}
 }
 
@@ -63,14 +63,13 @@ BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer* cons
 	}
 	else
 	{
+		GameObject::xVel = xVel;
 		screenWidth = _screenWidth, screenHeight = _screenHeight;
 		pos1.w = fileSurface.surface->w, pos1.h = fileSurface.surface->h;
 		pos1.x = 0, pos1.y = 0;
 		
 		pos2.w = fileSurface.surface->w, pos2.h = fileSurface.surface->h;
-		pos2.x = pos2.w, pos2.y = 0;
-		
-		XVel = xVel;
+		pos2.x = pos2.w, pos2.y = 0;		
 	}
 }
 
@@ -87,10 +86,10 @@ BackgroundLayer::~BackgroundLayer()
 }
 
 
-void BackgroundLayer::Update(Game& world)
+void BackgroundLayer::Update()
 {
-	if (GetDirection() == Left) pos1.x -= XVel, pos2.x -= XVel;
-	else if (GetDirection() == Right) pos1.x += XVel, pos2.x += XVel;
+	if (GetDirection() == Left) pos1.x -= xVel, pos2.x -= xVel;
+	else if (GetDirection() == Right) pos1.x += xVel, pos2.x += xVel;
 
 	//std::stringstream ss;
 	//ss << "pos1 {"<< pos1.x << ","<< pos1.y << ","<< pos1.w << "," << pos1.h << "}" << "  " 

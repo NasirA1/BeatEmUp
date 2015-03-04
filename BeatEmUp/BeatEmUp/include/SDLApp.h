@@ -17,6 +17,9 @@ public:
 	
 
 	__forceinline float Fps() const { return fps_; }
+	__forceinline unsigned int ClientWidth() const { return clientWidth_; }
+	__forceinline unsigned int ClientHeight() const { return clientHeight_; }
+
 	void ToggleFullScreen(); 
 
 

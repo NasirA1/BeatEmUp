@@ -19,7 +19,7 @@ bool GameObject::CollidesWith(const GameObject* const other) const
 }
 
 
-void GameObjectList::Update(Game& world, bool removeDead)
+void GameObjectList::Update(bool removeDead)
 {
 	for (vector<GameObject*>::iterator it = begin(); it != end(); )
 	{
@@ -30,7 +30,7 @@ void GameObjectList::Update(Game& world, bool removeDead)
 		}
 		else
 		{
-			(*it)->Update(world);
+			(*it)->Update();
 			++it;
 		}
 	}

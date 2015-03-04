@@ -3,32 +3,52 @@
 #include "Player.h"
 
 
+const int RANGE = 10 * GAME.ClientWidth();
+const double ROTATION_RATE = 10.0000;
+const float VELOCITY = 10.0f;
+
+
+
 Rock::Rock(const string& file, SDL_Renderer* const renderer)
- : GameObject() 
+ : GameObject(1, Left) 
  , texture(NULL)
 {
 	util::SDLSurfaceFromFile surf(file, true);
 	texture = SDL_CreateTextureFromSurface(renderer, surf.surface);
 	
-	position.x = 800 * 5;
-	position.y = 410;
+	position.x = RANGE;
 	position.w = surf.surface->w;
 	position.h = surf.surface->h;
+	position.y = GAME.MidSectionY(position.h) - 10;
 }
 
 
-void Rock::Update(Game& world)
+
+void Rock::Update()
 {
-	SetAngle(GetAngle() - 10);
-	position.x -= 10;
-
-	//remove when out of view
-	if(position.right() < 0)
+	if(GetDirection() == Left)
 	{
-		SetHealth(0);
-		//position.x = 900;
+		SetAngle(GetAngle() - ROTATION_RATE);
+		xVel = -VELOCITY;
 	}
+	else
+	{
+		SetAngle(GetAngle() + ROTATION_RATE);
+		xVel = VELOCITY;
+	}
+
+	if(position.x >= RANGE)
+	{
+		SetDirection(Left);
+	}
+	else if(position.x < -RANGE)
+	{
+		SetDirection(Right);
+	}
+
+	position.x += xVel;
 }
+
 
 
 void Rock::Draw(SDL_Renderer* const renderer) const
@@ -37,6 +57,7 @@ void Rock::Draw(SDL_Renderer* const renderer) const
 	util::Convert(position, nPos);
 	SDL_RenderCopyEx(renderer, texture, NULL, &nPos, GetAngle(), NULL, SDL_FLIP_NONE);
 }
+
 
 
 Rock::~Rock()
@@ -52,97 +73,58 @@ Rock::~Rock()
 
 
 
-Knight::Knight(SDL_Renderer* const renderer)
-	: GameObject(1, Left)	
-	, walkRight(NULL)
-	, walkLeft(NULL)
+Roamer::Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
+	, float posX, float posY, float roamMinX_, float roamMaxX_)
+	: GameObject()	
+	, walkRight(walkRightSprite)
+	, walkLeft(walkLeftSprite)
 	, current(NULL)
+	, roamMinX(roamMinX_)
+	, roamMaxX(roamMaxX_)
 {
-	position.x  = 1000, position.y = 400, position.w = 128, position.h = 128; 
-
-	walkRight = Sprite::FromFile("resources/knightwalk_right.png", renderer, 128, 128, 4, 15);
-	walkLeft = Sprite::FromFile("resources/knightwalk_left.png", renderer, 128, 128, 4, 3);
-
-	if(walkRight) SetDirection(Left);
+	position.x = posX, position.y = posY, position.w = walkLeft->Pos().w, position.h = walkLeft->Pos().h; 
 }
 
 
-int distance2(int a, int b)
+
+void Roamer::Update()
 {
-	return a - b;
-}
-
-
-void Knight::Update(Game& world)
-{
-	//xVel = -1;
-	//Translate(true);
-	Player& p = *world.player;
-
-	int distX = distance2(position.x, p.Position().x);
-	int distY = distance2(position.y, p.Position().y);
-	
-
-	if( distX > 50)
+	if(position.x <= roamMinX)
 	{
-		xVel=-5;
-		SetDirection(Left);
-		Translate(true);
-	}
-	else if(distX < -50)
-	{
-		xVel=5;
 		SetDirection(Right);
-		Translate(true);
+		xVel = 2;
 	}
-	else
+	else if(position.x >= roamMaxX)
 	{
-		xVel=0;
-		if(position.x < p.Position().x) SetDirection(Right);
-		else SetDirection(Left);
-		Translate(p.isMoving());
+		SetDirection(Left);
+		xVel = -2;
 	}
 
-	//if( distY > 20)
-	//{
-	//	yVel=-1;
-	//	Translate(true);
-	//}
-	//else if(distY <= -20)
-	//{
-	//	yVel=1;
-	//	Translate(true);
-	//}
-	//else
-	//{
-	//	yVel=0;
-	//	Translate(true);
-	//}
-
+	Translate(true);
 
 	//Propagate to the underlying currently active sprite
 	current->Pos().x = position.x;
 	current->Pos().y = position.y;
-	current->Update(world);
+	current->Update();
 }
 
 
-void Knight::Draw(SDL_Renderer* const renderer) const
+void Roamer::Draw(SDL_Renderer* const renderer) const
 {
 	current->Draw(renderer);
 }
 
 
-Knight::~Knight()
+Roamer::~Roamer()
 {
 	util::Delete(walkRight);
 	util::Delete(walkLeft);
 
-	logPrintf("Knight object released");
+	logPrintf("Roamer object released");
 }
 
 
-void Knight::SetDirection(Directions dir)
+void Roamer::SetDirection(Directions dir)
 {
 	GameObject::SetDirection(dir);
 	if (GetDirection() == Right) current = walkRight;
@@ -150,7 +132,7 @@ void Knight::SetDirection(Directions dir)
 }
 
 
-void Knight::Stop()
+void Roamer::Stop()
 {
 	//position.x -= xVel;
 	//position.y -= yVel;
@@ -159,7 +141,7 @@ void Knight::Stop()
 }
 
 
-void Knight::Translate(bool anim)
+void Roamer::Translate(bool anim)
 {
 	current->SetAnimation(anim);
 	position.x += xVel;

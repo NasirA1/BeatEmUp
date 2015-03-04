@@ -74,6 +74,12 @@
     <None Include="resources\rock2.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\skater_left.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\skater_right.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">

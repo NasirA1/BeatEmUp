@@ -7,7 +7,7 @@ class Player : public GameObject
 public:
 	Player(SDL_Renderer* const renderer);
 	virtual ~Player();
-	virtual void Update(Game& world) override;
+	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual void SetDirection(Directions dir) override;
 	virtual void SetAngle(double theta) override;
@@ -21,10 +21,10 @@ enum JumpState
 
 public:
 	void Stop();
-	void GoUp(Game& world);
-	void GoDown(Game& world);
-	void GoRight(Game& world);
-	void GoLeft(Game& world);
+	void GoUp();
+	void GoDown();
+	void GoRight();
+	void GoLeft();
 	
 	__forceinline bool isMoving() const 
 	{ 
@@ -44,6 +44,7 @@ private:
 
 	JumpState jumpState;
 	VectF jumpLocation;
+
 	static const float Gravity;
 	static const int JumpHeight;
 	static const float WalkVel;

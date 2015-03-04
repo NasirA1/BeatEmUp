@@ -11,6 +11,18 @@
 #endif
 
 
+template <typename T>
+class Singleton
+{
+public:
+	static T& Instance()
+	{
+		static T instance;
+		return instance;
+	}
+};
+
+
 namespace util
 {
 
@@ -47,22 +59,18 @@ namespace util
 
 
 	//Singleton pseudo-random number generator
-	struct Random
+	struct Random : public Singleton<Random>
 	{
+	protected:
 		Random()
 		{
 			srand(time(NULL));
 		}
 
+	public:
 		__forceinline int Next(const int min, const int max) const
 		{
 			return rand() % max + min;
-		}
-
-		static const Random& Instance()
-		{
-			static const Random instance;
-			return instance;
 		}
 	};
 
