@@ -16,10 +16,10 @@ Rock::Rock(const string& file, SDL_Renderer* const renderer)
 	util::SDLSurfaceFromFile surf(file, true);
 	texture = SDL_CreateTextureFromSurface(renderer, surf.surface);
 	
-	position.x = RANGE;
-	position.w = surf.surface->w;
-	position.h = surf.surface->h;
-	position.y = GAME.MidSectionY(position.h) - 10;
+	position.x = (float)RANGE;
+	position.w = (float)surf.surface->w;
+	position.h = (float)surf.surface->h;
+	position.y = (float)GAME.MidSectionY((int)position.h) - 10.0f;
 }
 
 
@@ -82,7 +82,7 @@ Roamer::Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	, roamMinX(roamMinX_)
 	, roamMaxX(roamMaxX_)
 {
-	position.x = posX, position.y = posY, position.w = walkLeft->Pos().w, position.h = walkLeft->Pos().h; 
+	position.x = posX, position.y = posY, position.w = (float)walkLeft->Pos().w, position.h = (float)walkLeft->Pos().h; 
 }
 
 
@@ -103,8 +103,8 @@ void Roamer::Update()
 	Translate(true);
 
 	//Propagate to the underlying currently active sprite
-	current->Pos().x = position.x;
-	current->Pos().y = position.y;
+	current->Pos().x = (int)position.x;
+	current->Pos().y = (int)position.y;
 	current->Update();
 }
 

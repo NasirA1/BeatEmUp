@@ -44,10 +44,10 @@ namespace util
 	//Converts a float rectangle to an int rectangle (useful in rendering)
 	inline void Convert(const RectF& rectF, SDL_Rect& rect)
 	{
-		rect.x = rectF.x;
-		rect.y = rectF.y;
-		rect.w = rectF.w;
-		rect.h = rectF.h;
+		rect.x = (int)rectF.x;
+		rect.y = (int)rectF.y;
+		rect.w = (int)rectF.w;
+		rect.h = (int)rectF.h;
 	}
 
 	
@@ -64,11 +64,11 @@ namespace util
 	protected:
 		Random()
 		{
-			srand(time(NULL));
+			srand((unsigned int)time(NULL));
 		}
 
 	public:
-		__forceinline int Next(const int min, const int max) const
+		__forceinline unsigned long Next(const int min, const int max) const
 		{
 			return rand() % max + min;
 		}

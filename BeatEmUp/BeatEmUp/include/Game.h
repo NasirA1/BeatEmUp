@@ -37,7 +37,7 @@ private:
 
 public:
 	//Accessors
-	__forceinline int MidSectionY(int myHeight) const { return clientHeight_ - myHeight - (MoveBounds.h / 2); }
+	__forceinline int MidSectionY(int myHeight) const { return clientHeight_ - myHeight - (int)(MoveBounds.h / 2); }
 	__forceinline int MidSectionX(int myWidth) const { return (clientWidth_ / 2) - (myWidth / 2); }
 
 public:
