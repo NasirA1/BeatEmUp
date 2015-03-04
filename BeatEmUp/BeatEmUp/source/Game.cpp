@@ -30,16 +30,6 @@ Game::~Game()
 }
 
 
-	//position.x  = 5000, position.y = 400, position.w = 128, position.h = 128; 
-
-	//walkRight = Sprite::FromFile("resources/knightwalk_right.png", renderer, 128, 128, 4, 15);
-	//walkLeft = Sprite::FromFile("resources/knightwalk_left.png", renderer, 128, 128, 4, 3);
-	
-	//position.x  = 1000, position.y = 400, position.w = 128, position.h = 128; 
-	//walkRight = Sprite::FromFile("resources/skater_left.png", renderer, 71, 90, 10, 10);
-	//walkLeft = Sprite::FromFile("resources/skater_right.png", renderer, 71, 90, 10, 0);
-
-
 
 bool Game::Init()
 {
@@ -49,8 +39,8 @@ bool Game::Init()
 	bg = new Background(clientWidth_, clientHeight_, renderer_);
 	
 	skaterboy = new Roamer(renderer_, 
-		Sprite::FromFile("resources/skater_left.png", renderer_, 71, 90, 10, 0),
-		Sprite::FromFile("resources/skater_right.png", renderer_, 71, 90, 10, 0), 
+		Sprite::FromFile("resources/skater_left.png", renderer_, 71, 90, 11, 0),
+		Sprite::FromFile("resources/skater_right.png", renderer_, 71, 90, 11, 0), 
 		-200, 400, -200, 1000);
 
 	Roamer* knight1 = new Roamer(renderer_, 
