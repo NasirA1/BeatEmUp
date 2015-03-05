@@ -3,7 +3,7 @@
 #include "Player.h"
 
 
-const int RANGE = 10 * GAME.ClientWidth();
+const int RANGE = 2 * GAME.ClientWidth();
 const double ROTATION_RATE = 10.0000;
 const float VELOCITY = 10.0f;
 
@@ -19,7 +19,8 @@ Rock::Rock(const string& file, SDL_Renderer* const renderer)
 	position.x = (float)RANGE;
 	position.w = (float)surf.surface->w;
 	position.h = (float)surf.surface->h;
-	position.y = (float)GAME.MidSectionY((int)position.h) - 10.0f;
+	//position.y = (float)GAME.MidSectionY((int)position.h) - 10.0f;
+	position.y = (float)GAME.player->Position().y + 20;
 }
 
 
@@ -104,8 +105,8 @@ void Roamer::Update()
 	Translate(true);
 
 	//Propagate to the underlying currently active sprite
-	current->Position().x = (int)position.x;
-	current->Position().y = (int)position.y;
+	current->Position().x = position.x;
+	current->Position().y = position.y;
 	current->Update();
 }
 

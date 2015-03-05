@@ -72,7 +72,7 @@ bool SDLApp::Init()
 		logPrintf( "Warning: Linear texture filtering not enabled!" );
 	}
 
-	renderer_ = SDL_CreateRenderer( window_, -1, SDL_RENDERER_ACCELERATED );
+	renderer_ = SDL_CreateRenderer( window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 	if( !renderer_ )
 	{
 		logPrintf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );

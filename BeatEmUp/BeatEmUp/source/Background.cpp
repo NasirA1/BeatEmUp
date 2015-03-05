@@ -65,11 +65,11 @@ BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer* cons
 	{
 		GameObject::xVel = xVel;
 		screenWidth = _screenWidth, screenHeight = _screenHeight;
-		pos1.w = fileSurface.surface->w, pos1.h = fileSurface.surface->h;
-		pos1.x = 0, pos1.y = 0;
+		pos1.w = (float)fileSurface.surface->w, pos1.h = (float)fileSurface.surface->h;
+		pos1.x = 0.0f, pos1.y = 0.0f;
 		
-		pos2.w = fileSurface.surface->w, pos2.h = fileSurface.surface->h;
-		pos2.x = pos2.w, pos2.y = 0;		
+		pos2.w = (float)fileSurface.surface->w, pos2.h = (float)fileSurface.surface->h;
+		pos2.x = pos2.w, pos2.y = 0.0f;		
 	}
 }
 

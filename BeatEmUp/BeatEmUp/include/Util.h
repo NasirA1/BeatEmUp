@@ -31,8 +31,9 @@ namespace util
 	struct RectF
 	{
 		float x, y, w, h;
-		RectF(float x_ = 0.0f, float y_ = 0.0f, float w_ = 0.0f, float h_ = 0.0f)
-		 : x(x_), y(y_), w(w_), h(h_){}
+		float z;
+		RectF(float x_ = 0.0f, float y_ = 0.0f, float w_ = 0.0f, float h_ = 0.0f, float z_ = 0.0f)
+		 : x(x_), y(y_), w(w_), h(h_), z(z_){}
 
 		__forceinline float left() const { return x; } 
 		__forceinline float right() const { return x + w; }

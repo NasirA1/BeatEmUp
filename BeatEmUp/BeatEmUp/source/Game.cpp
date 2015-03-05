@@ -11,7 +11,7 @@ Game::Game()
 	: SDLApp(SCREEN_WIDTH
 	, SCREEN_HEIGHT
 	, "Nasir's Beat 'em Up Game")
-	, MoveBounds(0, 370, SCREEN_WIDTH, 120)
+	, MoveBounds(0.0f, 370.0f, (float)SCREEN_WIDTH, 120.0f)
 	, bg(NULL)
 	, skaterboy(NULL)
 	, player(NULL)

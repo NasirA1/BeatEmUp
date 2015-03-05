@@ -16,8 +16,8 @@ Player::Player(SDL_Renderer* const renderer)
 	, current(NULL)
 	, jumpState(JS_Ground)
 {
-	position.x  = 100 , position.w = 76, position.h = 120;
-	position.y = (int)GAME.MidSectionY(position.h);
+	position.x  = 100.0f , position.w = 76.0f, position.h = 120.0f;
+	position.y = (float)GAME.MidSectionY((int)position.h);
 	walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	if(walkRight) SetDirection(Right);
@@ -72,7 +72,7 @@ void Player::Update()
 	if(CollidesWith(GAME.rock))
 	{
 		//got hit by rock!
-		Jump(-10, -30);
+		Jump(0, 30);
 	}
 }
 
