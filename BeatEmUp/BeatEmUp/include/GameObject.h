@@ -41,22 +41,27 @@ public:
 	__forceinline bool IsDead() const { return health <= 0; }
 	__forceinline float XVel() const { return xVel; }
 	__forceinline float YVel() const { return yVel; }
+	__forceinline int GetHealth() const { return health; }
 
 	
 	//Mutators
-	__forceinline void SetHealth(int value) { health = value; }
+	__forceinline void SetHealth(int value) { health = value < 0? 0: value; }
 
 
 	//Rectangle-based collision detection
 	bool CollidesWith(const GameObject* const other) const;
 	void AdjustZToGameDepth();
 
+	//Functor for sorting Game objects by depth (z axis) 
+	friend struct GameObjectSortByDepth;
+
+
 protected:
 	RectF position;
 	float xVel, yVel;
+	int health;
 
 private:
-	int health;
 	Directions direction;
 	double angle; //rotation angle
 };
@@ -68,6 +73,14 @@ public:
 	void Update(bool removeDead = true);
 	void Draw(SDL_Renderer* const renderer) const;
 	~GameObjectList();
+};
+
+
+//Functor for sorting Game objects by depth (z axis) 
+struct GameObjectSortByDepth {
+	__forceinline bool operator()(GameObject* const a, GameObject* const b) const {
+		return a->position.z < b->position.z;
+	}
 };
 
 
@@ -140,3 +153,5 @@ public:
 
 #endif
 #pragma endregion
+
+

@@ -12,6 +12,7 @@ Background::Background(int clientWidth, int clientHeight, SDL_Renderer* const re
 	, bg2(new BackgroundLayer("resources/bg2.gif", renderer, clientWidth, clientHeight, 2.0f))
 	, bg3(new BackgroundLayer("resources/bg3.gif", renderer, clientWidth, clientHeight, 3.0f))
 {
+	position.z = -1;
 	layers.push_back(bg1);
 	layers.push_back(bg2);
 	layers.push_back(bg3);

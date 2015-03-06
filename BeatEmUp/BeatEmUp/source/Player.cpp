@@ -73,7 +73,12 @@ void Player::Update()
 	if(CollidesWith(GAME.rock))
 	{
 		//got hit by rock!
+		if(GAME.rock->GetDirection() == Right) 
+			SetDirection(Left);
+		else 
+			SetDirection(Right);
 		Jump(0, 30);
+		SetHealth(GetHealth() - 1);
 	}
 }
 

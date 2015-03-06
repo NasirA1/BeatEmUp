@@ -1,6 +1,6 @@
 #include "Game.h"
 #include <sstream>
-
+#include <algorithm>
 
 
 Game::Game() 
@@ -142,10 +142,10 @@ void Game::Update()
 	tbFps->SetText(ss.str());
 	ss.str("");
 	ss.clear();
-	ss << "Pos: {" << player->Position().x 
-		<< "," << player->Position().y 
-		<< "," << player->Position().z 
-		<< "}";
+	ss << "Pos: {" << (int)player->Position().x 
+		<< "," << (int)player->Position().y 
+		<< "," << (int)player->Position().z 
+		<< "}  Health: " << player->GetHealth();
 	tbPlayerPos->SetText(ss.str());
 
 	//Other game logic
@@ -157,9 +157,9 @@ void Game::Update()
 void Game::Render()
 {
 	SDL_RenderClear( renderer_ );
-
+	//Sort by depth, then draw
+	std::sort(gameObjects.begin(), gameObjects.end(), GameObjectSortByDepth());
 	gameObjects.Draw( renderer_ );
-
 	SDL_RenderPresent( renderer_ );
 }
 

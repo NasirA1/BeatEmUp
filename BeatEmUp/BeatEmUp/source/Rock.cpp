@@ -49,6 +49,8 @@ void Rock::Update()
 	}
 
 	position.x += xVel;
+
+	AdjustZToGameDepth();
 }
 
 
@@ -86,6 +88,7 @@ Roamer::Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h; 
+	AdjustZToGameDepth();
 }
 
 
@@ -149,6 +152,7 @@ void Roamer::Translate(bool anim)
 	current->SetAnimation(anim);
 	position.x += xVel;
 	position.y += yVel;
-	//logPrintf("Translate: Pos {%d, %d}", position.x, position.y); 
+	//logPrintf("Translate: Pos {%d, %d}", position.x, position.y);
+	AdjustZToGameDepth();
 }
 
