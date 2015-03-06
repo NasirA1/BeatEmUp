@@ -18,7 +18,7 @@ class Game;
 class GameObject
 {
 protected:
-	GameObject(int health_ = 1, Directions initialDirection = Right) 
+	GameObject(int health_ = 0, Directions initialDirection = Right) 
 		: health(health_)
 		, direction(initialDirection)
 		, xVel(0)
@@ -38,7 +38,7 @@ public:
 	__forceinline RectF& Position() { return position; }
 	__forceinline Directions GetDirection() const { return direction; }
 	__forceinline double GetAngle() const { return angle; }
-	__forceinline bool IsDead() const { return health <= 0; }
+	__forceinline bool IsDead() const { return health < 0; }
 	__forceinline float XVel() const { return xVel; }
 	__forceinline float YVel() const { return yVel; }
 	__forceinline int GetHealth() const { return health; }
@@ -46,6 +46,7 @@ public:
 	
 	//Mutators
 	__forceinline void SetHealth(int value) { health = value < 0? 0: value; }
+	__forceinline void Kill() { health = -1; }
 
 
 	//Rectangle-based collision detection
@@ -59,11 +60,11 @@ public:
 protected:
 	RectF position;
 	float xVel, yVel;
-	int health;
 
 private:
 	Directions direction;
 	double angle; //rotation angle
+	int health;
 };
 
 
