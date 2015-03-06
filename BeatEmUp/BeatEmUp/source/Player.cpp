@@ -186,5 +186,6 @@ void Player::Translate(bool anim)
 	current->SetAnimation(anim);
 	position.x += xVel;
 	position.y += yVel;
+	position.z = position.y - GAME.MoveBounds.top();
 	//logPrintf("Translate: Pos {%d, %d}", position.x, position.y); 
 }

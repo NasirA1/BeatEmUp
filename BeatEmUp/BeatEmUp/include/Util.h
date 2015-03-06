@@ -3,6 +3,8 @@
 #include <ctime>
 #include <string>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
+
 
 #ifdef _DEBUG
 #define logPrintf(fmt, ...)	fprintf(stderr, fmt "\n", __VA_ARGS__)
@@ -129,6 +131,69 @@ namespace util
 		SDLSurfaceFromFile(const std::string& path, bool trans = false
 			, Uint8 ckeyr = 0x00, Uint8 ckeyg = 0x00, Uint8 ckeyb = 0x00);
 		~SDLSurfaceFromFile();
+	};
+
+
+	struct TTFont
+	{
+		TTF_Font* font;
+
+		TTFont(const std::string& fileName, size_t size)
+			: font(NULL)
+		{
+			font = TTF_OpenFont(fileName.c_str(), size);
+			if(!font)
+			{
+				logPrintf("Unable to open {%s}  ERROR: %s", fileName.c_str(), TTF_GetError());
+			}
+		}
+
+
+		~TTFont()
+		{
+			if(font)
+			{
+				TTF_CloseFont(font);
+				font = NULL;
+				logPrintf("TTFont object released");
+			}
+		}
+	};
+
+
+	struct TextTexture
+	{
+		SDL_Surface* const surface; 
+		SDL_Texture* const texture;
+
+		TextTexture(SDL_Renderer* const renderer, const TTFont& font, const std::string& text, const SDL_Colour& colour)
+			: surface(TTF_RenderText_Solid(font.font, text.c_str(), colour))
+			, texture(SDL_CreateTextureFromSurface(renderer, surface))
+		{
+			if(!surface)
+			{
+				logPrintf( "TextTexture ERROR: %s", TTF_GetError() );
+			}
+
+			if(!texture)
+			{
+				logPrintf( "TextTexture ERROR: %s", SDL_GetError() );
+			}
+		}
+
+		~TextTexture()
+		{
+			if(texture)
+			{
+				SDL_DestroyTexture(texture);
+				const_cast<SDL_Texture*>(texture) = NULL;
+			}
+			if(surface)
+			{
+				SDL_FreeSurface(surface);
+				const_cast<SDL_Surface*>(surface) = NULL;
+			}
+		}
 	};
 
 

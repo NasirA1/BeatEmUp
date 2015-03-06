@@ -14,7 +14,7 @@ namespace util
 	{
 		if(!surface)
 		{
-			logPrintf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+			logPrintf( "Unable to load image %s! SDL_image Error: %s", path.c_str(), IMG_GetError() );
 		}
 		else
 		{

@@ -19,6 +19,7 @@
     <ClCompile Include="source\SDLApp.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Sprite.cpp" />
+    <ClCompile Include="source\Text.cpp" />
     <ClCompile Include="source\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -43,6 +44,7 @@
     <ClInclude Include="include\SDLApp.h" />
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\Sprite.h" />
+    <ClInclude Include="include\Text.h" />
     <ClInclude Include="include\Util.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

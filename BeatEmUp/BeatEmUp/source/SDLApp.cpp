@@ -2,6 +2,7 @@
 #include "Util.h"
 #include <sstream>
 #include <string>
+#include <SDL_ttf.h>
 
 
 #define FPS_NORMAL			60
@@ -45,6 +46,7 @@ SDLApp::~SDLApp()
 	}
 
 	//Quit SDL subsystems
+	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
 }
@@ -81,6 +83,22 @@ bool SDLApp::Init()
 
 	//Initialize renderer color
 	SDL_SetRenderDrawColor( renderer_, 0xFF, 0xFF, 0xFF, 0xFF );
+
+
+	//Initialize PNG loading
+	int imgFlags = IMG_INIT_PNG;
+	if( !( IMG_Init( imgFlags ) & imgFlags ) )
+	{
+		logPrintf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+		return false;
+	}
+
+	//Initialize SDL_ttf
+	if( TTF_Init() == -1 )
+	{
+		logPrintf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+		return false;
+	}
 	
 	logPrintf("Init successful.");
 	return true;
@@ -99,7 +117,7 @@ int SDLApp::Run()
 	SDL_Event e;
 	LTimer fpsTimer;
 	LTimer capTimer;
-	std::stringstream timeText;
+	//std::stringstream timeText;
 	int countedFrames = 0;
 
 	fpsTimer.start();
@@ -121,19 +139,19 @@ int SDLApp::Run()
 		}
 
 		//Calculate and correct fps
-		float avgFPS = countedFrames / ( fpsTimer.getTicks() / 1000.f );
-		if( avgFPS > 2000000 )
+		fps_ = countedFrames / ( fpsTimer.getTicks() / 1000.f );
+		if( fps_ > 2000000 )
 		{
-			avgFPS = 0;
+			fps_ = 0;
 		}
 
 		//Set text to be rendered
-		if(true)
-		{
-			timeText.str("");
-			timeText << "Average Frames Per Second " << avgFPS; 
-			//logPrintf("%s", timeText.str().c_str());
-		}
+		//if(true)
+		//{
+		//	timeText.str("");
+		//	timeText << "Average Frames Per Second " << fps_;
+		//	//logPrintf("%s", timeText.str().c_str());
+		//}
 
 		Update();
 		Render();

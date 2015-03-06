@@ -1,9 +1,5 @@
 #include "Game.h"
-
-
-
-
-
+#include <sstream>
 
 
 
@@ -13,6 +9,7 @@ Game::Game()
 	, "Nasir's Beat 'em Up Game")
 	, MoveBounds(0.0f, 370.0f, (float)SCREEN_WIDTH, 120.0f)
 	, bg(NULL)
+	, tbFps(NULL), tbPlayerPos(NULL)
 	, skaterboy(NULL)
 	, player(NULL)
 	, leftDown(false)
@@ -50,12 +47,18 @@ bool Game::Init()
 
 
 	player = new Player(renderer_);
-	rock = new Rock("resources/rock.png", renderer_);
+	//rock = new Rock("resources/rock.png", renderer_);
+
+	tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer_);	
+	tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer_);
 
 	gameObjects.push_back(bg);
+	gameObjects.push_back(tbFps);
+	gameObjects.push_back(tbPlayerPos);
+
 	gameObjects.push_back(skaterboy);
 	gameObjects.push_back(player);
-	gameObjects.push_back(rock);
+	//gameObjects.push_back(rock);
 
 	gameObjects.push_back(knight1);
 
@@ -132,6 +135,18 @@ void Game::Update()
 	if (rightDown) player->GoRight();
 	if (leftDown) player->GoLeft();
 	bg->SetScroll(upDown || downDown || rightDown || leftDown);
+
+	//text
+	std::stringstream ss;
+	ss << "FPS: " << Fps();
+	tbFps->SetText(ss.str());
+	ss.str("");
+	ss.clear();
+	ss << "Pos: {" << player->Position().x 
+		<< "," << player->Position().y 
+		<< "," << player->Position().z 
+		<< "}";
+	tbPlayerPos->SetText(ss.str());
 
 	//Other game logic
 	gameObjects.Update();

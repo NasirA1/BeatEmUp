@@ -4,6 +4,7 @@
 #include "Background.h"
 #include "Player.h"
 #include "Rock.h"
+#include "Text.h"
 
 
 const int SCREEN_WIDTH = 800;
@@ -24,6 +25,7 @@ public:
 	//Game objects
 	GameObjectList gameObjects;
 	Background* bg;
+	TextBlock* tbFps, *tbPlayerPos;
 	Player* player;
 	Rock* rock;
 	Roamer* skaterboy;
