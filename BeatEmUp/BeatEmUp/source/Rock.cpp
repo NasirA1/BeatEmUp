@@ -21,6 +21,7 @@ Rock::Rock(const string& file, SDL_Renderer* const renderer)
 	position.h = (float)surf.surface->h;
 	//position.y = (float)GAME.MidSectionY((int)position.h) - 10.0f;
 	position.y = (float)GAME.player->Position().y + 20;
+	AdjustZToGameDepth();
 }
 
 

@@ -47,7 +47,7 @@ bool Game::Init()
 
 
 	player = new Player(renderer_);
-	//rock = new Rock("resources/rock.png", renderer_);
+	rock = new Rock("resources/rock.png", renderer_);
 
 	tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer_);	
 	tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer_);
@@ -58,7 +58,7 @@ bool Game::Init()
 
 	gameObjects.push_back(skaterboy);
 	gameObjects.push_back(player);
-	//gameObjects.push_back(rock);
+	gameObjects.push_back(rock);
 
 	gameObjects.push_back(knight1);
 

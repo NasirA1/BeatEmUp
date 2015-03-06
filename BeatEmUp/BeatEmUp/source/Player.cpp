@@ -18,6 +18,7 @@ Player::Player(SDL_Renderer* const renderer)
 {
 	position.x  = 100.0f , position.w = 76.0f, position.h = 120.0f;
 	position.y = (float)GAME.MidSectionY((int)position.h);
+	position.z = position.y - GAME.MoveBounds.top();
 	walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	if(walkRight) SetDirection(Right);
@@ -186,6 +187,11 @@ void Player::Translate(bool anim)
 	current->SetAnimation(anim);
 	position.x += xVel;
 	position.y += yVel;
-	position.z = position.y - GAME.MoveBounds.top();
+
+	//Jumping doesn't change z order
+	if(jumpState == JS_Ground)
+	{
+		 AdjustZToGameDepth();
+	}
 	//logPrintf("Translate: Pos {%d, %d}", position.x, position.y); 
 }

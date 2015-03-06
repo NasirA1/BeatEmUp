@@ -31,7 +31,9 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw(SDL_Renderer* const renderer) const = 0;
 	virtual void SetAngle(double theta) { angle = theta; }
+	__forceinline virtual void SetDirection(Directions dir) { direction = dir; }
 
+	
 	//Accessors
 	__forceinline RectF& Position() { return position; }
 	__forceinline Directions GetDirection() const { return direction; }
@@ -40,13 +42,14 @@ public:
 	__forceinline float XVel() const { return xVel; }
 	__forceinline float YVel() const { return yVel; }
 
-
+	
 	//Mutators
 	__forceinline void SetHealth(int value) { health = value; }
-	__forceinline virtual void SetDirection(Directions dir) { direction = dir; }
+
 
 	//Rectangle-based collision detection
 	bool CollidesWith(const GameObject* const other) const;
+	void AdjustZToGameDepth();
 
 protected:
 	RectF position;

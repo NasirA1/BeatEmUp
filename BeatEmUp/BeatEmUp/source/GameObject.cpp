@@ -1,4 +1,5 @@
 #include "GameObject.h"
+#include "Game.h"
 
 
 //Penetration threshold
@@ -15,8 +16,17 @@ bool GameObject::CollidesWith(const GameObject* const other) const
 	if(position.top() + PenThreshold >= other->position.bottom()) return false;
 	if(position.right() - PenThreshold <= other->position.left()) return false;
 	if(position.left() + PenThreshold >= other->position.right()) return false;
+	if(SDL_abs( (int)position.z - (int)other->position.z ) > PenThreshold)  return false;
+
 	return true;
 }
+
+
+void GameObject::AdjustZToGameDepth() 
+{ 
+	position.z = position.y - GAME.MoveBounds.top(); 
+}
+
 
 
 void GameObjectList::Update(bool removeDead)
