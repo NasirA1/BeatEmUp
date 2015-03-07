@@ -3,7 +3,8 @@
 #include "SDLApp.h"
 #include "Background.h"
 #include "Player.h"
-#include "Rock.h"
+#include "Roamer.h"
+#include "Enemy.h"
 #include "Text.h"
 
 

@@ -16,7 +16,8 @@
     <ClCompile Include="source\GameObject.cpp" />
     <ClCompile Include="source\Mixer.cpp" />
     <ClCompile Include="source\Player.cpp" />
-    <ClCompile Include="source\Rock.cpp" />
+    <ClCompile Include="source\Roamer.cpp" />
+    <ClCompile Include="source\Enemy.cpp" />
     <ClCompile Include="source\SDLApp.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\Sprite.cpp" />
@@ -25,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\aldebaran.mp3" />
+    <None Include="resources\andore_walkleft.png" />
     <None Include="resources\bg1.gif" />
     <None Include="resources\bg2.gif" />
     <None Include="resources\bg3.gif" />
@@ -47,7 +49,8 @@
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\Mixer.h" />
     <ClInclude Include="include\Player.h" />
-    <ClInclude Include="include\Rock.h" />
+    <ClInclude Include="include\Roamer.h" />
+    <ClInclude Include="include\Enemy.h" />
     <ClInclude Include="include\SDLApp.h" />
     <ClInclude Include="include\GameObject.h" />
     <ClInclude Include="include\Sprite.h" />

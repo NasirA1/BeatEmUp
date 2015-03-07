@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "Util.h"
 #include "Game.h"
-#include "Rock.h"
+#include "Enemy.h"
 #include "Mixer.h"
 
 const float Player::Gravity(2.0f);
