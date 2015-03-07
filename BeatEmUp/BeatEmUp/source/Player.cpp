@@ -6,7 +6,7 @@
 
 const float Player::Gravity(2.0f);
 const int Player::JumpHeight(50);
-const float Player::WalkVel(0.5f);
+
 
 
 Player::Player(SDL_Renderer* const renderer)
@@ -142,7 +142,7 @@ void Player::GoUp()
 	if(jumpState != JS_Ground) return;
 
 	if (position.y >= GAME.MoveBounds.y) 
-		yVel = -WalkVel;
+		yVel = -speed;
 	else 
 		yVel = 0;
 	Translate();
@@ -154,7 +154,7 @@ void Player::GoDown()
 	if(jumpState != JS_Ground) return;
 	
 	if (position.y <= GAME.MoveBounds.bottom()) 
-		yVel = WalkVel;
+		yVel = speed;
 	else 
 		yVel = 0;
 	Translate();        
@@ -166,7 +166,7 @@ void Player::GoRight()
 	if(jumpState != JS_Ground) return;
 
 	if (position.x <= GAME.MoveBounds.right() - position.w) 
-		xVel = WalkVel;
+		xVel = speed;
 	else 
 		xVel = 0;
 
@@ -180,7 +180,7 @@ void Player::GoLeft()
 	if(jumpState != JS_Ground) return;
 	
 	if (position.x >= GAME.MoveBounds.x) 
-		xVel = -WalkVel;
+		xVel = -speed;
 	else 
 		xVel = 0;
 

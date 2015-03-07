@@ -47,5 +47,4 @@ private:
 
 	static const float Gravity;
 	static const int JumpHeight;
-	static const float WalkVel;
 };

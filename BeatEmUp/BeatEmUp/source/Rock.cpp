@@ -4,8 +4,6 @@
 
 
 const int RANGE = 2 * GAME.ClientWidth();
-const double ROTATION_RATE = 10.0000;
-const float VELOCITY = 10.0f;
 
 
 
@@ -16,10 +14,10 @@ Rock::Rock(const string& file, SDL_Renderer* const renderer)
 	util::SDLSurfaceFromFile surf(file, true);
 	texture = SDL_CreateTextureFromSurface(renderer, surf.surface);
 	
+	speed = 10.0f;
 	position.x = (float)RANGE;
 	position.w = (float)surf.surface->w;
 	position.h = (float)surf.surface->h;
-	//position.y = (float)GAME.MidSectionY((int)position.h) - 10.0f;
 	position.y = (float)GAME.player->Position().y + 20;
 	AdjustZToGameDepth();
 }
@@ -30,13 +28,13 @@ void Rock::Update()
 {
 	if(GetDirection() == Left)
 	{
-		SetAngle(GetAngle() - ROTATION_RATE);
-		xVel = -VELOCITY;
+		SetAngle(GetAngle() - speed);
+		xVel = -speed;
 	}
 	else
 	{
-		SetAngle(GetAngle() + ROTATION_RATE);
-		xVel = VELOCITY;
+		SetAngle(GetAngle() + speed);
+		xVel = speed;
 	}
 
 	if(position.x >= RANGE)
@@ -87,7 +85,8 @@ Roamer::Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	, roamMaxX(roamMaxX_)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
-	position.h = (float)walkLeft->Position().h; 
+	position.h = (float)walkLeft->Position().h;
+	speed = 2.0f;
 	AdjustZToGameDepth();
 }
 
@@ -98,12 +97,12 @@ void Roamer::Update()
 	if(position.x <= roamMinX)
 	{
 		SetDirection(Right);
-		xVel = 2;
+		xVel = speed;
 	}
 	else if(position.x >= roamMaxX)
 	{
 		SetDirection(Left);
-		xVel = -2;
+		xVel = -speed;
 	}
 
 	Translate(true);

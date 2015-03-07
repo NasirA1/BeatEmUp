@@ -63,6 +63,16 @@ namespace util
 	};
 
 
+
+	static inline float GetDistance(const RectF& a, const RectF& b)
+	{
+		double dx = a.x - b.x;
+		double dy = a.y - b.y;
+		double dist = SDL_sqrt(dx * dx + dy * dy);
+		return (float)dist;
+	}
+
+
 	//Singleton pseudo-random number generator
 	struct Random : public Singleton<Random>
 	{

@@ -21,9 +21,10 @@ protected:
 	GameObject(int health_ = 0, Directions initialDirection = Right) 
 		: health(health_)
 		, direction(initialDirection)
-		, xVel(0)
-		, yVel(0)
-		, angle(0)
+		, xVel(0.0f)
+		, yVel(0.0f)
+		, angle(0.0000)
+		, speed(1.0f)
 	{}
 
 public:
@@ -53,13 +54,14 @@ public:
 	bool CollidesWith(const GameObject* const other) const;
 	void AdjustZToGameDepth();
 
+
 	//Functor for sorting Game objects by depth (z axis) 
 	friend struct GameObjectSortByDepth;
-
 
 protected:
 	RectF position;
 	float xVel, yVel;
+	float speed;
 
 private:
 	Directions direction;
