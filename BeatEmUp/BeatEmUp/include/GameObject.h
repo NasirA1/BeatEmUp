@@ -42,12 +42,14 @@ public:
 	__forceinline bool IsDead() const { return health < 0; }
 	__forceinline float XVel() const { return xVel; }
 	__forceinline float YVel() const { return yVel; }
+	__forceinline float GetSpeed() const { return speed; }
 	__forceinline int GetHealth() const { return health; }
 
 	
 	//Mutators
 	__forceinline void SetHealth(int value) { health = value < 0? 0: value; }
 	__forceinline void Kill() { health = -1; }
+	__forceinline void SetSpeed(float sp) { speed = sp; }
 
 
 	//Rectangle-based collision detection
@@ -55,7 +57,8 @@ public:
 	void AdjustZToGameDepth();
 
 
-	//Functor for sorting Game objects by depth (z axis) 
+	//Functor for sorting Game objects by depth (z axis)
+	//Used for painting
 	friend struct GameObjectSortByDepth;
 
 protected:

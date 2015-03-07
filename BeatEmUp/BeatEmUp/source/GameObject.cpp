@@ -24,7 +24,7 @@ bool GameObject::CollidesWith(const GameObject* const other) const
 
 void GameObject::AdjustZToGameDepth() 
 { 
-	position.z = position.y - GAME.MoveBounds.top(); 
+	position.z = position.y - GAME.MoveBounds.top();
 }
 
 
