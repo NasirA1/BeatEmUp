@@ -6,7 +6,7 @@
 const int PenThreshold(25);
 
 
-bool GameObject::CollidesWith(const GameObject* const other) const
+bool GameObject::CollidedWith(const GameObject* const other) const
 {
 	//null case
 	if(!other) return false;
@@ -31,9 +31,10 @@ void GameObject::AdjustZToGameDepth()
 
 void GameObjectList::Update(bool removeDead)
 {
+	//Garbage collect dead objects (except Player - special case)
 	for (vector<GameObject*>::iterator it = begin(); it != end(); )
 	{
-		if((*it)->IsDead())
+		if((*it)->IsDead() && (*it)->GetType() != GameObject::GT_Player)
 		{
 			util::Delete(*it);
 			it = erase(it);

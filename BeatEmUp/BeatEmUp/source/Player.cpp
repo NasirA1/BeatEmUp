@@ -10,7 +10,7 @@ const int Player::JumpHeight(50);
 
 
 Player::Player(SDL_Renderer* const renderer)
-	: GameObject(10, Right)	
+	: GameObject(GT_Player, 10, Right)	
 	, walkRight(NULL)
 	, walkLeft(NULL)
 	, current(NULL)
@@ -70,7 +70,7 @@ void Player::Update()
 	current->Update();
 
 	//Collision detection
-	if(CollidesWith(GAME.rock))
+	if(CollidedWith(GAME.rock))
 	{
 		//got hit by rock!
 		if(GAME.rock->GetDirection() == Right) 

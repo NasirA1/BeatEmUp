@@ -8,7 +8,7 @@ const int RANGE = 2 * GAME.ClientWidth();
 
 
 Rock::Rock(const string& file, SDL_Renderer* const renderer)
- : GameObject(1, Left) 
+ : GameObject(GT_Enemy, 1, Left) 
  , texture(NULL)
 {
 	util::SDLSurfaceFromFile surf(file, true);
@@ -77,7 +77,7 @@ Rock::~Rock()
 
 Roamer::Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
 	, float posX, float posY, float roamMinX_, float roamMaxX_,  bool backgroundObj)
-	: GameObject()	
+	: GameObject(GT_Background)	
 	, walkRight(walkRightSprite)
 	, walkLeft(walkLeftSprite)
 	, current(NULL)

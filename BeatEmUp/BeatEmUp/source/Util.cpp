@@ -21,7 +21,7 @@ namespace util
 			//Color key image
 			if(trans)
 			{
-				logPrintf("Color Key -> R: %d,  G: %d,  B: %d", colKeyR, colKeyG, colKeyB);
+				//logPrintf("Color Key -> R: %d,  G: %d,  B: %d", colKeyR, colKeyG, colKeyB);
 				SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, colKeyR, colKeyG, colKeyB));
 			}
 		}
@@ -34,7 +34,7 @@ namespace util
 		{
 			SDL_FreeSurface(surface);
 			surface = NULL;
-			logPrintf("%s surface released", file.c_str());
+			//logPrintf("%s surface released", file.c_str());
 		}
 	}
 

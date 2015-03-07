@@ -158,10 +158,11 @@ void Game::Update()
 
 void Game::Render()
 {
-	SDL_RenderClear( renderer_ );
+	//SDL_RenderClear( renderer_ );
 	//Sort by depth, then draw
 	std::sort(gameObjects.begin(), gameObjects.end(), GameObjectSortByDepth());
 	gameObjects.Draw( renderer_ );
+	
 	SDL_RenderPresent( renderer_ );
 }
 

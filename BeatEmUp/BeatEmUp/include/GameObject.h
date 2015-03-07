@@ -17,9 +17,19 @@ class Game;
 
 class GameObject
 {
+public:
+	enum Type
+	{
+		GT_Background,
+		GT_Sprite,
+		GT_Player,
+		GT_Enemy
+	};
+
 protected:
-	GameObject(int health_ = 0, Directions initialDirection = Right) 
-		: health(health_)
+	GameObject(Type type_, int health_ = 1, Directions initialDirection = Right)
+		: type(type_)
+		, health(health_)
 		, direction(initialDirection)
 		, xVel(0.0f)
 		, yVel(0.0f)
@@ -39,21 +49,21 @@ public:
 	__forceinline RectF& Position() { return position; }
 	__forceinline Directions GetDirection() const { return direction; }
 	__forceinline double GetAngle() const { return angle; }
-	__forceinline bool IsDead() const { return health < 0; }
+	__forceinline bool IsDead() const { return health <= 0; }
 	__forceinline float XVel() const { return xVel; }
 	__forceinline float YVel() const { return yVel; }
 	__forceinline float GetSpeed() const { return speed; }
 	__forceinline int GetHealth() const { return health; }
-
+	__forceinline Type GetType() const { return type; }
 	
 	//Mutators
-	__forceinline void SetHealth(int value) { health = value < 0? 0: value; }
-	__forceinline void Kill() { health = -1; }
+	__forceinline void SetHealth(int value) { health = value; }
+	__forceinline void Kill() { health = 0; }
 	__forceinline void SetSpeed(float sp) { speed = sp; }
 
 
 	//Rectangle-based collision detection
-	bool CollidesWith(const GameObject* const other) const;
+	bool CollidedWith(const GameObject* const other) const;
 	void AdjustZToGameDepth();
 
 
@@ -70,6 +80,7 @@ private:
 	Directions direction;
 	double angle; //rotation angle
 	int health;
+	Type type;
 };
 
 
