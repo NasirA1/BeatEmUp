@@ -24,6 +24,7 @@
     <ClCompile Include="source\Util.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\aldebaran.mp3" />
     <None Include="resources\bg1.gif" />
     <None Include="resources\bg2.gif" />
     <None Include="resources\bg3.gif" />

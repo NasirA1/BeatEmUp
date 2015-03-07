@@ -98,6 +98,7 @@
     <None Include="resources\punch.wav">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\aldebaran.mp3" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">
