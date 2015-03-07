@@ -1,8 +1,9 @@
 #include "SDLApp.h"
-#include "Util.h"
 #include <sstream>
 #include <string>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
+#include "Util.h"
 
 
 #define FPS_NORMAL			60
@@ -46,6 +47,7 @@ SDLApp::~SDLApp()
 	}
 
 	//Quit SDL subsystems
+	Mix_Quit();
 	TTF_Quit();
 	IMG_Quit();
 	SDL_Quit();
@@ -54,9 +56,9 @@ SDLApp::~SDLApp()
 
 bool SDLApp::Init()
 {
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0 )
 	{
-		logPrintf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+		logPrintf( "SDL could not initialize! SDL Error: %s", SDL_GetError() );
 		return false;
 	}
 
@@ -64,7 +66,7 @@ bool SDLApp::Init()
 		clientWidth_, clientHeight_, SDL_WINDOW_ALLOW_HIGHDPI | SDL_WINDOWPOS_CENTERED );
 	if( !window_ )
 	{
-		logPrintf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+		logPrintf( "Window could not be created! SDL Error: %s", SDL_GetError() );
 		return false;
 	}
 
@@ -77,7 +79,7 @@ bool SDLApp::Init()
 	renderer_ = SDL_CreateRenderer( window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC );
 	if( !renderer_ )
 	{
-		logPrintf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+		logPrintf( "Renderer could not be created! SDL Error: %s", SDL_GetError() );
 		return false;
 	}
 
@@ -89,16 +91,24 @@ bool SDLApp::Init()
 	int imgFlags = IMG_INIT_PNG;
 	if( !( IMG_Init( imgFlags ) & imgFlags ) )
 	{
-		logPrintf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+		logPrintf( "SDL_image could not initialize! SDL_image Error: %s", IMG_GetError() );
 		return false;
 	}
 
 	//Initialize SDL_ttf
 	if( TTF_Init() == -1 )
 	{
-		logPrintf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() );
+		logPrintf( "SDL_ttf could not initialize! SDL_ttf Error: %s", TTF_GetError() );
 		return false;
 	}
+
+	//Initialize SDL_mixer
+	if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+	{
+		logPrintf( "SDL_mixer could not initialize! SDL_mixer Error: %s", Mix_GetError() );
+		return false;
+	}
+
 	
 	logPrintf("Init successful.");
 	return true;

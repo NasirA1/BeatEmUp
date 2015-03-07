@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <sstream>
 #include <algorithm>
+#include "Mixer.h"
 
 
 Game::Game() 
@@ -62,6 +63,7 @@ bool Game::Init()
 
 	gameObjects.push_back(knight1);
 
+	MIXER.Play(Mixer::ST_Track1);
 	return true;
 }
 

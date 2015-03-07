@@ -2,7 +2,7 @@
 #include "Util.h"
 #include "Game.h"
 #include "Rock.h"
-
+#include "Mixer.h"
 
 const float Player::Gravity(2.0f);
 const int Player::JumpHeight(50);
@@ -77,8 +77,10 @@ void Player::Update()
 			SetDirection(Left);
 		else 
 			SetDirection(Right);
+		
 		Jump(0, 30);
 		SetHealth(GetHealth() - 1);
+		MIXER.Play(Mixer::SE_Grunt);
 	}
 }
 

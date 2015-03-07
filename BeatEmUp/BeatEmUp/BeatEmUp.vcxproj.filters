@@ -45,6 +45,9 @@
     <ClCompile Include="source\Text.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Mixer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\bg_full.gif">
@@ -83,6 +86,18 @@
     <None Include="resources\skater_right.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\dragonroar.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\grunt.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\kick.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\punch.wav">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">
@@ -110,6 +125,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Mixer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
