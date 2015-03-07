@@ -39,12 +39,12 @@ bool Game::Init()
 	skaterboy = new Roamer(renderer_, 
 		Sprite::FromFile("resources/skater_left.png", renderer_, 71, 90, 11, 0),
 		Sprite::FromFile("resources/skater_right.png", renderer_, 71, 90, 11, 0), 
-		-200, 400, -200, 1000);
+		-200, 390, -200, 1000, true);
 
 	Roamer* knight1 = new Roamer(renderer_, 
 		Sprite::FromFile("resources/knightwalk_left.png", renderer_, 128, 128, 4, 15),
 		Sprite::FromFile("resources/knightwalk_right.png", renderer_, 128, 128, 4, 3), 
-		5000, 450, -5000, 5000);
+		5000, 450, -5000, 5000, false);
 
 
 	player = new Player(renderer_);
@@ -63,7 +63,7 @@ bool Game::Init()
 
 	gameObjects.push_back(knight1);
 
-	MIXER.Play(Mixer::ST_Track1);
+	//MIXER.Play(Mixer::ST_Track1);
 	return true;
 }
 
