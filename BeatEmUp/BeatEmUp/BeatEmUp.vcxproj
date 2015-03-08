@@ -26,12 +26,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\aldebaran.mp3" />
+    <None Include="resources\andore_punchleft.png" />
+    <None Include="resources\andore_punchright.png" />
     <None Include="resources\andore_walkright.png" />
     <None Include="resources\andore_walkleft.png" />
     <None Include="resources\bg1.gif" />
     <None Include="resources\bg2.gif" />
     <None Include="resources\bg3.gif" />
     <None Include="resources\bg_full.gif" />
+    <None Include="resources\calibri.ttf" />
     <None Include="resources\dragonroar.wav" />
     <None Include="resources\grunt.wav" />
     <None Include="resources\kick.wav" />

@@ -108,6 +108,13 @@
     <None Include="resources\andore_walkright.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\andore_punchleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\andore_punchright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\calibri.ttf" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">

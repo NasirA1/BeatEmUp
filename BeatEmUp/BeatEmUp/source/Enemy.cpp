@@ -89,24 +89,25 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	AdjustZToGameDepth();
 }
 
-const float MinDistance = 10.0f;
-const float MaxDistance = 20.0f;
+const float MaxDistX = 60.0f;
+const float MaxDistY = 0.0f;
 
 void Andore::Update()
 {
+	//Chase player
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.y - GAME.player->Position().y;
 
-	if(distY > 0.0f) yVel = -speed;
-	else if(distY < 0.0f) yVel = speed;
+	if(distY > MaxDistY) yVel = -speed;
+	else if(distY < -MaxDistY) yVel = speed;
 	else yVel = 0.0f;
 
-	if(distX > 60.0f)
+	if(distX > MaxDistX)
 	{
 		SetDirection(Left);
 		xVel = -speed;
 	}
-	else if(distX < -60.0f)
+	else if(distX < -MaxDistX)
 	{
 		SetDirection(Right);
 		xVel = speed;
@@ -116,12 +117,14 @@ void Andore::Update()
 		Stop();
 	}
 
+	//Handle BG scrolling
 	if(GAME.bg->IsScrolling())
 	{
 		position.x += GAME.bg->GetDirection() == Left?
 			-GAME.bg->GetSpeed(): GAME.bg->GetSpeed();
 	}
 
+	//Translate/animate
 	Translate(xVel != 0 || yVel != 0);
 
 	//Propagate to the underlying currently active sprite
