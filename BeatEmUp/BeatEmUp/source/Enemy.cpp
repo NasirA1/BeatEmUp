@@ -89,21 +89,40 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	AdjustZToGameDepth();
 }
 
+const float MinDistance = 10.0f;
+const float MaxDistance = 20.0f;
 
 void Andore::Update()
 {
-	if(position.x <= 0)
-	{
-		SetDirection(Right);
-		xVel = speed;
-	}
-	else if(position.x + position.w > GAME.ClientWidth())
+	float distX = position.x - GAME.player->Position().x;
+	float distY = position.y - GAME.player->Position().y;
+
+	if(distY > 0.0f) yVel = -speed;
+	else if(distY < 0.0f) yVel = speed;
+	else yVel = 0.0f;
+
+	if(distX > 60.0f)
 	{
 		SetDirection(Left);
 		xVel = -speed;
 	}
+	else if(distX < -60.0f)
+	{
+		SetDirection(Right);
+		xVel = speed;
+	}
+	else
+	{
+		Stop();
+	}
 
-	Translate(true);
+	if(GAME.bg->IsScrolling())
+	{
+		position.x += GAME.bg->GetDirection() == Left?
+			-GAME.bg->GetSpeed(): GAME.bg->GetSpeed();
+	}
+
+	Translate(xVel != 0 || yVel != 0);
 
 	//Propagate to the underlying currently active sprite
 	current->Position().x = position.x;
@@ -147,7 +166,7 @@ void Andore::Translate(bool anim)
 	current->SetAnimation(anim);
 	position.x += xVel;
 	position.y += yVel;
-	logPrintf("Andore Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
+	//logPrintf("Andore Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
 	AdjustZToGameDepth();
 }
 
