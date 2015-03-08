@@ -97,6 +97,7 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	//Start chasing now
 	//TODO: add patrolling logic later
 	state = ES_Chasing;
+	speed = 1.0f;
 }
 
 
@@ -155,7 +156,7 @@ void Andore::Update()
 		}
 		else
 		{
-			if(SDL_GetTicks() >= idleTimer)
+			if(SDL_GetTicks() >= idleTimer || GAME.player->isMoving())
 			{
 				state = ES_Chasing;
 				idleTimer = 0;
