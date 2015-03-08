@@ -85,8 +85,9 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	, punchLeft(punchLeftSprite)
 	, punchRight(punchRightSprite)
 	, current(NULL)
-	, state(ST_Patrolling)
+	, state(ES_Patrolling)
 	, punchTimer(0)
+	, idleTimer(0)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -95,7 +96,7 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 
 	//Start chasing now
 	//TODO: add patrolling logic later
-	state = ST_Chasing;
+	state = ES_Chasing;
 }
 
 
@@ -110,7 +111,7 @@ void Andore::Update()
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.y - GAME.player->Position().y;
 
-	if(state == ST_Chasing)
+	if(state == ES_Chasing)
 	{
 		if(distY > MaxDistY) yVel = -speed;
 		else if(distY < -MaxDistY) yVel = speed;
@@ -134,14 +135,36 @@ void Andore::Update()
 			Punch();
 		}
 	}
-	else if(state == ST_Punching)
+	else if(state == ES_Punching)
 	{
 		current = GetDirection() == Left? punchLeft: punchRight;
 
 		if(SDL_GetTicks() - punchTimer > 1000)
 		{
-			state = ST_Chasing;
+			state = ES_Idle;
 			punchTimer = 0;
+		}
+	}
+	else if(state == ES_Idle)
+	{
+		if(!idleTimer)
+		{
+			current = GetDirection() == Left? walkLeft: walkRight;
+			Stop();
+			idleTimer = SDL_GetTicks() + Random::Instance().Next(1000, 5000);
+		}
+		else
+		{
+			if(SDL_GetTicks() >= idleTimer)
+			{
+				state = ES_Chasing;
+				idleTimer = 0;
+			}
+			else
+			{
+				//Face player all the time when on idle
+				SetDirection(position.x > GAME.player->Position().x? Left: Right);
+			}
 		}
 	}
 
@@ -153,7 +176,7 @@ void Andore::Update()
 	}
 
 	//Translate/animate
-	Translate(xVel != 0 || yVel != 0 || state == ST_Punching);
+	Translate(xVel != 0 || yVel != 0 || state == ES_Punching);
 
 	//Propagate to the underlying currently active sprite
 	current->Position().x = position.x;
@@ -164,7 +187,7 @@ void Andore::Update()
 
 void Andore::Punch()
 {
-	state = ST_Punching;
+	state = ES_Punching;
 	punchTimer = SDL_GetTicks();
 }
 

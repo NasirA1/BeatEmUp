@@ -35,11 +35,12 @@ public:
 	void Stop();
 	void Punch();
 
-	enum State
+	enum EState
 	{
-		ST_Patrolling,
-		ST_Chasing,
-		ST_Punching
+		ES_Patrolling,
+		ES_Chasing,
+		ES_Punching,
+		ES_Idle
 	};
 
 private:
@@ -53,6 +54,7 @@ private:
 
 	Sprite* punchRight;
 	Sprite* punchLeft;
-	State state;
+	EState state;
 	Uint32 punchTimer;
+	Uint32 idleTimer;
 };

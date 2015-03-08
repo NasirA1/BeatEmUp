@@ -76,13 +76,11 @@ namespace util
 	//Singleton pseudo-random number generator
 	struct Random : public Singleton<Random>
 	{
-	protected:
 		Random()
 		{
 			srand((unsigned int)time(NULL));
 		}
 
-	public:
 		__forceinline unsigned long Next(const int min, const int max) const
 		{
 			return rand() % max + min;

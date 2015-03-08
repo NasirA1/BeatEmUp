@@ -30,7 +30,7 @@ public:
 	Player* player;
 	Rock* rock;
 	Roamer* skaterboy;
-	Andore* andore;
+	Andore *andore, *andore2;
 
 private:
 	bool leftDown;
