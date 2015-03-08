@@ -26,10 +26,11 @@ public:
 	//Game objects
 	GameObjectList gameObjects;
 	Background* bg;
-	TextBlock* tbFps, *tbPlayerPos;
+	TextBlock *tbFps, *tbPlayerPos, *tbEnemyPos;
 	Player* player;
 	Rock* rock;
 	Roamer* skaterboy;
+	Andore* andore;
 
 private:
 	bool leftDown;

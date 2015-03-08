@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\aldebaran.mp3" />
+    <None Include="resources\andore_walkright.png" />
     <None Include="resources\andore_walkleft.png" />
     <None Include="resources\bg1.gif" />
     <None Include="resources\bg2.gif" />

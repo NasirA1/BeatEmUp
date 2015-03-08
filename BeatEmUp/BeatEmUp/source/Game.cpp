@@ -10,9 +10,10 @@ Game::Game()
 	, "Nasir's Beat 'em Up Game")
 	, MoveBounds(0.0f, 370.0f, (float)SCREEN_WIDTH, 120.0f)
 	, bg(NULL)
-	, tbFps(NULL), tbPlayerPos(NULL)
+	, tbFps(NULL), tbPlayerPos(NULL), tbEnemyPos(NULL)
 	, skaterboy(NULL)
 	, player(NULL)
+	, andore(NULL)
 	, leftDown(false)
 	, rightDown(false)
 	, upDown(false)
@@ -47,22 +48,30 @@ bool Game::Init()
 		5000, 450, -5000, 5000, false);
 
 
+	andore = new Andore(renderer_, 
+		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 124, 10, 3),
+		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 130, 10, 3), 
+		-100, 450);
+
+
 	player = new Player(renderer_);
-	rock = new Rock("resources/rock.png", renderer_);
+	//rock = new Rock("resources/rock.png", renderer_);
 
 	tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer_);	
 	tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer_);
+	tbEnemyPos = new TextBlock("Enemy Pos {}", 16, 0.0f, tbPlayerPos->Position().bottom() + 1, renderer_);
 
 	gameObjects.push_back(bg);
 	gameObjects.push_back(tbFps);
 	gameObjects.push_back(tbPlayerPos);
+	gameObjects.push_back(tbEnemyPos);
 
 	gameObjects.push_back(skaterboy);
 	gameObjects.push_back(player);
-	gameObjects.push_back(rock);
+	//gameObjects.push_back(rock);
 
 	gameObjects.push_back(knight1);
-
+	gameObjects.push_back(andore);
 	//MIXER.Play(Mixer::ST_Track1);
 	return true;
 }
@@ -149,6 +158,14 @@ void Game::Update()
 		<< "," << (int)player->Position().z 
 		<< "}  Health: " << player->GetHealth();
 	tbPlayerPos->SetText(ss.str());
+	ss.str("");
+	ss.clear();
+	ss << "Enemy Pos: {" << (int)andore->Position().x 
+		<< "," << (int)andore->Position().y 
+		<< "," << (int)andore->Position().z 
+		<< "}  Health: " << andore->GetHealth();
+	tbEnemyPos->SetText(ss.str());
+
 
 	//Other game logic
 	gameObjects.Update();
