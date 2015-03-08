@@ -77,19 +77,27 @@ Rock::~Rock()
 
 
 Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
+	, Sprite* punchLeftSprite, Sprite* punchRightSprite
 	, float posX, float posY)
 	: GameObject(GT_Enemy)	
-	, walkRight(walkRightSprite)
 	, walkLeft(walkLeftSprite)
+	, walkRight(walkRightSprite)
+	, punchLeft(punchLeftSprite)
+	, punchRight(punchRightSprite)
 	, current(NULL)
+	, state(ST_Patrolling)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
 	speed = 1.0f;
 	AdjustZToGameDepth();
+
+	//Start chasing now
+	//TODO: add patrolling logic later
+	state = ST_Chasing;
 }
 
-const float MaxDistX = 60.0f;
+const float MaxDistX = 50.0f;
 const float MaxDistY = 0.0f;
 
 void Andore::Update()
@@ -98,23 +106,31 @@ void Andore::Update()
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.y - GAME.player->Position().y;
 
-	if(distY > MaxDistY) yVel = -speed;
-	else if(distY < -MaxDistY) yVel = speed;
-	else yVel = 0.0f;
+	if(state == ST_Chasing)
+	{
+		if(distY > MaxDistY) yVel = -speed;
+		else if(distY < -MaxDistY) yVel = speed;
+		else yVel = 0.0f;
 
-	if(distX > MaxDistX)
-	{
-		SetDirection(Left);
-		xVel = -speed;
+		if(distX > MaxDistX)
+		{
+			SetDirection(Left);
+			xVel = -speed;
+		}
+		else if(distX < -MaxDistX)
+		{
+			SetDirection(Right);
+			xVel = speed;
+		}
+		else
+		{
+			Stop();
+			Punch();
+		}
 	}
-	else if(distX < -MaxDistX)
+	else if(state == ST_Punching)
 	{
-		SetDirection(Right);
-		xVel = speed;
-	}
-	else
-	{
-		Stop();
+		current = GetDirection() == Left? punchLeft: punchRight;
 	}
 
 	//Handle BG scrolling
@@ -125,12 +141,18 @@ void Andore::Update()
 	}
 
 	//Translate/animate
-	Translate(xVel != 0 || yVel != 0);
+	Translate(xVel != 0 || yVel != 0 || state == ST_Punching);
 
 	//Propagate to the underlying currently active sprite
 	current->Position().x = position.x;
 	current->Position().y = position.y;
 	current->Update();
+}
+
+
+void Andore::Punch()
+{
+	state = ST_Punching;
 }
 
 
@@ -142,9 +164,10 @@ void Andore::Draw(SDL_Renderer* const renderer) const
 
 Andore::~Andore()
 {
-	util::Delete(walkRight);
 	util::Delete(walkLeft);
-
+	util::Delete(walkRight);
+	util::Delete(punchLeft);
+	util::Delete(punchRight);
 	logPrintf("Andore object released");
 }
 
