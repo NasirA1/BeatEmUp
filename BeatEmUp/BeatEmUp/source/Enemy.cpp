@@ -86,6 +86,7 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	, punchRight(punchRightSprite)
 	, current(NULL)
 	, state(ST_Patrolling)
+	, punchTimer(0)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -97,8 +98,11 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	state = ST_Chasing;
 }
 
+
+
 const float MaxDistX = 50.0f;
 const float MaxDistY = 0.0f;
+
 
 void Andore::Update()
 {
@@ -122,7 +126,9 @@ void Andore::Update()
 			SetDirection(Right);
 			xVel = speed;
 		}
-		else
+
+		if(SDL_abs(distX) <= MaxDistX 
+			&& SDL_abs(distY) <= MaxDistY)
 		{
 			Stop();
 			Punch();
@@ -131,6 +137,12 @@ void Andore::Update()
 	else if(state == ST_Punching)
 	{
 		current = GetDirection() == Left? punchLeft: punchRight;
+
+		if(SDL_GetTicks() - punchTimer > 1000)
+		{
+			state = ST_Chasing;
+			punchTimer = 0;
+		}
 	}
 
 	//Handle BG scrolling
@@ -153,6 +165,7 @@ void Andore::Update()
 void Andore::Punch()
 {
 	state = ST_Punching;
+	punchTimer = SDL_GetTicks();
 }
 
 

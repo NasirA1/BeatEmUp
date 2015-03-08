@@ -54,4 +54,5 @@ private:
 	Sprite* punchRight;
 	Sprite* punchLeft;
 	State state;
+	Uint32 punchTimer;
 };

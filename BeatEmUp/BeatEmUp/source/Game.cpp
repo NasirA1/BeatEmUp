@@ -51,9 +51,9 @@ bool Game::Init()
 	andore = new Andore(renderer_, 
 		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 124, 10, 5),
 		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 130, 10, 5), 
-		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
-		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
-		-800, 450);
+		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 50, 1),
+		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 50, 1), 
+		600, 450);
 
 
 	player = new Player(renderer_);
