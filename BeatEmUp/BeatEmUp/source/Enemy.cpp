@@ -140,7 +140,7 @@ void Andore::Update()
 	{
 		current = GetDirection() == Left? punchLeft: punchRight;
 
-		if(SDL_GetTicks() - punchTimer > 1000)
+		if(SDL_GetTicks() - punchTimer > 300)
 		{
 			state = ES_Idle;
 			punchTimer = 0;
@@ -152,7 +152,7 @@ void Andore::Update()
 		{
 			current = GetDirection() == Left? walkLeft: walkRight;
 			Stop();
-			idleTimer = SDL_GetTicks() + Random::Instance().Next(1000, 5000);
+			idleTimer = SDL_GetTicks() + Random::Instance().Next(1000, 3000);
 		}
 		else
 		{

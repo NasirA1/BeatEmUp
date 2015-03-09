@@ -21,6 +21,8 @@ Player::Player(SDL_Renderer* const renderer)
 	position.z = position.y - GAME.MoveBounds.top();
 	walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
+	//walkRight = Sprite::FromFile("resources/player_walkright.png", renderer, 55, 90, 5, 0);
+	//walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	if(walkRight) SetDirection(Right);
 }
 

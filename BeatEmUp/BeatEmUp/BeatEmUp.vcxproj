@@ -40,6 +40,7 @@
     <None Include="resources\kick.wav" />
     <None Include="resources\knightwalk_left.png" />
     <None Include="resources\knightwalk_right.png" />
+    <None Include="resources\player_walkright.png" />
     <None Include="resources\punch.wav" />
     <None Include="resources\rock.png" />
     <None Include="resources\rock2.png" />
