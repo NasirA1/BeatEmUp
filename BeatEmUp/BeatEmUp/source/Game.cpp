@@ -119,6 +119,9 @@ void Game::ProcessEvent(const SDL_Event& e)
 		case SDLK_SPACE:
 			player->Jump(1, 20);
 			break;
+		case SDLK_a:
+			player->Punch();
+			break;
 		}
 	}
 	else if(e.key.state == SDL_RELEASED && !e.key.repeat)

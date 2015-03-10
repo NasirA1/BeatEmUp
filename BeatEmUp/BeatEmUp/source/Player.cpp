@@ -15,18 +15,27 @@ Player::Player(SDL_Renderer* const renderer)
 	, walkLeft(NULL)
 	, stanceRight(NULL)
 	, stanceLeft(NULL)
+	, punchRight(NULL)
+	, punchLeft(NULL)
 	, current(NULL)
 	, jumpState(JS_Ground)
 {
 	position.x  = 100.0f , position.w = 76.0f, position.h = 120.0f;
 	position.y = (float)GAME.MidSectionY((int)position.h);
 	position.z = position.y - GAME.MoveBounds.top();
+	
+	//test gladiator walker//////////////////////////////////////////////////////////////////////////////////
 	//walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	//walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 	stanceRight = Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0);
 	stanceLeft = Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0);
 	walkRight = Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7);
 	walkLeft = Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7);
+	punchRight = Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 15, 0, 0xFF, 0xFF, 0xFF);
+	punchLeft = Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 15, 0, 0xFF, 0xFF, 0xFF);
+	
 	if(stanceRight) SetDirection(Right);
 	Stop();
 }
@@ -104,6 +113,8 @@ Player::~Player()
 	util::Delete(walkLeft);
 	util::Delete(stanceRight);
 	util::Delete(stanceLeft);
+	util::Delete(punchRight);
+	util::Delete(punchLeft);
 	logPrintf("Player object released");
 }
 
@@ -134,6 +145,13 @@ void Player::Jump(float xForce, float yForce)
 	xVel = GetDirection() == Right? xForce: -xForce;
 	yVel = -yForce;
 	jumpState = JS_Jumped;
+}
+
+
+void Player::Punch()
+{
+	current = GetDirection()==Right? punchRight: punchLeft;
+	current->SetAnimation(true);
 }
 
 

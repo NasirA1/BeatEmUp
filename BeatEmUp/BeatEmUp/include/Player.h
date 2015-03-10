@@ -28,10 +28,11 @@ public:
 	
 	__forceinline bool isMoving() const 
 	{ 
-		return xVel == 0.0f && yVel == 0.0f; //current->IsAnimationRunning(); 
+		return xVel == 0.0f && yVel == 0.0f; 
 	}
 	
 	void Jump(float xForce, float yForce);
+	void Punch();
 
 private:
 	void Translate(bool anim = true);
@@ -43,10 +44,11 @@ private:
 	Sprite* stanceRight;
 	Sprite* stanceLeft;
 	Sprite* current;
+	Sprite* punchLeft;
+	Sprite* punchRight;
 
 	JumpState jumpState;
 	VectF jumpLocation;
-
 	static const float Gravity;
 	static const int JumpHeight;
 };
