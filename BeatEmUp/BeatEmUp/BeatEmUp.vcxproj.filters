@@ -115,7 +115,10 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="resources\calibri.ttf" />
-    <None Include="resources\player_walkright.png">
+    <None Include="resources\baddude_walkright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude_walkleft.png">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
