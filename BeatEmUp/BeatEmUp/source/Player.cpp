@@ -34,8 +34,8 @@ Player::Player(SDL_Renderer* const renderer)
 	stanceLeft = Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0);
 	walkRight = Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7);
 	walkLeft = Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7);
-	punchRight = Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 15, 0, 0xFF, 0xFF, 0xFF);
-	punchLeft = Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 15, 0, 0xFF, 0xFF, 0xFF);
+	punchRight = Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 10, 0, 0xFF, 0xFF, 0xFF);
+	punchLeft = Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 10, 0, 0xFF, 0xFF, 0xFF);
 	
 	SetDirection(Right);
 	Stop();
@@ -45,44 +45,45 @@ Player::Player(SDL_Renderer* const renderer)
 
 void Player::Update()
 {
-		//Jump rotation...
-			if(jumpState == JS_Jumped || jumpState == JS_Landing)
-					SetAngle(GetAngle() + (GetDirection()==Right? 13: -13));
-			else { 
-				SetAngle(0);
-				current->SetAnimation(true);
-			}
+	//Jump rotation...
+	if(jumpState == JS_Jumped || jumpState == JS_Landing) {
+		SetAngle(GetAngle() + (GetDirection()==Right? 13: -13));
+	}
+	else { 
+		SetAngle(0);
+		current->SetAnimation(true); //back to stance
+	}
 
-			//Jump start..
-			//Shoot up (y) and sway horizontally a bit (x)
-			if(jumpState == JS_Jumped)
-			{
-				yVel += Gravity/(float)JumpHeight;
-				if(position.y > jumpLocation.y - JumpHeight) 
-					Translate(false);
-				else 
-					jumpState = JS_Landing;
-			}
+	//Jump start..
+	//Shoot up (y) and sway horizontally a bit (x)
+	if(jumpState == JS_Jumped)
+	{
+		yVel += Gravity/(float)JumpHeight;
+		if(position.y > jumpLocation.y - JumpHeight) 
+			Translate(false);
+		else 
+			jumpState = JS_Landing;
+	}
 
-			//Landing (in the air)..
-			else if(jumpState == JS_Landing)
-			{
-				//Not landed yet..
-				if(position.y < jumpLocation.y)
-				{
-					yVel += Gravity;
-					xVel += GetDirection() == Right? 0.15f: -0.15f;
-					Translate(false);
-				}
-				//On the ground now...
-				else 
-				{
-					jumpState = JS_Ground;
-					xVel = 0, yVel = 0;
-					position.y = jumpLocation.y;
-					Translate(false);
-				}
-			}
+	//Landing (in the air)..
+	else if(jumpState == JS_Landing)
+	{
+		//Not landed yet..
+		if(position.y < jumpLocation.y)
+		{
+			yVel += Gravity;
+			xVel += GetDirection() == Right? 0.15f: -0.15f;
+			Translate(false);
+		}
+		//On the ground now...
+		else 
+		{
+			jumpState = JS_Ground;
+			xVel = 0, yVel = 0;
+			position.y = jumpLocation.y;
+			Translate(false);
+		}
+	}
 
 	//Propagate to the underlying currently active sprite
 	current->Position().x = position.x;
@@ -97,7 +98,7 @@ void Player::Update()
 			SetDirection(Left);
 		else 
 			SetDirection(Right);
-		
+
 		Jump(0, 30);
 		SetHealth(GetHealth() - 1);
 		MIXER.Play(Mixer::SE_Grunt);
