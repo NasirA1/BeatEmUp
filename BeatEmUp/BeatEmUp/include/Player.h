@@ -28,7 +28,7 @@ public:
 	
 	__forceinline bool isMoving() const 
 	{ 
-		return current->IsAnimationRunning(); 
+		return xVel == 0.0f && yVel == 0.0f; //current->IsAnimationRunning(); 
 	}
 	
 	void Jump(float xForce, float yForce);
@@ -40,6 +40,8 @@ private:
 private:
 	Sprite* walkRight;
 	Sprite* walkLeft;
+	Sprite* stanceRight;
+	Sprite* stanceLeft;
 	Sprite* current;
 
 	JumpState jumpState;

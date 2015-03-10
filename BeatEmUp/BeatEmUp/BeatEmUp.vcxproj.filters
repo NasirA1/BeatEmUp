@@ -121,6 +121,12 @@
     <None Include="resources\baddude_walkleft.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\baddude_stanceleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude_stanceright.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">

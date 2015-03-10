@@ -13,6 +13,8 @@ Player::Player(SDL_Renderer* const renderer)
 	: GameObject(GT_Player, 10, Right)	
 	, walkRight(NULL)
 	, walkLeft(NULL)
+	, stanceRight(NULL)
+	, stanceLeft(NULL)
 	, current(NULL)
 	, jumpState(JS_Ground)
 {
@@ -21,9 +23,12 @@ Player::Player(SDL_Renderer* const renderer)
 	position.z = position.y - GAME.MoveBounds.top();
 	//walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	//walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
+	stanceRight = Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0);
+	stanceLeft = Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0);
 	walkRight = Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7);
 	walkLeft = Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7);
-	if(walkRight) SetDirection(Right);
+	if(stanceRight) SetDirection(Right);
+	Stop();
 }
 
 
@@ -97,7 +102,8 @@ Player::~Player()
 {
 	util::Delete(walkRight);
 	util::Delete(walkLeft);
-
+	util::Delete(stanceRight);
+	util::Delete(stanceLeft);
 	logPrintf("Player object released");
 }
 
@@ -124,6 +130,7 @@ void Player::Jump(float xForce, float yForce)
 
 	jumpLocation.x = position.x;
 	jumpLocation.y = position.y;
+	current = GetDirection() == Right? stanceRight: stanceLeft;
 	xVel = GetDirection() == Right? xForce: -xForce;
 	yVel = -yForce;
 	jumpState = JS_Jumped;
@@ -135,13 +142,16 @@ void Player::Stop()
 	position.x -= xVel;
 	position.y -= yVel;
 	xVel = yVel = 0;
-	current->SetStill();
+	current = GetDirection() == Right? stanceRight: stanceLeft;
+	current->SetAnimation(true);
 }
 
 
 void Player::GoUp()
 {
 	if(jumpState != JS_Ground) return;
+
+	current = GetDirection() == Right? walkRight: walkLeft;
 
 	if (position.y >= GAME.MoveBounds.y) 
 		yVel = -(speed/2.0f);
@@ -155,6 +165,8 @@ void Player::GoDown()
 {
 	if(jumpState != JS_Ground) return;
 	
+	current = GetDirection() == Right? walkRight: walkLeft;
+	
 	if (position.y <= GAME.MoveBounds.bottom()) 
 		yVel = (speed/2.0f);
 	else 
@@ -166,6 +178,8 @@ void Player::GoDown()
 void Player::GoRight()
 {
 	if(jumpState != JS_Ground) return;
+
+	current = GetDirection() == Right? walkRight: walkLeft;
 
 	if (position.x <= GAME.MoveBounds.right() - position.w) 
 		xVel = speed;
@@ -181,6 +195,8 @@ void Player::GoLeft()
 {
 	if(jumpState != JS_Ground) return;
 	
+	current = GetDirection() == Right? walkRight: walkLeft;
+
 	if (position.x >= GAME.MoveBounds.x) 
 		xVel = -speed;
 	else 

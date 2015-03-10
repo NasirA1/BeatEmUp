@@ -30,6 +30,8 @@
     <None Include="resources\andore_punchright.png" />
     <None Include="resources\andore_walkright.png" />
     <None Include="resources\andore_walkleft.png" />
+    <None Include="resources\baddude_stanceleft.png" />
+    <None Include="resources\baddude_stanceright.png" />
     <None Include="resources\baddude_walkleft.png" />
     <None Include="resources\baddude_walkright.png" />
     <None Include="resources\bg1.gif" />
