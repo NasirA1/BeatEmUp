@@ -19,6 +19,17 @@ enum JumpState
 	JS_Landing
 };
 
+enum PState
+{
+	PS_Stance,
+	PS_Walking,
+	PS_Jumping,
+	PS_Punching,
+	PS_Kicking,
+	PS_Hit,
+	PS_Recovering
+};
+
 public:
 	void Stop();
 	void GoUp();
@@ -46,6 +57,9 @@ private:
 	Sprite* current;
 	Sprite* punchLeft;
 	Sprite* punchRight;
+
+	//player state
+	PState pState;
 
 	JumpState jumpState;
 	VectF jumpLocation;
