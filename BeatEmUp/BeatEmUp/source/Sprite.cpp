@@ -30,6 +30,15 @@ Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer,
 }
 
 
+void Sprite::PlayFrames(int fromFrame, int toFrame, bool loop_) 
+{
+	fromIndex = currentFrame = fromFrame; 
+	toIndex = toFrame;
+	SetLoop(loop_);
+	SetAnimation(true);
+}
+
+
 void Sprite::Update()
 {
 	if (!animationRunning)
@@ -42,6 +51,10 @@ void Sprite::Update()
 	if (counter == (frameSpeed - 1)) {
 		currentFrame = (currentFrame + 1) % (toIndex + 1);
     if(currentFrame < fromIndex) currentFrame = fromIndex;
+
+		//play sound effect if one exists for this frame
+		std::map< int, Mixer::SoundEffect >::iterator it = frameSounds.find(currentFrame);
+		if(it != frameSounds.end()) MIXER.Play(it->second);		
 	}
 	// update the counter
 	counter = (counter + 1) % frameSpeed;

@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
-
+#include "Mixer.h"
+#include <map>
 
 class Sprite : public GameObject
 {
@@ -19,6 +20,7 @@ private:
 	int fromIndex;
 	int toIndex;
 	bool loop;
+	std::map< int, Mixer::SoundEffect > frameSounds;
 
 public:
 	Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer, 
@@ -40,14 +42,9 @@ public:
 	__forceinline void SetFrameSpeed(int fps) { frameSpeed = fps; }
 	__forceinline void SetStill() { currentFrame = stillFrame; animationRunning = false; }
 	__forceinline void SetLoop(bool enabled) { loop = enabled; }
+	__forceinline void AddSoundEffect(int frameIndex, Mixer::SoundEffect effect) { frameSounds[frameIndex] = effect; }
 
-	__forceinline void PlayFrames(int fromFrame, int toFrame, bool loop_) 
-	{
-		fromIndex = currentFrame = fromFrame; 
-		toIndex = toFrame;
-		SetLoop(loop_);
-		SetAnimation(true);
-	}
+	void PlayFrames(int fromFrame, int toFrame, bool loop_); 
 
 	static inline Sprite* FromFile(string filename, SDL_Renderer* const renderer, 
 		int frameWidth, int frameHeight, int frameSpeed, int stillFrame

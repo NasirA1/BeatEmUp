@@ -11,12 +11,12 @@ const int Player::JumpHeight(50);
 
 Player::Player(SDL_Renderer* const renderer)
 	: GameObject(GT_Player, 10, Right)	
-	, walkRight(NULL)
-	, walkLeft(NULL)
-	, stanceRight(NULL)
-	, stanceLeft(NULL)
-	, punchRight(NULL)
-	, punchLeft(NULL)
+	, stanceRight(Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0))
+	, stanceLeft(Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0))
+	, walkRight(Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7))
+	, walkLeft(Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7))
+	, punchRight(Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 10, 0, 0xFF, 0xFF, 0xFF))
+	, punchLeft(Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 10, 0, 0xFF, 0xFF, 0xFF))
 	, current(NULL)
 	, jumpState(JS_Ground)
 	, pState(PS_Stance)
@@ -25,19 +25,16 @@ Player::Player(SDL_Renderer* const renderer)
 	position.x  = 100.0f , position.w = 76.0f, position.h = 120.0f;
 	position.y = (float)GAME.MidSectionY((int)position.h);
 	position.z = position.y - GAME.MoveBounds.top();
-	
 	//test gladiator walker//////////////////////////////////////////////////////////////////////////////////
 	//walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	//walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-	stanceRight = Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0);
-	stanceLeft = Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0);
-	walkRight = Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7);
-	walkLeft = Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7);
-	punchRight = Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 10, 0, 0xFF, 0xFF, 0xFF);
-	punchLeft = Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 10, 0, 0xFF, 0xFF, 0xFF);
-	
+	punchRight->AddSoundEffect(1, Mixer::SE_Punch);
+	punchRight->AddSoundEffect(4, Mixer::SE_Punch);
+	punchRight->AddSoundEffect(8, Mixer::SE_Punch);
+	punchLeft->AddSoundEffect(1, Mixer::SE_Punch);
+	punchLeft->AddSoundEffect(4, Mixer::SE_Punch);
+	punchLeft->AddSoundEffect(8, Mixer::SE_Punch);	
 	SetDirection(Right);
 	Stop();
 }
@@ -50,7 +47,7 @@ void Player::Update()
 	if(pState == PS_Punching)
 	{
 		if(SDL_GetTicks() > punchTimeout) {
-			Stop();
+			Stop(); //sets pState to PS_Stance
 			punchTimeout = 0;
 		}
 	}
@@ -61,14 +58,13 @@ void Player::Update()
 	}
 	else {
 		SetAngle(0);
-		if(pState == PS_Jumping)
-		{
-			Stop();
+		if(pState == PS_Jumping) {
+			Stop(); //jump complete set pState to PS_Stance
 		}
 	}
 
 	//Jump start..
-	//Shoot up (y) and sway horizontally a bit (x)
+	//Shoot up (yVel acceleration)...
 	if(jumpState == JS_Jumped)
 	{
 		yVel += Gravity/(float)JumpHeight;
@@ -171,16 +167,14 @@ void Player::Punch()
 {
 	if(pState == PS_Punching)
 	{
-		punchTimeout += 300;
-		MIXER.Play(Mixer::SE_Punch);
+		punchTimeout += 200;
 	}
 	else
 	{
 		current = GetDirection()==Right? punchRight: punchLeft;
 		current->SetAnimation(true);
 		current->SetCurrentFrame(0);
-		punchTimeout = SDL_GetTicks() + 300;
-		MIXER.Play(Mixer::SE_Punch);
+		punchTimeout = SDL_GetTicks() + 200;
 		pState = PS_Punching;
 	}
 }
@@ -207,6 +201,7 @@ void Player::GoUp()
 		yVel = -(speed/2.0f);
 	else 
 		yVel = 0;
+	
 	Translate();
 	pState = PS_Walking;
 }
@@ -222,6 +217,7 @@ void Player::GoDown()
 		yVel = (speed/2.0f);
 	else 
 		yVel = 0;
+	
 	Translate();        
 	pState = PS_Walking;
 }
