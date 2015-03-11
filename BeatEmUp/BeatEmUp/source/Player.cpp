@@ -20,6 +20,7 @@ Player::Player(SDL_Renderer* const renderer)
 	, current(NULL)
 	, jumpState(JS_Ground)
 	, pState(PS_Stance)
+	, punchTimer(0)
 {
 	position.x  = 100.0f , position.w = 76.0f, position.h = 120.0f;
 	position.y = (float)GAME.MidSectionY((int)position.h);
@@ -45,13 +46,23 @@ Player::Player(SDL_Renderer* const renderer)
 
 void Player::Update()
 {
+	//punching
+	if(pState == PS_Punching && SDL_GetTicks() > punchTimer + 300)
+	{
+		Stop();
+		punchTimer = 0;
+	}
+
 	//Jump rotation...
 	if(jumpState == JS_Jumped || jumpState == JS_Landing) {
 		SetAngle(GetAngle() + (GetDirection()==Right? 13: -13));
 	}
-	else { 
+	else {
 		SetAngle(0);
-		current->SetAnimation(true); //back to stance
+		if(pState == PS_Jumping)
+		{
+			Stop();
+		}
 	}
 
 	//Jump start..
@@ -157,7 +168,9 @@ void Player::Jump(float xForce, float yForce)
 void Player::Punch()
 {
 	current = GetDirection()==Right? punchRight: punchLeft;
-	//current->SetAnimation(true);
+	current->PlayFrames(0, 1, false);
+	current->SetAnimation(true);
+	punchTimer = SDL_GetTicks();
 	pState = PS_Punching;
 }
 

@@ -60,6 +60,7 @@ private:
 
 	//player state
 	PState pState;
+	Uint32 punchTimer;
 
 	JumpState jumpState;
 	VectF jumpLocation;

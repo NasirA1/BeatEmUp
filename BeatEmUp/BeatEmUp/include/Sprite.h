@@ -16,6 +16,9 @@ private:
 	int counter;
 	bool animationRunning;
 	int stillFrame;
+	int fromIndex;
+	int toIndex;
+	bool loop;
 
 public:
 	Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer, 
@@ -36,6 +39,15 @@ public:
 	__forceinline void SetCurrentFrame(int index) { currentFrame = index; }
 	__forceinline void SetFrameSpeed(int fps) { frameSpeed = fps; }
 	__forceinline void SetStill() { currentFrame = stillFrame; animationRunning = false; }
+	__forceinline void SetLoop(bool enabled) { loop = enabled; }
+
+	__forceinline void PlayFrames(int fromFrame, int toFrame, bool loop_) 
+	{
+		fromIndex = currentFrame = fromFrame; 
+		toIndex = toFrame;
+		SetLoop(loop_);
+		SetAnimation(true);
+	}
 
 	static inline Sprite* FromFile(string filename, SDL_Renderer* const renderer, 
 		int frameWidth, int frameHeight, int frameSpeed, int stillFrame

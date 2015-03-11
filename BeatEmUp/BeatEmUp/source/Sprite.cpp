@@ -9,8 +9,11 @@ Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer,
 	, sheet(NULL)
 	, frameSpeed(frameSpeed_)
 	, stillFrame(stillFrame_)
+	, fromIndex(0)
+	, toIndex(0)
 	, currentFrame(0)
 	, animationRunning(false)
+	, loop(true)
 {
 	if(!spriteSheet || !renderer) return;
 
@@ -21,6 +24,8 @@ Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer,
 	frameCount = framesPerRow * rowCount;
 	sheet = SDL_CreateTextureFromSurface(renderer, spriteSheet);
 
+	fromIndex = 0;
+	toIndex = frameCount - 1;
 	logPrintf("spritesheet loaded (%d,%d) %d frames", spriteSheet->w, spriteSheet->h, frameCount);
 }
 
@@ -29,14 +34,15 @@ void Sprite::Update()
 {
 	if (!animationRunning)
 	{
-		currentFrame = stillFrame;
+		//currentFrame = stillFrame;
 		return;
 	}
 
 	// update to the next frame if it is time
-	if (counter == (frameSpeed - 1))
-		currentFrame = (currentFrame + 1) % frameCount;
-
+	if (counter == (frameSpeed - 1)) {
+		currentFrame = (currentFrame + 1) % (toIndex + 1);
+    if(currentFrame < fromIndex) currentFrame = fromIndex;
+	}
 	// update the counter
 	counter = (counter + 1) % frameSpeed;
 }
@@ -52,6 +58,11 @@ void Sprite::Draw(SDL_Renderer* const renderer) const
 	SDL_Rect nPos;
 	util::Convert(position, nPos);
 	SDL_RenderCopyEx(renderer, sheet, &src, &nPos, GetAngle(), NULL, SDL_FLIP_NONE);
+
+	if(!loop && IsAnimationRunning() && currentFrame == toIndex)
+	{
+		const_cast<Sprite*>(this)->SetAnimation(false);
+	}
 }
 
 
