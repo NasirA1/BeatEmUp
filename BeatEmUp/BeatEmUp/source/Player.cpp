@@ -167,14 +167,14 @@ void Player::Punch()
 {
 	if(pState == PS_Punching)
 	{
-		punchTimeout += 200;
+		punchTimeout += 250;
 	}
 	else
 	{
 		current = GetDirection()==Right? punchRight: punchLeft;
 		current->SetAnimation(true);
 		current->SetCurrentFrame(0);
-		punchTimeout = SDL_GetTicks() + 200;
+		punchTimeout = SDL_GetTicks() + 250;
 		pState = PS_Punching;
 	}
 }
