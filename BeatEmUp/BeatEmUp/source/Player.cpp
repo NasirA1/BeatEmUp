@@ -172,6 +172,7 @@ void Player::Punch()
 	if(pState == PS_Punching)
 	{
 		punchTimeout += 300;
+		MIXER.Play(Mixer::SE_Punch);
 	}
 	else
 	{
@@ -179,6 +180,7 @@ void Player::Punch()
 		current->SetAnimation(true);
 		current->SetCurrentFrame(0);
 		punchTimeout = SDL_GetTicks() + 300;
+		MIXER.Play(Mixer::SE_Punch);
 		pState = PS_Punching;
 	}
 }

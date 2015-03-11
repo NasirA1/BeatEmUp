@@ -61,7 +61,7 @@ void Mixer::Play(Mixer::SoundEffect effect)
 	map< Mixer::SoundEffect, Mix_Chunk* >::iterator it = effects.find(effect);
 	if(it != effects.end() && it->second)
 	{
-		Mix_PlayChannel(-1, it->second, 1);
+		Mix_PlayChannel(-1, it->second, 0);
 	}
 }
 
