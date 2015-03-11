@@ -37,10 +37,8 @@ public:
 	void GoRight();
 	void GoLeft();
 	
-	__forceinline bool isMoving() const 
-	{ 
-		return xVel == 0.0f && yVel == 0.0f; 
-	}
+	__forceinline bool isMoving() const { return xVel == 0.0f && yVel == 0.0f; }
+	__forceinline PState GetState() const { return pState; }
 	
 	void Jump(float xForce, float yForce);
 	void Punch();
