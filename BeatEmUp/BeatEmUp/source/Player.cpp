@@ -20,7 +20,7 @@ Player::Player(SDL_Renderer* const renderer)
 	, current(NULL)
 	, jumpState(JS_Ground)
 	, pState(PS_Stance)
-	, punchTimer(0)
+	, punchTimeout(0)
 {
 	position.x  = 100.0f , position.w = 76.0f, position.h = 120.0f;
 	position.y = (float)GAME.MidSectionY((int)position.h);
@@ -47,10 +47,12 @@ Player::Player(SDL_Renderer* const renderer)
 void Player::Update()
 {
 	//punching
-	if(pState == PS_Punching && SDL_GetTicks() > punchTimer + 300)
+	if(pState == PS_Punching)
 	{
-		Stop();
-		punchTimer = 0;
+		if(SDL_GetTicks() > punchTimeout) {
+			Stop();
+			punchTimeout = 0;
+		}
 	}
 
 	//Jump rotation...
@@ -167,11 +169,18 @@ void Player::Jump(float xForce, float yForce)
 
 void Player::Punch()
 {
-	current = GetDirection()==Right? punchRight: punchLeft;
-	current->PlayFrames(0, 1, false);
-	current->SetAnimation(true);
-	punchTimer = SDL_GetTicks();
-	pState = PS_Punching;
+	if(pState == PS_Punching)
+	{
+		punchTimeout += 300;
+	}
+	else
+	{
+		current = GetDirection()==Right? punchRight: punchLeft;
+		current->SetAnimation(true);
+		current->SetCurrentFrame(0);
+		punchTimeout = SDL_GetTicks() + 300;
+		pState = PS_Punching;
+	}
 }
 
 
@@ -188,7 +197,7 @@ void Player::Stop()
 
 void Player::GoUp()
 {
-	if(jumpState != JS_Ground) return;
+	if(jumpState != JS_Ground || pState == PS_Punching) return;
 
 	current = GetDirection() == Right? walkRight: walkLeft;
 
@@ -203,7 +212,7 @@ void Player::GoUp()
 
 void Player::GoDown()
 {
-	if(jumpState != JS_Ground) return;
+	if(jumpState != JS_Ground || pState == PS_Punching) return;
 	
 	current = GetDirection() == Right? walkRight: walkLeft;
 	
@@ -218,7 +227,7 @@ void Player::GoDown()
 
 void Player::GoRight()
 {
-	if(jumpState != JS_Ground) return;
+	if(jumpState != JS_Ground || pState == PS_Punching) return;
 
 	current = GetDirection() == Right? walkRight: walkLeft;
 
@@ -235,7 +244,7 @@ void Player::GoRight()
 
 void Player::GoLeft()
 {
-	if(jumpState != JS_Ground) return;
+	if(jumpState != JS_Ground || pState == PS_Punching) return;
 	
 	current = GetDirection() == Right? walkRight: walkLeft;
 
