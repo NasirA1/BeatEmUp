@@ -238,6 +238,7 @@ void Andore::Translate(bool anim)
 	current->SetAnimation(anim);
 	position.x += xVel;
 	position.y += yVel;
+	position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;
 	//logPrintf("Andore Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
 	AdjustZToGameDepth();
 }
