@@ -77,13 +77,15 @@ Rock::~Rock()
 
 
 Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
-	, Sprite* punchLeftSprite, Sprite* punchRightSprite
+	, Sprite* punchLeftSprite, Sprite* punchRightSprite, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, float posX, float posY)
 	: GameObject(GT_Enemy)	
 	, walkLeft(walkLeftSprite)
 	, walkRight(walkRightSprite)
 	, punchLeft(punchLeftSprite)
 	, punchRight(punchRightSprite)
+	, hitLeft(hitLeftSprite)
+	, hitRight(hitRightSprite)
 	, current(NULL)
 	, state(ES_Patrolling)
 	, punchTimer(0)
@@ -118,6 +120,8 @@ void Andore::Update()
 		{
 			logPrintf("ouch!");
 			//MIXER.Play(Mixer::SE_DragonRoar);
+			Stop();
+			current = GetDirection() == Left? hitLeft: hitRight;
 		}
 	}
 
@@ -142,7 +146,7 @@ void Andore::Update()
 			&& SDL_abs(distY) <= MaxDistY)
 		{
 			Stop();
-			Attack();
+			//Attack();
 		}
 	}
 	else if(state == ES_Attacking)
@@ -214,6 +218,8 @@ Andore::~Andore()
 	util::Delete(walkRight);
 	util::Delete(punchLeft);
 	util::Delete(punchRight);
+	util::Delete(hitLeft);
+	util::Delete(hitRight);
 	logPrintf("Andore object released");
 }
 
