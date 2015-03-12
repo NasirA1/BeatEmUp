@@ -117,7 +117,7 @@ void Andore::Update()
 		if(GAME.player->GetState() == Player::PS_Punching && CollidedWith(GAME.player))
 		{
 			logPrintf("ouch!");
-			MIXER.Play(Mixer::SE_DragonRoar);
+			//MIXER.Play(Mixer::SE_DragonRoar);
 		}
 	}
 

@@ -13,7 +13,7 @@ Background::Background(int clientWidth, int clientHeight, SDL_Renderer* const re
 	, bg3(new BackgroundLayer("resources/bg3.gif", renderer, clientWidth, clientHeight, 3.0f))
 {
 	speed = 3.0f; //speed of the outermost layer
-	position.z = -10;
+	position.z = -99999; //bg z-order
 	layers.push_back(bg1);
 	layers.push_back(bg2);
 	layers.push_back(bg3);
