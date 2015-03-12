@@ -112,6 +112,15 @@ void Andore::Update()
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.y - GAME.player->Position().y;
 
+	if(state != ES_Attacking)
+	{
+		if(GAME.player->GetState() == Player::PS_Punching && CollidedWith(GAME.player))
+		{
+			logPrintf("ouch!");
+			MIXER.Play(Mixer::SE_DragonRoar);
+		}
+	}
+
 	if(state == ES_Chasing)
 	{
 		if(distY > MaxDistY) yVel = -speed;
@@ -133,10 +142,10 @@ void Andore::Update()
 			&& SDL_abs(distY) <= MaxDistY)
 		{
 			Stop();
-			Punch();
+			Attack();
 		}
 	}
-	else if(state == ES_Punching)
+	else if(state == ES_Attacking)
 	{
 		current = GetDirection() == Left? punchLeft: punchRight;
 
@@ -177,7 +186,7 @@ void Andore::Update()
 	}
 
 	//Translate/animate
-	Translate(xVel != 0 || yVel != 0 || state == ES_Punching);
+	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking);
 
 	//Propagate to the underlying currently active sprite
 	current->Position().x = position.x;
@@ -186,9 +195,9 @@ void Andore::Update()
 }
 
 
-void Andore::Punch()
+void Andore::Attack()
 {
-	state = ES_Punching;
+	state = ES_Attacking;
 	punchTimer = SDL_GetTicks();
 }
 

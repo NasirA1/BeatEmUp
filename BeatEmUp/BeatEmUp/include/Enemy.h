@@ -33,13 +33,13 @@ public:
 	virtual ~Andore();
 	virtual void SetDirection(Directions dir) override;
 	void Stop();
-	void Punch();
+	void Attack();
 
 	enum EState
 	{
 		ES_Patrolling,
 		ES_Chasing,
-		ES_Punching,
+		ES_Attacking,
 		ES_Idle
 	};
 

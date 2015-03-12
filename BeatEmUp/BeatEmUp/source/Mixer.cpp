@@ -39,6 +39,7 @@ Mixer::Mixer()
 	LoadChunk(*this, SE_Kick, "resources/kick.wav");
 	LoadChunk(*this, SE_Punch, "resources/punch.wav");
 	LoadChunk(*this, SE_Grunt, "resources/grunt.wav");
+	LoadChunk(*this, SE_DragonRoar, "resources/dragonroar.wav");
 
 	//Load tracks1
 	LoadMusic(*this, ST_Track1, "resources/aldebaran.mp3");

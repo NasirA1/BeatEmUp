@@ -36,12 +36,12 @@ public:
 	void GoDown();
 	void GoRight();
 	void GoLeft();
+	void Jump(float xForce, float yForce);
+	void Punch();
 	
 	__forceinline bool isMoving() const { return xVel == 0.0f && yVel == 0.0f; }
 	__forceinline PState GetState() const { return pState; }
 	
-	void Jump(float xForce, float yForce);
-	void Punch();
 
 private:
 	void Translate(bool anim = true);
@@ -60,6 +60,7 @@ private:
 	PState pState;
 	Uint32 punchTimeout;
 
+	//jumping
 	JumpState jumpState;
 	VectF jumpLocation;
 	static const float Gravity;
