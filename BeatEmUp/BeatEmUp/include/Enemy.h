@@ -35,7 +35,6 @@ public:
 	void Stop();
 	void Attack();
 	void OnPlayerAttack();
-	void OnHit();
 
 	enum EState
 	{

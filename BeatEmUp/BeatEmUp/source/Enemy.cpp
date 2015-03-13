@@ -113,7 +113,10 @@ void Andore::OnPlayerAttack()
 		current = GetDirection() == Left? hitLeft: hitRight;
 		state = ES_Hit;
 		SetHealth(GetHealth() - 1);
-		recoveryTimer = SDL_GetTicks() + 200;
+		if(GetHealth() > 0)
+			recoveryTimer = SDL_GetTicks() + 200;
+		else
+			MIXER.Play(Mixer::SE_DragonRoar); //death
 	}
 }
 
