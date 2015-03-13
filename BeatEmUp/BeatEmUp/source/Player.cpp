@@ -50,6 +50,15 @@ void Player::Update()
 			Stop(); //sets pState to PS_Stance
 			punchTimeout = 0;
 		}
+		else if(current->GetCurrentFrame() == 1
+			|| current->GetCurrentFrame() == 4
+			|| current->GetCurrentFrame() == 8)
+		{
+			if(CollidedWith(GAME.andore))
+			{
+				GAME.andore->OnPlayerAttack();
+			}
+		}
 	}
 
 	//Jump rotation...

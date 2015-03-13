@@ -79,7 +79,7 @@ Rock::~Rock()
 Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
 	, Sprite* punchLeftSprite, Sprite* punchRightSprite, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, float posX, float posY)
-	: GameObject(GT_Enemy)	
+	: GameObject(GT_Enemy, 100)	
 	, walkLeft(walkLeftSprite)
 	, walkRight(walkRightSprite)
 	, punchLeft(punchLeftSprite)
@@ -90,6 +90,7 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	, state(ES_Patrolling)
 	, punchTimer(0)
 	, idleTimer(0)
+	, recoveryTimer(0)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -104,9 +105,21 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 
 
 
+void Andore::OnPlayerAttack()
+{
+	if(state != ES_Attacking)
+	{
+		Stop();
+		current = GetDirection() == Left? hitLeft: hitRight;
+		state = ES_Hit;
+		SetHealth(GetHealth() - 1);
+		recoveryTimer = SDL_GetTicks() + 200;
+	}
+}
+
+
 const float MaxDistX = 50.0f;
 const float MaxDistY = 0.0f;
-
 
 void Andore::Update()
 {
@@ -114,15 +127,14 @@ void Andore::Update()
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.y - GAME.player->Position().y;
 
-	if(state != ES_Attacking)
+	//when hit, check if recovered and resume chasing player
+	if(state == ES_Hit && SDL_GetTicks() > recoveryTimer)
 	{
-		if(GAME.player->GetState() == Player::PS_Punching && CollidedWith(GAME.player))
-		{
-			logPrintf("ouch!");
-			//MIXER.Play(Mixer::SE_DragonRoar);
-			Stop();
-			current = GetDirection() == Left? hitLeft: hitRight;
-		}
+		Stop();
+		state = ES_Idle;
+		recoveryTimer = 0;
+		//Face player
+		//SetDirection(position.x > GAME.player->Position().x? Left: Right);
 	}
 
 	if(state == ES_Chasing)
@@ -146,7 +158,7 @@ void Andore::Update()
 			&& SDL_abs(distY) <= MaxDistY)
 		{
 			Stop();
-			//Attack();
+			Attack();
 		}
 	}
 	else if(state == ES_Attacking)
@@ -163,7 +175,6 @@ void Andore::Update()
 	{
 		if(!idleTimer)
 		{
-			current = GetDirection() == Left? walkLeft: walkRight;
 			Stop();
 			idleTimer = SDL_GetTicks() + Random::Instance().Next(1000, 3000);
 		}
@@ -235,6 +246,7 @@ void Andore::SetDirection(Directions dir)
 void Andore::Stop()
 {
 	xVel = yVel = 0;
+	current = GetDirection() == Left? walkLeft: walkRight;
 	current->SetStill();
 }
 

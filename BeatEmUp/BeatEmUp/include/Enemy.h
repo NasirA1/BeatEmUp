@@ -34,12 +34,15 @@ public:
 	virtual void SetDirection(Directions dir) override;
 	void Stop();
 	void Attack();
+	void OnPlayerAttack();
+	void OnHit();
 
 	enum EState
 	{
 		ES_Patrolling,
 		ES_Chasing,
 		ES_Attacking,
+		ES_Hit,
 		ES_Idle
 	};
 
@@ -59,4 +62,5 @@ private:
 	EState state;
 	Uint32 punchTimer;
 	Uint32 idleTimer;
+	Uint32 recoveryTimer;
 };

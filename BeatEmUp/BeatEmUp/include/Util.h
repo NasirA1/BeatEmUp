@@ -15,20 +15,21 @@
 
 
 
-template <typename T>
-class Singleton
-{
-public:
-	static T& Instance()
-	{
-		static T instance;
-		return instance;
-	}
-};
-
-
 namespace util
 {
+
+	//General-purpose Singleton mixin
+	template <typename T>
+	class Singleton
+	{
+	public:
+		static T& Instance()
+		{
+			static T instance;
+			return instance;
+		}
+	};
+
 
 	//Float rectangle (useful for more precise calculations)
 	//e.g. move by 2.5 pixels
@@ -257,6 +258,7 @@ namespace util
 			t = NULL;
 		}
 	}
+
 
 }//endnamespace
 

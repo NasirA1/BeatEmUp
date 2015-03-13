@@ -8,7 +8,7 @@
 #define MIXER	Mixer::Instance()
 
 
-class Mixer : public Singleton<Mixer>
+class Mixer : public util::Singleton<Mixer>
 {
 public:
 	enum SoundEffect
