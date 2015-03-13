@@ -55,13 +55,15 @@ bool Game::Init()
 		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
 		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
-		800/*2400*/, 450);
-	//andore2 = new Andore(renderer_, 
-	//	Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 124, 10, 5),
-	//	Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 130, 10, 5), 
-	//	Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
-	//	Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
-	//	-600, 450);
+		2400, 450);
+	andore2 = new Andore(renderer_, 
+		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 124, 10, 5),
+		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 130, 10, 5), 
+		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
+		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
+		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
+		-600, 450);
 
 
 	player = new Player(renderer_);
@@ -82,8 +84,8 @@ bool Game::Init()
 
 	gameObjects.push_back(knight1);
 	gameObjects.push_back(andore);
-	//gameObjects.push_back(andore2);
-	//MIXER.Play(Mixer::ST_Track1);
+	gameObjects.push_back(andore2);
+	MIXER.Play(Mixer::ST_Track1);
 	return true;
 }
 

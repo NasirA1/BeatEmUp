@@ -10,7 +10,7 @@ const int Player::JumpHeight(50);
 
 
 Player::Player(SDL_Renderer* const renderer)
-	: GameObject(GT_Player, 10, Right)	
+	: GameObject(GT_Player, 100, Right)	
 	, stanceRight(Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0))
 	, stanceLeft(Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0))
 	, walkRight(Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7))
@@ -61,6 +61,19 @@ void Player::Update()
 		}
 	}
 
+	//Hit by rock..
+	if(CollidedWith(GAME.rock))
+	{
+		if(GAME.rock->GetDirection() == Right) 
+			SetDirection(Left);
+		else 
+			SetDirection(Right);
+
+		Jump(0, 30);
+		SetHealth(GetHealth() - 1);
+		MIXER.Play(Mixer::SE_Grunt);
+	}
+
 	//Jump rotation...
 	if(jumpState == JS_Jumped || jumpState == JS_Landing) {
 		SetAngle(GetAngle() + (GetDirection()==Right? 13: -13));
@@ -107,20 +120,6 @@ void Player::Update()
 	current->Position().x = position.x;
 	current->Position().y = position.y;
 	current->Update();
-
-	//Collision detection
-	if(CollidedWith(GAME.rock))
-	{
-		//got hit by rock!
-		if(GAME.rock->GetDirection() == Right) 
-			SetDirection(Left);
-		else 
-			SetDirection(Right);
-
-		Jump(0, 30);
-		SetHealth(GetHealth() - 1);
-		MIXER.Play(Mixer::SE_Grunt);
-	}
 }
 
 
