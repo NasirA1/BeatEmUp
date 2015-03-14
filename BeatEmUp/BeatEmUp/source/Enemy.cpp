@@ -175,7 +175,7 @@ void Enemy::HandleKnockedDown()
 			xVel += GetDirection() == Right? 0.15f: -0.15f;
 			Translate(false);
 		}
-		//On the ground now...
+		//Landed. On the ground now...
 		else 
 		{
 			jumpState = JS_Ground;
@@ -185,14 +185,30 @@ void Enemy::HandleKnockedDown()
 			Translate(false);
 		}
 	}
-	////Dead... play death soundeffect and mark for GC
-	//if(!IsDead())
-	//{
-	//	Stop();
-	//	state = ES_Idle;
-	//	recoveryTimer = 0;
-	//	hitCount = 0;
-	//}
+	else if(jumpState == JS_Ground)
+	{
+		//Getting up...
+		if(GetHealth() > 0)
+		{
+			if(current->GetCurrentFrame() == 1)
+			{
+				if(recoveryTimer == 0) {
+					recoveryTimer = SDL_GetTicks() + 2000;
+				} else if (SDL_GetTicks() > recoveryTimer) {
+					current->SetCurrentFrame(2);
+					recoveryTimer = SDL_GetTicks() + 500;
+				}
+			}
+			else if(current->GetCurrentFrame() == 2)
+			{
+				if(SDL_GetTicks() > recoveryTimer) {
+					Stop();
+					state = ES_Idle;
+					recoveryTimer = 0;
+				}
+			}
+		}
+	}
 }
 
 
@@ -245,7 +261,7 @@ void Enemy::Update()
 			&& SDL_abs((int)distY) <= (int)MaxDistY)
 		{
 			Stop();
-			//Attack();
+			Attack();
 		}
 	}
 	else if(state == ES_Attacking)
