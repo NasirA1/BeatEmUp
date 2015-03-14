@@ -39,7 +39,8 @@ public:
 	void Stop();
 	void Attack();
 	void OnPlayerAttack();
-
+	void Jump(float xAccel, float yAccel);
+	
 	enum EState
 	{
 		ES_Patrolling,
@@ -52,6 +53,7 @@ public:
 		health of 0 indicates death
 		*/
 	};
+
 
 private:
 	void Translate(bool anim);
@@ -75,4 +77,16 @@ private:
 	Uint32 idleTimer;
 	Uint32 recoveryTimer;
 	Uint8 hitCount;
+
+	//jumping
+	enum JumpState
+	{
+		JS_Ground,
+		JS_Jumped,
+		JS_Landing
+	};
+	JumpState jumpState;
+	VectF jumpLocation;
+	static const float Gravity;
+	static const int JumpHeight;
 };

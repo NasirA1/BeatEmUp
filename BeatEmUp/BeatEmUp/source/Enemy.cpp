@@ -97,6 +97,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, idleTimer(0)
 	, recoveryTimer(0)
 	, hitCount(0)
+	, jumpState(JS_Ground)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -112,7 +113,6 @@ Enemy::Enemy(SDL_Renderer* const renderer
 
 
 const Uint8 KnockDownHitCount = 15;
-
 void Enemy::OnPlayerAttack()
 {
 	if(state != ES_Attacking && state != ES_KnockedDown)
@@ -132,47 +132,72 @@ void Enemy::OnPlayerAttack()
 			current = GetDirection() == Left? fallLeft: fallRight;
 			current->SetCurrentFrame(0);
 			state = ES_KnockedDown;
-			recoveryTimer = SDL_GetTicks() + 1500/*10000*/;
+			recoveryTimer = 0;
+			Jump(8.0f, 10.0f);
 		}
 	}
 }
 
+
+const float Enemy::Gravity(2.0f);
+const int Enemy::JumpHeight(50);
+
+
+void Enemy::Jump(float xAccel, float yAccel)
+{
+	jumpLocation.x = position.x;
+	jumpLocation.y = position.y;
+	xVel = GetDirection() == Right? -xAccel: xAccel;
+	yVel = -yAccel;
+	jumpState = JS_Jumped;
+}
 
 
 void Enemy::HandleKnockedDown()
 {
-	if(SDL_GetTicks() < recoveryTimer)
+	//Jump start..
+	//Shoot up (yVel acceleration)...
+	if(jumpState == JS_Jumped)
 	{
-		//Propagate to the underlying currently active sprite
-		if(current->GetCurrentFrame() == 0)
+		yVel += Gravity/(float)JumpHeight;
+		if(position.y > jumpLocation.y - JumpHeight) 
+			Translate(false);
+		else 
+			jumpState = JS_Landing;
+	}
+	//Landing (in the air)..
+	else if(jumpState == JS_Landing)
+	{
+		//Not landed yet..
+		if(position.y < jumpLocation.y)
 		{
-			yVel = 0.3f;
-			xVel = 10.0f;
+			yVel += Gravity;
+			xVel += GetDirection() == Right? 0.15f: -0.15f;
+			Translate(false);
 		}
-		else
+		//On the ground now...
+		else 
 		{
-			xVel = 0.0f, yVel=0.0f;
+			jumpState = JS_Ground;
+			xVel = 0, yVel = 0;
+			position.y = jumpLocation.y;
+			current->SetCurrentFrame(1);
+			Translate(false);
 		}
 	}
-	else
-	{
-		//Dead... play death soundeffect and mark for GC
-		if(!IsDead())
-		{
-			Stop();
-			state = ES_Idle;
-			recoveryTimer = 0;
-			hitCount = 0;
-		}
-	}
+	////Dead... play death soundeffect and mark for GC
+	//if(!IsDead())
+	//{
+	//	Stop();
+	//	state = ES_Idle;
+	//	recoveryTimer = 0;
+	//	hitCount = 0;
+	//}
 }
-
-
 
 
 const float MaxDistX = 50.0f;
 const float MaxDistY = 0.0f;
-
 void Enemy::Update()
 {
 	//Recovery (when hit)
@@ -188,6 +213,11 @@ void Enemy::Update()
 	if(state == ES_KnockedDown)
 	{
 		HandleKnockedDown();
+		Translate();
+		current->Position().x = position.x;
+		current->Position().y = position.y;
+		current->Update();
+		return;
 	}
 
 	//Chase player
@@ -215,7 +245,7 @@ void Enemy::Update()
 			&& SDL_abs((int)distY) <= (int)MaxDistY)
 		{
 			Stop();
-			Attack();
+			//Attack();
 		}
 	}
 	else if(state == ES_Attacking)
@@ -248,13 +278,6 @@ void Enemy::Update()
 				SetDirection(position.x > GAME.player->Position().x? Left: Right);
 			}
 		}
-	}
-
-	//Handle BG scrolling
-	if(GAME.bg->IsScrolling())
-	{
-		position.x += GAME.bg->GetDirection() == Left?
-			-GAME.bg->GetSpeed(): GAME.bg->GetSpeed();
 	}
 
 	//Translate/animate
@@ -312,6 +335,13 @@ void Enemy::Stop()
 
 void Enemy::Translate()
 {
+	//Handle BG scrolling
+	if(GAME.bg->IsScrolling())
+	{
+		position.x += GAME.bg->GetDirection() == Left?
+			-GAME.bg->GetSpeed(): GAME.bg->GetSpeed();
+	}
+
 	position.x += xVel;
 	position.y += yVel;
 	position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;

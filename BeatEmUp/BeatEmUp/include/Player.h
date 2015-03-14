@@ -12,12 +12,6 @@ public:
 	virtual void SetDirection(Directions dir) override;
 	virtual void SetAngle(double theta) override;
 
-enum JumpState
-{
-	JS_Ground,
-	JS_Jumped,
-	JS_Landing
-};
 
 enum PState
 {
@@ -39,7 +33,7 @@ public:
 	void Jump(float xForce, float yForce);
 	void Punch();
 	
-	__forceinline bool isMoving() const { return xVel == 0.0f && yVel == 0.0f; }
+	__forceinline bool isMoving() const { return !(xVel == 0.0f && yVel == 0.0f); }
 	__forceinline PState GetState() const { return pState; }
 	
 
@@ -61,6 +55,12 @@ private:
 	Uint32 punchTimeout;
 
 	//jumping
+	enum JumpState
+	{
+		JS_Ground,
+		JS_Jumped,
+		JS_Landing
+	};
 	JumpState jumpState;
 	VectF jumpLocation;
 	static const float Gravity;
