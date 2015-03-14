@@ -54,7 +54,7 @@ void Player::Update()
 			|| current->GetCurrentFrame() == 4
 			|| current->GetCurrentFrame() == 8)
 		{
-			//TODO: test hardcoded code
+			//TODO: remove this test-hardcoded code
 			if(CollidedWith(GAME.andore) && GetDirection() != GAME.andore->GetDirection())
 			{
 				GAME.andore->OnPlayerAttack();

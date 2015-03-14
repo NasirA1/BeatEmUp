@@ -31,7 +31,7 @@ public:
 	Player* player;
 	Rock* rock;
 	Roamer* skaterboy;
-	Andore *andore, *andore2;
+	Enemy *andore, *andore2;
 
 private:
 	bool leftDown;

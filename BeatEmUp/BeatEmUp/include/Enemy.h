@@ -22,15 +22,15 @@ private:
 
 
 
-class Andore : public GameObject
+class Enemy : public GameObject
 {
 public:
-	Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
+	Enemy(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
 		, Sprite* punchLeftSprite, Sprite* punchRightSprite, Sprite* hitLeftSprite, Sprite* hitRightSprite
 		, float posX, float posY);
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
-	virtual ~Andore();
+	virtual ~Enemy();
 	virtual void SetDirection(Directions dir) override;
 	void Stop();
 	void Attack();
@@ -42,7 +42,11 @@ public:
 		ES_Chasing,
 		ES_Attacking,
 		ES_Hit,
+		ES_KnockedDown,
 		ES_Idle
+		/*No ES_Dead state
+		health of 0 indicates death
+		*/
 	};
 
 private:
@@ -62,4 +66,5 @@ private:
 	Uint32 punchTimer;
 	Uint32 idleTimer;
 	Uint32 recoveryTimer;
+	Uint8 hitCount;
 };

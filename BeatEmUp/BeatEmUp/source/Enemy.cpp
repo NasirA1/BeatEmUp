@@ -76,7 +76,7 @@ Rock::~Rock()
 
 
 
-Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
+Enemy::Enemy(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
 	, Sprite* punchLeftSprite, Sprite* punchRightSprite, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, float posX, float posY)
 	: GameObject(GT_Enemy, 100)	
@@ -91,6 +91,7 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 	, punchTimer(0)
 	, idleTimer(0)
 	, recoveryTimer(0)
+	, hitCount(0)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -105,18 +106,22 @@ Andore::Andore(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 
 
 
-void Andore::OnPlayerAttack()
+const Uint8 KnockDownHitCount = 4;
+
+void Enemy::OnPlayerAttack()
 {
 	if(state != ES_Attacking)
 	{
 		Stop();
 		current = GetDirection() == Left? hitLeft: hitRight;
 		state = ES_Hit;
+		hitCount++;
 		SetHealth(GetHealth() - 1);
-		if(GetHealth() > 0)
-			recoveryTimer = SDL_GetTicks() + 200;
-		else
-			MIXER.Play(Mixer::SE_DragonRoar); //death
+	
+		if(GetHealth() > 0) recoveryTimer = SDL_GetTicks() + 200;
+		
+		
+		//else MIXER.Play(Mixer::SE_DragonRoar); //death
 	}
 }
 
@@ -124,20 +129,19 @@ void Andore::OnPlayerAttack()
 const float MaxDistX = 50.0f;
 const float MaxDistY = 0.0f;
 
-void Andore::Update()
+void Enemy::Update()
 {
 	//Chase player
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.y - GAME.player->Position().y;
 
-	//when hit, check if recovered and resume chasing player
+	//Recovery (when hit)
 	if(state == ES_Hit && SDL_GetTicks() > recoveryTimer)
 	{
 		Stop();
 		state = ES_Idle;
 		recoveryTimer = 0;
-		//Face player
-		//SetDirection(position.x > GAME.player->Position().x? Left: Right);
+		hitCount = 0;
 	}
 
 	if(state == ES_Chasing)
@@ -213,20 +217,20 @@ void Andore::Update()
 }
 
 
-void Andore::Attack()
+void Enemy::Attack()
 {
 	state = ES_Attacking;
 	punchTimer = SDL_GetTicks();
 }
 
 
-void Andore::Draw(SDL_Renderer* const renderer) const
+void Enemy::Draw(SDL_Renderer* const renderer) const
 {
 	current->Draw(renderer);
 }
 
 
-Andore::~Andore()
+Enemy::~Enemy()
 {
 	util::Delete(walkLeft);
 	util::Delete(walkRight);
@@ -234,11 +238,11 @@ Andore::~Andore()
 	util::Delete(punchRight);
 	util::Delete(hitLeft);
 	util::Delete(hitRight);
-	logPrintf("Andore object released");
+	logPrintf("Enemy object released");
 }
 
 
-void Andore::SetDirection(Directions dir)
+void Enemy::SetDirection(Directions dir)
 {
 	GameObject::SetDirection(dir);
 	if (GetDirection() == Right) current = walkRight;
@@ -246,7 +250,7 @@ void Andore::SetDirection(Directions dir)
 }
 
 
-void Andore::Stop()
+void Enemy::Stop()
 {
 	xVel = yVel = 0;
 	current = GetDirection() == Left? walkLeft: walkRight;
@@ -254,13 +258,13 @@ void Andore::Stop()
 }
 
 
-void Andore::Translate(bool anim)
+void Enemy::Translate(bool anim)
 {
 	current->SetAnimation(anim);
 	position.x += xVel;
 	position.y += yVel;
 	position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;
-	//logPrintf("Andore Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
+	//logPrintf("Enemy Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
 	AdjustZToGameDepth();
 }
 

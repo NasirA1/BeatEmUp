@@ -29,12 +29,12 @@ void GameObject::AdjustZToGameDepth()
 
 
 
-void GameObjectList::Update(bool removeDead)
+void GameObjectList::Update()
 {
 	//Garbage collect dead objects (except Player - special case)
 	for (vector<GameObject*>::iterator it = begin(); it != end(); )
 	{
-		if((*it)->IsDead() && (*it)->GetType() != GameObject::GT_Player)
+		if((*it)->IsMarkedForGC())
 		{
 			util::Delete(*it);
 			it = erase(it);

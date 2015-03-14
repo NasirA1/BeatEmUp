@@ -35,6 +35,7 @@ protected:
 		, yVel(0.0f)
 		, angle(0.0000)
 		, speed(1.0f)
+		, gc(false)
 	{}
 
 public:
@@ -55,6 +56,8 @@ public:
 	__forceinline float GetSpeed() const { return speed; }
 	__forceinline int GetHealth() const { return health; }
 	__forceinline Type GetType() const { return type; }
+	__forceinline bool IsMarkedForGC() const { return gc; }
+	__forceinline void MarkForGC() { gc = true; }
 	
 	//Mutators
 	__forceinline void SetHealth(int value) { health = value; }
@@ -81,13 +84,14 @@ private:
 	double angle; //rotation angle
 	int health;
 	Type type;
+	bool gc;
 };
 
 
 class GameObjectList : public vector<GameObject*>
 {
 public:
-	void Update(bool removeDead = true);
+	void Update();
 	void Draw(SDL_Renderer* const renderer) const;
 	~GameObjectList();
 };
