@@ -44,7 +44,7 @@ public:
 	
 
 private:
-	void Translate(bool anim = true);
+	void Translate(bool anim);
 
 
 private:

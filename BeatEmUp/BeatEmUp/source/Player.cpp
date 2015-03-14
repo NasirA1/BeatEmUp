@@ -215,7 +215,7 @@ void Player::GoUp()
 	else 
 		yVel = 0;
 	
-	Translate();
+	Translate(true);
 	pState = PS_Walking;
 }
 
@@ -231,7 +231,7 @@ void Player::GoDown()
 	else 
 		yVel = 0;
 	
-	Translate();        
+	Translate(true);        
 	pState = PS_Walking;
 }
 
@@ -248,7 +248,7 @@ void Player::GoRight()
 		xVel = 0;
 
 	SetDirection(Right);
-	Translate();
+	Translate(true);
 	pState = PS_Walking;
 }
 
@@ -265,7 +265,7 @@ void Player::GoLeft()
 		xVel = 0;
 
 	SetDirection(Left);
-	Translate();
+	Translate(true);
 	pState = PS_Walking;
 }
 

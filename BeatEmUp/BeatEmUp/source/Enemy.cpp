@@ -115,7 +115,7 @@ const Uint8 KnockDownHitCount = 1;
 
 void Enemy::OnPlayerAttack()
 {
-	if(state != ES_Attacking)
+	if(state != ES_Attacking && state != ES_KnockedDown)
 	{
 		Stop();
 		current = GetDirection() == Left? hitLeft: hitRight;
@@ -128,10 +128,11 @@ void Enemy::OnPlayerAttack()
 		}
 		else
 		{
+			hitCount = 0;
 			current = GetDirection() == Left? fallLeft: fallRight;
 			current->PlayFrames(0, 2, false);
 			state = ES_KnockedDown;
-			recoveryTimer = SDL_GetTicks() + 1500;
+			recoveryTimer = SDL_GetTicks() + 1500/*10000*/;
 		}
 	}
 }
@@ -142,22 +143,53 @@ const float MaxDistY = 0.0f;
 
 void Enemy::Update()
 {
-
-	//Dead... play death soundeffect and mark for GC
-	if(IsDead())
-	{
-		MIXER.Play(Mixer::SE_DragonRoar); //death
-		MarkForGC();
-		return;
-	}
-
 	//Recovery (when hit)
-	if((state == ES_Hit || state == ES_KnockedDown) && SDL_GetTicks() > recoveryTimer)
+	if(state == ES_Hit && SDL_GetTicks() > recoveryTimer)
 	{
 		Stop();
 		state = ES_Idle;
 		recoveryTimer = 0;
 		hitCount = 0;
+	}
+
+	//Knocked down.. get up or die...
+	if(state == ES_KnockedDown)
+	{
+		if(SDL_GetTicks() < recoveryTimer)
+		{
+			//Propagate to the underlying currently active sprite
+			if(current->GetCurrentFrame() == 0)
+			{
+				yVel = 0.3f;
+				xVel = 10.0f;
+			}
+			else
+			{
+				xVel = 0.0f, yVel=0.0f;
+			}
+			Translate();
+			current->Position().x = position.x;
+			current->Position().y = position.y;
+			current->Update();
+			return;
+		}
+		else
+		{
+			//Dead... play death soundeffect and mark for GC
+			if(IsDead())
+			{
+				MIXER.Play(Mixer::SE_DragonRoar); //death
+				MarkForGC();
+				return;
+			}
+			else
+			{
+				Stop();
+				state = ES_Idle;
+				recoveryTimer = 0;
+				hitCount = 0;
+			}
+		}
 	}
 
 	//Chase player
@@ -279,14 +311,20 @@ void Enemy::Stop()
 }
 
 
-void Enemy::Translate(bool anim)
+void Enemy::Translate()
 {
-	current->SetAnimation(anim);
 	position.x += xVel;
 	position.y += yVel;
 	position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;
 	//logPrintf("Enemy Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
 	AdjustZToGameDepth();
+}
+
+
+void Enemy::Translate(bool anim)
+{
+	current->SetAnimation(anim);
+	Translate();
 }
 
 
