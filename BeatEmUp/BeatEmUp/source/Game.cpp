@@ -49,8 +49,8 @@ bool Game::Init()
 
 
 	andore = new Enemy(renderer_, 
-		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 124, 10, 5),
-		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 130, 10, 5), 
+		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 115, 10, 5),
+		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 117, 10, 5), 
 		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
 		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
 		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 

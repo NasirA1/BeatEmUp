@@ -162,7 +162,6 @@ void Enemy::HandleKnockedDown()
 		yVel += Gravity/(float)JumpHeight;
 		if(position.y <= jumpLocation.y - JumpHeight) 
 			jumpState = JS_Landing;
-//		Translate();
 	}
 	//Landing (in the air)..
 	else if(jumpState == JS_Landing)
@@ -172,7 +171,6 @@ void Enemy::HandleKnockedDown()
 		{
 			yVel += Gravity;
 			xVel += GetDirection() == Right? 0.15f: -0.15f;
-//			Translate();
 		}
 		//Landed. On the ground now...
 		else 
@@ -182,9 +180,9 @@ void Enemy::HandleKnockedDown()
 			position.y = jumpLocation.y;
 			current->SetCurrentFrame(1);
 			MIXER.Play(Mixer::SE_Thud);
-//			Translate();
 		}
 	}
+	//On-the-ground logic...
 	else if(jumpState == JS_Ground)
 	{
 		//Getting up...
@@ -209,11 +207,13 @@ void Enemy::HandleKnockedDown()
 					recoveryTimer = 0;
 				}
 			}
-//			Translate();
 		}
 	}
 
 	Translate();
+	current->Position().x = position.x;
+	current->Position().y = position.y;
+	current->Update();
 }
 
 
@@ -221,6 +221,13 @@ const float MaxDistX = 50.0f;
 const float MaxDistY = 0.0f;
 void Enemy::Update()
 {
+	//Knocked down.. get up or die...
+	if(state == ES_KnockedDown)
+	{
+		HandleKnockedDown();
+		return;
+	}
+
 	//Recovery (when hit)
 	if(state == ES_Hit && SDL_GetTicks() > recoveryTimer)
 	{
@@ -228,16 +235,6 @@ void Enemy::Update()
 		state = ES_Idle;
 		recoveryTimer = 0;
 		hitCount = 0;
-	}
-
-	//Knocked down.. get up or die...
-	if(state == ES_KnockedDown)
-	{
-		HandleKnockedDown();
-		current->Position().x = position.x;
-		current->Position().y = position.y;
-		current->Update();
-		return;
 	}
 
 	//Chase player
