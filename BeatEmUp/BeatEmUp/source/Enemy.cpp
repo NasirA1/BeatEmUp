@@ -111,7 +111,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 
 
 
-const Uint8 KnockDownHitCount = 10;
+const Uint8 KnockDownHitCount = 1;
 
 void Enemy::OnPlayerAttack()
 {
@@ -129,8 +129,9 @@ void Enemy::OnPlayerAttack()
 		else
 		{
 			current = GetDirection() == Left? fallLeft: fallRight;
+			current->PlayFrames(0, 2, false);
 			state = ES_KnockedDown;
-			recoveryTimer = SDL_GetTicks() + 1000;
+			recoveryTimer = SDL_GetTicks() + 1500;
 		}
 	}
 }
@@ -183,7 +184,7 @@ void Enemy::Update()
 			&& SDL_abs((int)distY) <= (int)MaxDistY)
 		{
 			Stop();
-			Attack();
+			//Attack();
 		}
 	}
 	else if(state == ES_Attacking)
@@ -226,7 +227,7 @@ void Enemy::Update()
 	}
 
 	//Translate/animate
-	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking || state == ES_KnockedDown);
+	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking);
 	//Propagate to the underlying currently active sprite
 	current->Position().x = position.x;
 	current->Position().y = position.y;

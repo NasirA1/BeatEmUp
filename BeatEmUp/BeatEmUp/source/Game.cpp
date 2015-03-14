@@ -57,7 +57,7 @@ bool Game::Init()
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 100, 30, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 100, 30, 0), 
-		/*2400*/600, 450);
+		/*2400*/300, 450);
 	//andore2 = new Enemy(renderer_, 
 	//	Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 124, 10, 5),
 	//	Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 130, 10, 5), 
@@ -69,7 +69,7 @@ bool Game::Init()
 
 
 	player = new Player(renderer_);
-	rock = new Rock("resources/rock.png", renderer_);
+	//rock = new Rock("resources/rock.png", renderer_);
 
 	tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer_);	
 	tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer_);
@@ -82,12 +82,12 @@ bool Game::Init()
 
 	gameObjects.push_back(skaterboy);
 	gameObjects.push_back(player);
-	gameObjects.push_back(rock);
+	//gameObjects.push_back(rock);
 
 	gameObjects.push_back(knight1);
 	gameObjects.push_back(andore);
-//	gameObjects.push_back(andore2);
-	MIXER.Play(Mixer::ST_Track1);
+//gameObjects.push_back(andore2);
+	//MIXER.Play(Mixer::ST_Track1);
 	return true;
 }
 
