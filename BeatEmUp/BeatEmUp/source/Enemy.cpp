@@ -76,8 +76,11 @@ Rock::~Rock()
 
 
 
-Enemy::Enemy(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
-	, Sprite* punchLeftSprite, Sprite* punchRightSprite, Sprite* hitLeftSprite, Sprite* hitRightSprite
+Enemy::Enemy(SDL_Renderer* const renderer
+	, Sprite* walkLeftSprite, Sprite* walkRightSprite
+	, Sprite* punchLeftSprite, Sprite* punchRightSprite
+	, Sprite* hitLeftSprite, Sprite* hitRightSprite
+	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY)
 	: GameObject(GT_Enemy, 100)	
 	, walkLeft(walkLeftSprite)
@@ -86,6 +89,8 @@ Enemy::Enemy(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkR
 	, punchRight(punchRightSprite)
 	, hitLeft(hitLeftSprite)
 	, hitRight(hitRightSprite)
+	, fallLeft(fallLeftSprite)
+	, fallRight(fallRightSprite)
 	, current(NULL)
 	, state(ES_Patrolling)
 	, punchTimer(0)
@@ -118,10 +123,14 @@ void Enemy::OnPlayerAttack()
 		hitCount++;
 		SetHealth(GetHealth() - 1);
 	
-		if(GetHealth() > 0) recoveryTimer = SDL_GetTicks() + 200;
-		
-		
-		//else MIXER.Play(Mixer::SE_DragonRoar); //death
+		if(GetHealth() > 0 && hitCount < KnockDownHitCount){ 
+			recoveryTimer = SDL_GetTicks() + 200;
+		}
+		else
+		{
+			current = GetDirection() == Left? fallLeft: fallRight;
+			state = ES_KnockedDown;
+		}
 	}
 }
 
@@ -131,9 +140,14 @@ const float MaxDistY = 0.0f;
 
 void Enemy::Update()
 {
-	//Chase player
-	float distX = position.x - GAME.player->Position().x;
-	float distY = position.y - GAME.player->Position().y;
+
+	//Dead... play death soundeffect and mark for GC
+	if(IsDead())
+	{
+		MIXER.Play(Mixer::SE_DragonRoar); //death
+		MarkForGC();
+		return;
+	}
 
 	//Recovery (when hit)
 	if(state == ES_Hit && SDL_GetTicks() > recoveryTimer)
@@ -144,6 +158,9 @@ void Enemy::Update()
 		hitCount = 0;
 	}
 
+	//Chase player
+	float distX = position.x - GAME.player->Position().x;
+	float distY = position.y - GAME.player->Position().y;
 	if(state == ES_Chasing)
 	{
 		if(distY > MaxDistY) yVel = -speed;
@@ -161,8 +178,8 @@ void Enemy::Update()
 			xVel = speed;
 		}
 
-		if(SDL_abs(distX) <= MaxDistX 
-			&& SDL_abs(distY) <= MaxDistY)
+		if(SDL_abs((int)distX) <= (int)MaxDistX 
+			&& SDL_abs((int)distY) <= (int)MaxDistY)
 		{
 			Stop();
 			Attack();
@@ -208,8 +225,7 @@ void Enemy::Update()
 	}
 
 	//Translate/animate
-	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking);
-
+	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking || state == ES_KnockedDown);
 	//Propagate to the underlying currently active sprite
 	current->Position().x = position.x;
 	current->Position().y = position.y;

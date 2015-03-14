@@ -25,9 +25,13 @@ private:
 class Enemy : public GameObject
 {
 public:
-	Enemy(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
-		, Sprite* punchLeftSprite, Sprite* punchRightSprite, Sprite* hitLeftSprite, Sprite* hitRightSprite
-		, float posX, float posY);
+	Enemy(SDL_Renderer* const renderer
+	, Sprite* walkLeftSprite, Sprite* walkRightSprite
+	, Sprite* punchLeftSprite, Sprite* punchRightSprite
+	, Sprite* hitLeftSprite, Sprite* hitRightSprite
+	, Sprite* fallLeftSprite, Sprite* fallRightSprite
+	, float posX, float posY);
+
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Enemy();
@@ -59,6 +63,8 @@ private:
 	Sprite* current;
 	Sprite* hitLeft;
 	Sprite* hitRight;
+	Sprite* fallLeft;
+	Sprite* fallRight;
 
 	Sprite* punchRight;
 	Sprite* punchLeft;
