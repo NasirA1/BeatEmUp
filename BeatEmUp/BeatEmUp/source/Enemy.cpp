@@ -111,7 +111,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 
 
 
-const Uint8 KnockDownHitCount = 1;
+const Uint8 KnockDownHitCount = 15;
 
 void Enemy::OnPlayerAttack()
 {
@@ -130,12 +130,44 @@ void Enemy::OnPlayerAttack()
 		{
 			hitCount = 0;
 			current = GetDirection() == Left? fallLeft: fallRight;
-			current->PlayFrames(0, 2, false);
+			current->SetCurrentFrame(0);
 			state = ES_KnockedDown;
 			recoveryTimer = SDL_GetTicks() + 1500/*10000*/;
 		}
 	}
 }
+
+
+
+void Enemy::HandleKnockedDown()
+{
+	if(SDL_GetTicks() < recoveryTimer)
+	{
+		//Propagate to the underlying currently active sprite
+		if(current->GetCurrentFrame() == 0)
+		{
+			yVel = 0.3f;
+			xVel = 10.0f;
+		}
+		else
+		{
+			xVel = 0.0f, yVel=0.0f;
+		}
+	}
+	else
+	{
+		//Dead... play death soundeffect and mark for GC
+		if(!IsDead())
+		{
+			Stop();
+			state = ES_Idle;
+			recoveryTimer = 0;
+			hitCount = 0;
+		}
+	}
+}
+
+
 
 
 const float MaxDistX = 50.0f;
@@ -155,41 +187,7 @@ void Enemy::Update()
 	//Knocked down.. get up or die...
 	if(state == ES_KnockedDown)
 	{
-		if(SDL_GetTicks() < recoveryTimer)
-		{
-			//Propagate to the underlying currently active sprite
-			if(current->GetCurrentFrame() == 0)
-			{
-				yVel = 0.3f;
-				xVel = 10.0f;
-			}
-			else
-			{
-				xVel = 0.0f, yVel=0.0f;
-			}
-			Translate();
-			current->Position().x = position.x;
-			current->Position().y = position.y;
-			current->Update();
-			return;
-		}
-		else
-		{
-			//Dead... play death soundeffect and mark for GC
-			if(IsDead())
-			{
-				MIXER.Play(Mixer::SE_DragonRoar); //death
-				MarkForGC();
-				return;
-			}
-			else
-			{
-				Stop();
-				state = ES_Idle;
-				recoveryTimer = 0;
-				hitCount = 0;
-			}
-		}
+		HandleKnockedDown();
 	}
 
 	//Chase player
@@ -212,11 +210,12 @@ void Enemy::Update()
 			xVel = speed;
 		}
 
+		//When close enough, attack
 		if(SDL_abs((int)distX) <= (int)MaxDistX 
 			&& SDL_abs((int)distY) <= (int)MaxDistY)
 		{
 			Stop();
-			//Attack();
+			Attack();
 		}
 	}
 	else if(state == ES_Attacking)

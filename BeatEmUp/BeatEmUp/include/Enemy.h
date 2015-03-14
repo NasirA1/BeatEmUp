@@ -56,6 +56,7 @@ public:
 private:
 	void Translate(bool anim);
 	void Translate();
+	void HandleKnockedDown();
 
 
 private:
