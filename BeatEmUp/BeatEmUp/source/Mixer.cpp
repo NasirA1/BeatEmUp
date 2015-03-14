@@ -18,6 +18,7 @@ void LoadChunk(Mixer& mixer, Mixer::SoundEffect effect, const string& file)
 	if(chunk)
 	{
 		mixer.effects[effect] = chunk;
+		logPrintf("Loaded soundeffect: %s", file.c_str());
 	}
 	else
 	{
@@ -40,6 +41,7 @@ Mixer::Mixer()
 	LoadChunk(*this, SE_Punch, "resources/punch.wav");
 	LoadChunk(*this, SE_Grunt, "resources/grunt.wav");
 	LoadChunk(*this, SE_DragonRoar, "resources/dragonroar.wav");
+	LoadChunk(*this, SE_Thud, "resources/thud.wav");
 
 	//Load tracks1
 	LoadMusic(*this, ST_Track1, "resources/aldebaran.mp3");

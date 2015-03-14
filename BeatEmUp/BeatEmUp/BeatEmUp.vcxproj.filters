@@ -139,6 +139,9 @@
     <None Include="resources\andore_fallright.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\thud.wav">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">

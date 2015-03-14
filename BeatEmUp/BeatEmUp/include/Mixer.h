@@ -16,7 +16,8 @@ public:
 		SE_DragonRoar,
 		SE_Grunt,
 		SE_Kick,
-		SE_Punch
+		SE_Punch,
+		SE_Thud
 	};
 
 	enum SoundTrack

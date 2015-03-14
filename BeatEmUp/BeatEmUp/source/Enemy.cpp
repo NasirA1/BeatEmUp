@@ -160,10 +160,9 @@ void Enemy::HandleKnockedDown()
 	if(jumpState == JS_Jumped)
 	{
 		yVel += Gravity/(float)JumpHeight;
-		if(position.y > jumpLocation.y - JumpHeight) 
-			Translate(false);
-		else 
+		if(position.y <= jumpLocation.y - JumpHeight) 
 			jumpState = JS_Landing;
+//		Translate();
 	}
 	//Landing (in the air)..
 	else if(jumpState == JS_Landing)
@@ -173,7 +172,7 @@ void Enemy::HandleKnockedDown()
 		{
 			yVel += Gravity;
 			xVel += GetDirection() == Right? 0.15f: -0.15f;
-			Translate(false);
+//			Translate();
 		}
 		//Landed. On the ground now...
 		else 
@@ -182,7 +181,8 @@ void Enemy::HandleKnockedDown()
 			xVel = 0, yVel = 0;
 			position.y = jumpLocation.y;
 			current->SetCurrentFrame(1);
-			Translate(false);
+			MIXER.Play(Mixer::SE_Thud);
+//			Translate();
 		}
 	}
 	else if(jumpState == JS_Ground)
@@ -199,16 +199,21 @@ void Enemy::HandleKnockedDown()
 					recoveryTimer = SDL_GetTicks() + 500;
 				}
 			}
+			//Half up...
 			else if(current->GetCurrentFrame() == 2)
 			{
+				//full up.. go to idle..
 				if(SDL_GetTicks() > recoveryTimer) {
 					Stop();
 					state = ES_Idle;
 					recoveryTimer = 0;
 				}
 			}
+//			Translate();
 		}
 	}
+
+	Translate();
 }
 
 
@@ -229,7 +234,6 @@ void Enemy::Update()
 	if(state == ES_KnockedDown)
 	{
 		HandleKnockedDown();
-		Translate();
 		current->Position().x = position.x;
 		current->Position().y = position.y;
 		current->Update();
@@ -358,11 +362,18 @@ void Enemy::Translate()
 			-GAME.bg->GetSpeed(): GAME.bg->GetSpeed();
 	}
 
+	//Translate
 	position.x += xVel;
 	position.y += yVel;
-	position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;
+
+	//Z rules dont apply to jumping
+	if(jumpState == JS_Ground)
+	{
+		position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;
+		AdjustZToGameDepth();
+	}
+
 	//logPrintf("Enemy Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
-	AdjustZToGameDepth();
 }
 
 
