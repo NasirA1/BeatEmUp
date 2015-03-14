@@ -82,7 +82,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY)
-	: GameObject(GT_Enemy, 100)	
+	: GameObject(GT_Enemy, 1000)	
 	, walkLeft(walkLeftSprite)
 	, walkRight(walkRightSprite)
 	, punchLeft(punchLeftSprite)
@@ -111,7 +111,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 
 
 
-const Uint8 KnockDownHitCount = 4;
+const Uint8 KnockDownHitCount = 10;
 
 void Enemy::OnPlayerAttack()
 {
@@ -123,13 +123,14 @@ void Enemy::OnPlayerAttack()
 		hitCount++;
 		SetHealth(GetHealth() - 1);
 	
-		if(GetHealth() > 0 && hitCount < KnockDownHitCount){ 
+		if(GetHealth() > 0 && hitCount < KnockDownHitCount){
 			recoveryTimer = SDL_GetTicks() + 200;
 		}
 		else
 		{
 			current = GetDirection() == Left? fallLeft: fallRight;
 			state = ES_KnockedDown;
+			recoveryTimer = SDL_GetTicks() + 1000;
 		}
 	}
 }
@@ -150,7 +151,7 @@ void Enemy::Update()
 	}
 
 	//Recovery (when hit)
-	if(state == ES_Hit && SDL_GetTicks() > recoveryTimer)
+	if((state == ES_Hit || state == ES_KnockedDown) && SDL_GetTicks() > recoveryTimer)
 	{
 		Stop();
 		state = ES_Idle;
@@ -248,12 +249,15 @@ void Enemy::Draw(SDL_Renderer* const renderer) const
 
 Enemy::~Enemy()
 {
+	current = NULL;
 	util::Delete(walkLeft);
 	util::Delete(walkRight);
 	util::Delete(punchLeft);
 	util::Delete(punchRight);
 	util::Delete(hitLeft);
 	util::Delete(hitRight);
+	util::Delete(fallLeft);
+	util::Delete(fallRight);
 	logPrintf("Enemy object released");
 }
 

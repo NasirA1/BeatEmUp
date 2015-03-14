@@ -26,10 +26,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\aldebaran.mp3" />
+    <None Include="resources\andore_fallleft.png" />
+    <None Include="resources\andore_fallright.png" />
     <None Include="resources\andore_punchleft.png" />
     <None Include="resources\andore_punchright.png" />
     <None Include="resources\andore_walkright.png" />
     <None Include="resources\andore_walkleft.png" />
+    <None Include="resources\baddude_punchleft.png" />
+    <None Include="resources\baddude_punchright.png" />
     <None Include="resources\baddude_stanceleft.png" />
     <None Include="resources\baddude_stanceright.png" />
     <None Include="resources\baddude_walkleft.png" />

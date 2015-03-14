@@ -59,10 +59,10 @@ void Player::Update()
 			{
 				GAME.andore->OnPlayerAttack();
 			}
-			if(CollidedWith(GAME.andore2) && GetDirection() != GAME.andore2->GetDirection())
-			{
-				GAME.andore2->OnPlayerAttack();
-			}
+			//if(CollidedWith(GAME.andore2) && GetDirection() != GAME.andore2->GetDirection())
+			//{
+			//	GAME.andore2->OnPlayerAttack();
+			//}
 		}
 	}
 

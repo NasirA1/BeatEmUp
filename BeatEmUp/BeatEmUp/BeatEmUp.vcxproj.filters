@@ -127,6 +127,18 @@
     <None Include="resources\baddude_stanceright.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\baddude_punchleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude_punchright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\andore_fallleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\andore_fallright.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">
