@@ -31,7 +31,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, jumpState(JS_Ground)
 	, KnockDownHitCount(3)
 	, patrolRange(200.0f)
-	, vision(250.0f)
+	, vision(200.0f)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -281,10 +281,13 @@ void Enemy::OnKnockDown()
 
 void Enemy::OnPatrol()
 {
-	float distanceToPlayer = util::GetDistance(GAME.player->Position(), position);
-	//logPrintf("vision %f dist %f", vision, distanceToPlayer);
-	if(distanceToPlayer <= vision) {
-		state = ES_Chasing;
+	if(!GAME.player->IsDead())
+	{
+		float distanceToPlayer = util::GetDistance(GAME.player->Position(), position);
+		//logPrintf("vision %f dist %f", vision, distanceToPlayer);
+		if(distanceToPlayer <= vision) {
+			state = ES_Chasing;
+		}
 	}
 
 	static float patrolVectX = 0;
@@ -325,6 +328,12 @@ void Enemy::OnChase()
 	{
 		Stop();
 		Attack();
+		
+		if(GAME.player->IsDead())
+		{
+			state = ES_Patrolling;
+			current = GetDirection() == Right? walkRight: walkLeft;
+		}
 	}
 }
 

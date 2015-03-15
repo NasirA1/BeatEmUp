@@ -37,6 +37,7 @@ public:
 	void OnEnemyAttack();
 	
 	__forceinline bool isMoving() const { return !(xVel == 0.0f && yVel == 0.0f); }
+	__forceinline bool IsDead() const { return pState == PS_Dead; }
 	__forceinline PState GetState() const { return pState; }
 	
 

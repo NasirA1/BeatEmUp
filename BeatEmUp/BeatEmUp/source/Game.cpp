@@ -58,16 +58,16 @@ bool Game::Init()
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
 		/*2400*/700, 450);
-	//andore2 = new Enemy(renderer_, 
-	//	Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 115, 10, 5),
-	//	Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 117, 10, 5), 
-	//	Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
-	//	Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
-	//	Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
-	//	Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
-	//	Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
-	//	Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-	//	-600, 450);
+	andore2 = new Enemy(renderer_, 
+		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 115, 10, 5),
+		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 117, 10, 5), 
+		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
+		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
+		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
+		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
+		/*-600*/1200, 450);
 
 
 	player = new Player(renderer_);
@@ -88,7 +88,7 @@ bool Game::Init()
 
 	gameObjects.push_back(knight1);
 	gameObjects.push_back(andore);
-	//gameObjects.push_back(andore2);
+	gameObjects.push_back(andore2);
 
 
 	MIXER.Instance();
@@ -203,7 +203,6 @@ void Game::Render()
 	//Sort by depth, then draw
 	std::sort(gameObjects.begin(), gameObjects.end(), GameObjectSortByDepth());
 	gameObjects.Draw( renderer_ );
-	
 	SDL_RenderPresent( renderer_ );
 }
 
