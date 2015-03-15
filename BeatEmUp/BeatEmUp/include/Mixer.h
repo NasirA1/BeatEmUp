@@ -17,6 +17,7 @@ public:
 		SE_Grunt,
 		SE_Kick,
 		SE_Punch,
+		SE_PunchHit,
 		SE_Thud
 	};
 

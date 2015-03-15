@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Background.h" />
+    <ClInclude Include="include\CppEvent.h" />
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\Mixer.h" />
     <ClInclude Include="include\Player.h" />

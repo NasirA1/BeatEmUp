@@ -17,10 +17,16 @@ Player::Player(SDL_Renderer* const renderer)
 	, walkLeft(Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7))
 	, punchRight(Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 5, 0, 0xFF, 0xFF, 0xFF))
 	, punchLeft(Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 5, 0, 0xFF, 0xFF, 0xFF))
+	,	hitLeft(Sprite::FromFile("resources/andore_hitleft.png", renderer, 70, 124, 5, 0)) 
+	,	hitRight(Sprite::FromFile("resources/andore_hitright.png", renderer, 70, 124, 5, 0))
+	,	fallLeft(Sprite::FromFile("resources/andore_fallleft.png", renderer, 150, 120, 1, 0))
+	,	fallRight(Sprite::FromFile("resources/andore_fallright.png", renderer, 150, 120, 1, 0)) 
 	, current(NULL)
 	, jumpState(JS_Ground)
 	, pState(PS_Stance)
 	, punchTimeout(0)
+	, hitCount(0)
+	, recoveryTimer(0)
 {
 	position.x  = 100.0f , position.w = 76.0f, position.h = 120.0f;
 	position.y = (float)GAME.MidSectionY((int)position.h);
@@ -29,16 +35,60 @@ Player::Player(SDL_Renderer* const renderer)
 	//walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	//walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	punchRight->AddSoundEffect(1, Mixer::SE_Punch);
-	punchRight->AddSoundEffect(4, Mixer::SE_Punch);
-	punchRight->AddSoundEffect(8, Mixer::SE_Punch);
-	punchLeft->AddSoundEffect(1, Mixer::SE_Punch);
-	punchLeft->AddSoundEffect(4, Mixer::SE_Punch);
-	punchLeft->AddSoundEffect(8, Mixer::SE_Punch);	
+	punchRight->FramePlayed.attach(this, &Player::PunchSprites_FramePlayed);
+	punchLeft->FramePlayed.attach(this, &Player::PunchSprites_FramePlayed);
+
 	SetDirection(Right);
 	Stop();
 }
 
+
+
+void Player::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+{
+	if(e->FrameIndex == 1 || 
+		e->FrameIndex == 4 || 
+		e->FrameIndex == 8
+	)
+	{
+		if(CollidedWith(GAME.andore) && GetDirection() != GAME.andore->GetDirection())
+		{
+			MIXER.Play(Mixer::SE_PunchHit);
+			GAME.andore->OnPlayerAttack();
+		}
+		else
+		{
+			MIXER.Play(Mixer::SE_Punch);
+		}
+	}
+}
+
+
+const Uint8 KnockDownHitCount = 15;
+void Player::OnEnemyAttack()
+{
+	if(pState != PS_KnockedDown)
+	{
+		Stop();
+		current = GetDirection() == Left? hitLeft: hitRight;
+		pState = PS_Hit;
+		hitCount++;
+		SetHealth(GetHealth() - 1);
+	
+		if(GetHealth() > 0 && hitCount < KnockDownHitCount){
+			recoveryTimer = SDL_GetTicks() + 200;
+		}
+		else
+		{
+			hitCount = 0;
+			current = GetDirection() == Left? fallLeft: fallRight;
+			current->SetCurrentFrame(0);
+			pState = PS_KnockedDown;
+			recoveryTimer = 0;
+			//Jump(8.0f, 10.0f);
+		}
+	}
+}
 
 
 void Player::Update()
@@ -50,20 +100,20 @@ void Player::Update()
 			Stop(); //sets pState to PS_Stance
 			punchTimeout = 0;
 		}
-		else if(current->GetCurrentFrame() == 1
-			|| current->GetCurrentFrame() == 4
-			|| current->GetCurrentFrame() == 8)
-		{
-			//TODO: remove this test-hardcoded code
-			if(CollidedWith(GAME.andore) && GetDirection() != GAME.andore->GetDirection())
-			{
-				GAME.andore->OnPlayerAttack();
-			}
-			//if(CollidedWith(GAME.andore2) && GetDirection() != GAME.andore2->GetDirection())
-			//{
-			//	GAME.andore2->OnPlayerAttack();
-			//}
-		}
+		//else if(current->GetCurrentFrame() == 1
+		//	|| current->GetCurrentFrame() == 4
+		//	|| current->GetCurrentFrame() == 8)
+		//{
+		//	////TODO: remove this test-hardcoded code
+		//	//if(CollidedWith(GAME.andore) && GetDirection() != GAME.andore->GetDirection())
+		//	//{
+		//	//	GAME.andore->OnPlayerAttack();
+		//	//}
+		//	//if(CollidedWith(GAME.andore2) && GetDirection() != GAME.andore2->GetDirection())
+		//	//{
+		//	//	GAME.andore2->OnPlayerAttack();
+		//	//}
+		//}
 	}
 
 	//Hit by rock..
@@ -136,6 +186,8 @@ void Player::Draw(SDL_Renderer* const renderer) const
 
 Player::~Player()
 {
+	punchLeft->FramePlayed.detach(this, &Player::PunchSprites_FramePlayed);
+	punchRight->FramePlayed.detach(this, &Player::PunchSprites_FramePlayed);
 	util::Delete(walkRight);
 	util::Delete(walkLeft);
 	util::Delete(stanceRight);

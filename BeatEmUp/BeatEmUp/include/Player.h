@@ -21,7 +21,7 @@ enum PState
 	PS_Punching,
 	PS_Kicking,
 	PS_Hit,
-	PS_Recovering
+	PS_KnockedDown
 };
 
 public:
@@ -32,6 +32,7 @@ public:
 	void GoLeft();
 	void Jump(float xForce, float yForce);
 	void Punch();
+	void OnEnemyAttack();
 	
 	__forceinline bool isMoving() const { return !(xVel == 0.0f && yVel == 0.0f); }
 	__forceinline PState GetState() const { return pState; }
@@ -39,7 +40,7 @@ public:
 
 private:
 	void Translate(bool anim);
-
+	void PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 
 private:
 	Sprite* walkRight;
@@ -49,10 +50,16 @@ private:
 	Sprite* current;
 	Sprite* punchLeft;
 	Sprite* punchRight;
+	Sprite* hitLeft;
+	Sprite* hitRight;
+	Sprite* fallLeft;
+	Sprite* fallRight;
 
 	//player state
 	PState pState;
 	Uint32 punchTimeout;
+	Uint32 recoveryTimer;
+	Uint8 hitCount;
 
 	//jumping
 	enum JumpState

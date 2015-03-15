@@ -104,6 +104,9 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	speed = 1.0f;
 	AdjustZToGameDepth();
 
+	punchLeft->FramePlayed.attach(this, &Enemy::PunchSprites_FramePlayed);
+	punchRight->FramePlayed.attach(this, &Enemy::PunchSprites_FramePlayed);
+
 	//Start chasing now
 	//TODO: add patrolling logic later
 	state = ES_Chasing;
@@ -112,7 +115,22 @@ Enemy::Enemy(SDL_Renderer* const renderer
 
 
 
-const Uint8 KnockDownHitCount = 15;
+void Enemy::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+{
+	if(e->FrameIndex == 1)
+	{
+		MIXER.Play(Mixer::SE_Punch);
+		{
+			if(CollidedWith(GAME.player) && GetDirection() != GAME.player->GetDirection())
+			{
+				GAME.player->OnEnemyAttack();
+			}
+		}
+	}
+}
+
+
+const Uint8 KnockDownHitCount = 3;
 void Enemy::OnPlayerAttack()
 {
 	if(state != ES_Attacking && state != ES_KnockedDown)
@@ -124,7 +142,7 @@ void Enemy::OnPlayerAttack()
 		SetHealth(GetHealth() - 1);
 	
 		if(GetHealth() > 0 && hitCount < KnockDownHitCount){
-			recoveryTimer = SDL_GetTicks() + 200;
+			recoveryTimer = SDL_GetTicks() + 300;
 		}
 		else
 		{
@@ -245,10 +263,11 @@ void Enemy::Update()
 	}
 
 	//Chase player
-	float distX = position.x - GAME.player->Position().x;
-	float distY = position.y - GAME.player->Position().y;
 	if(state == ES_Chasing)
 	{
+		float distX = position.x - GAME.player->Position().x;
+		float distY = position.y - GAME.player->Position().y;
+		
 		if(distY > MaxDistY) yVel = -speed;
 		else if(distY < -MaxDistY) yVel = speed;
 		else yVel = 0.0f;
@@ -275,7 +294,6 @@ void Enemy::Update()
 	else if(state == ES_Attacking)
 	{
 		current = GetDirection() == Left? punchLeft: punchRight;
-
 		if(SDL_GetTicks() - punchTimer > 300)
 		{
 			state = ES_Idle;
@@ -328,6 +346,8 @@ void Enemy::Draw(SDL_Renderer* const renderer) const
 
 Enemy::~Enemy()
 {
+	punchLeft->FramePlayed.detach(this, &Enemy::PunchSprites_FramePlayed);
+	punchRight->FramePlayed.detach(this, &Enemy::PunchSprites_FramePlayed);
 	current = NULL;
 	util::Delete(walkLeft);
 	util::Delete(walkRight);

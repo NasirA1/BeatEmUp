@@ -52,9 +52,8 @@ void Sprite::Update()
 		currentFrame = (currentFrame + 1) % (toIndex + 1);
     if(currentFrame < fromIndex) currentFrame = fromIndex;
 
-		//play sound effect if one exists for this frame
-		std::map< int, Mixer::SoundEffect >::iterator it = frameSounds.find(currentFrame);
-		if(it != frameSounds.end()) MIXER.Play(it->second);		
+		//notify listeners (if any)
+		FramePlayed.notify(this, &FramePlayedEventArgs(currentFrame));
 	}
 	// update the counter
 	counter = (counter + 1) % frameSpeed;
@@ -89,4 +88,3 @@ Sprite::~Sprite()
 
 	logPrintf("Sprite object released");
 }
-

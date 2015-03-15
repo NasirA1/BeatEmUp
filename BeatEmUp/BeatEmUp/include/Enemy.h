@@ -57,6 +57,7 @@ private:
 	void Translate(bool anim);
 	void Translate();
 	void HandleKnockedDown();
+	void PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 
 
 private:

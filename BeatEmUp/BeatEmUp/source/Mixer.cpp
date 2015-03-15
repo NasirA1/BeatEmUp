@@ -39,6 +39,7 @@ Mixer::Mixer()
 	//Load sound effects
 	LoadChunk(*this, SE_Kick, "resources/kick.wav");
 	LoadChunk(*this, SE_Punch, "resources/punch.wav");
+	LoadChunk(*this, SE_PunchHit, "resources/punch_hit.wav");
 	LoadChunk(*this, SE_Grunt, "resources/grunt.wav");
 	LoadChunk(*this, SE_DragonRoar, "resources/dragonroar.wav");
 	LoadChunk(*this, SE_Thud, "resources/thud.wav");
