@@ -12,6 +12,7 @@
 #define logPrintf()
 #endif
 
+#define WHEEL_OF_FORTUNE	util::Random::Instance()
 
 
 
@@ -84,7 +85,14 @@ namespace util
 
 		__forceinline unsigned long Next(const int min, const int max) const
 		{
-			return rand() % max + min;
+			int r = rand();
+			return min + r % (max - min);
+		}
+
+		__forceinline float Next(const float min, const float max) const
+		{
+			float r = (float)rand() / (float)RAND_MAX;
+			return min + r * (max - min);
 		}
 	};
 

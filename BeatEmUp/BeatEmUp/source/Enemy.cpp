@@ -236,7 +236,7 @@ void Enemy::Update()
 		if(!idleTimer)
 		{
 			Stop();
-			idleTimer = SDL_GetTicks() + Random::Instance().Next(1000, 3000);
+			idleTimer = SDL_GetTicks() + WHEEL_OF_FORTUNE.Next(1000, 3000);
 		}
 		else
 		{
@@ -343,7 +343,7 @@ void Enemy::Translate(bool anim)
 
 #pragma region Rock
 
-const float Rock::Range(10.0f * (float)GAME.ClientWidth());
+const float Rock::Range(1.0f * (float)GAME.ClientWidth());
 
 
 Rock::Rock(const string& file, SDL_Renderer* const renderer)
@@ -377,10 +377,12 @@ void Rock::Update()
 
 	if(position.x >= Range)
 	{
+		position.y = GAME.RandomYWithinMoveBounds((int)position.h);
 		SetDirection(Left);
 	}
 	else if(position.x < -Range)
 	{
+		position.y = GAME.RandomYWithinMoveBounds((int)position.h);
 		SetDirection(Right);
 	}
 
