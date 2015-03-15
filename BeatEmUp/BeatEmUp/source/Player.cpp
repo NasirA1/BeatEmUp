@@ -54,11 +54,12 @@ void Player::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.andore->OnPlayerAttack();
 		}
-		//if(CollidedWith(GAME.andore2) && GetDirection() != GAME.andore2->GetDirection())
-		//{
-		//	MIXER.Play(Mixer::SE_PunchHit);
-		//	GAME.andore2->OnPlayerAttack();
-		//}
+		if(GAME.andore2->IsAttackable() && CollidedWith(GAME.andore2) 
+			&& GetDirection() != GAME.andore2->GetDirection())
+		{
+			MIXER.Play(Mixer::SE_PunchHit);
+			GAME.andore2->OnPlayerAttack();
+		}
 		else
 		{
 			MIXER.Play(Mixer::SE_Punch);
