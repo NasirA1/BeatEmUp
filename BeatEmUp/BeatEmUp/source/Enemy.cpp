@@ -31,24 +31,21 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, hitCount(0)
 	, jumpState(JS_Ground)
 	, KnockDownHitCount(3)
+	, patrolRange(200.0f)
+	, vision(50.0f)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
 	speed = 1.0f;
 	AdjustZToGameDepth();
 
-	punchLeft->FramePlayed.attach(this, &Enemy::PunchSprites_FramePlayed);
-	punchRight->FramePlayed.attach(this, &Enemy::PunchSprites_FramePlayed);
-
-	//Start chasing now
-	//TODO: add patrolling logic later
-	state = ES_Chasing;
-	speed = 1.0f;
+	punchLeft->FramePlayed.attach(this, &Enemy::OnPunchSprite);
+	punchRight->FramePlayed.attach(this, &Enemy::OnPunchSprite);
 }
 
 
 
-void Enemy::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+void Enemy::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
 {
 	if(e->FrameIndex == 1)
 	{
@@ -63,7 +60,6 @@ void Enemy::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::F
 		}
 	}
 }
-
 
 
 void Enemy::OnPlayerAttack()
@@ -102,7 +98,7 @@ void Enemy::Jump(float xAccel, float yAccel)
 }
 
 
-void Enemy::HandleKnockedDown()
+void Enemy::OnKnockDown()
 {
 	//Jump start..
 	//Shoot up (yVel acceleration)...
@@ -173,84 +169,119 @@ void Enemy::HandleKnockedDown()
 }
 
 
-const float MaxDistX = 50.0f;
-const float MaxDistY = 0.0f;
-void Enemy::Update()
+void Enemy::OnPatrol()
 {
-	//Knocked down.. get up or die...
-	if(state == ES_KnockedDown)
+	if(position.x >= patrolRange) SetDirection(Left);
+	else if(position.x < -patrolRange) SetDirection(Right);
+	if(GetDirection() == Left) xVel = -speed;
+	else xVel = speed;
+}
+
+
+void Enemy::OnChase()
+{
+	static const float MaxDistX = 50.0f;
+	static const float MaxDistY = 0.0f;
+	float distX = position.x - GAME.player->Position().x;
+	float distY = position.y - GAME.player->Position().y;
+
+	if(distY > MaxDistY) yVel = -speed;
+	else if(distY < -MaxDistY) yVel = speed;
+	else yVel = 0.0f;
+
+	if(distX > MaxDistX)
 	{
-		HandleKnockedDown();
-		return;
+		SetDirection(Left);
+		xVel = -speed;
+	}
+	else if(distX < -MaxDistX)
+	{
+		SetDirection(Right);
+		xVel = speed;
 	}
 
-	//Recovery (when hit)
-	if(state == ES_Hit && SDL_GetTicks() > recoveryTimer)
+	//When close enough, attack
+	if(SDL_abs((int)distX) <= (int)MaxDistX 
+		&& SDL_abs((int)distY) <= (int)MaxDistY)
 	{
 		Stop();
+		Attack();
+	}
+}
+
+
+void Enemy::OnRecovery()
+{
+	Stop();
+	state = ES_Idle;
+	recoveryTimer = 0;
+	hitCount = 0;
+}
+
+
+void Enemy::OnPunch()
+{
+	current = GetDirection() == Left? punchLeft: punchRight;
+	if(SDL_GetTicks() - punchTimer > 300)
+	{
 		state = ES_Idle;
-		recoveryTimer = 0;
-		hitCount = 0;
+		punchTimer = 0;
 	}
+}
 
-	//Chase player
-	if(state == ES_Chasing)
+
+void Enemy::OnIdle()
+{
+	if(!idleTimer)
 	{
-		float distX = position.x - GAME.player->Position().x;
-		float distY = position.y - GAME.player->Position().y;
-		
-		if(distY > MaxDistY) yVel = -speed;
-		else if(distY < -MaxDistY) yVel = speed;
-		else yVel = 0.0f;
-
-		if(distX > MaxDistX)
-		{
-			SetDirection(Left);
-			xVel = -speed;
-		}
-		else if(distX < -MaxDistX)
-		{
-			SetDirection(Right);
-			xVel = speed;
-		}
-
-		//When close enough, attack
-		if(SDL_abs((int)distX) <= (int)MaxDistX 
-			&& SDL_abs((int)distY) <= (int)MaxDistY)
-		{
-			Stop();
-			Attack();
-		}
+		Stop();
+		idleTimer = SDL_GetTicks() + WHEEL_OF_FORTUNE.Next(1000, 3000);
 	}
-	else if(state == ES_Attacking)
+	else
 	{
-		current = GetDirection() == Left? punchLeft: punchRight;
-		if(SDL_GetTicks() - punchTimer > 300)
+		if(SDL_GetTicks() >= idleTimer)
 		{
-			state = ES_Idle;
-			punchTimer = 0;
-		}
-	}
-	else if(state == ES_Idle)
-	{
-		if(!idleTimer)
-		{
-			Stop();
-			idleTimer = SDL_GetTicks() + WHEEL_OF_FORTUNE.Next(1000, 3000);
+			state = ES_Chasing;
+			idleTimer = 0;
 		}
 		else
 		{
-			if(SDL_GetTicks() >= idleTimer)
-			{
-				state = ES_Chasing;
-				idleTimer = 0;
-			}
-			else
-			{
-				//Face player all the time when on idle
-				SetDirection(position.x > GAME.player->Position().x? Left: Right);
-			}
+			//Face player all the time when on idle
+			SetDirection(position.x > GAME.player->Position().x? Left: Right);
 		}
+	}
+}
+
+
+void Enemy::Update()
+{
+	switch(state)
+	{
+	case ES_KnockedDown:
+		OnKnockDown();
+		return;
+
+	//Recovery (when hit)
+	case ES_Hit:
+		if(SDL_GetTicks() > recoveryTimer)
+			OnRecovery();
+		break;
+
+	case ES_Patrolling:
+		OnPatrol();
+		break;
+
+	case ES_Chasing:
+		OnChase();
+		break;
+
+	case ES_Attacking:
+		OnPunch();
+		break;
+
+	case ES_Idle:
+		OnIdle();
+		break;
 	}
 
 	//Translate/animate
@@ -277,8 +308,8 @@ void Enemy::Draw(SDL_Renderer* const renderer) const
 
 Enemy::~Enemy()
 {
-	punchLeft->FramePlayed.detach(this, &Enemy::PunchSprites_FramePlayed);
-	punchRight->FramePlayed.detach(this, &Enemy::PunchSprites_FramePlayed);
+	punchLeft->FramePlayed.detach(this, &Enemy::OnPunchSprite);
+	punchRight->FramePlayed.detach(this, &Enemy::OnPunchSprite);
 	current = NULL;
 	util::Delete(walkLeft);
 	util::Delete(walkRight);

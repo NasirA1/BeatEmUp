@@ -36,15 +36,15 @@ Player::Player(SDL_Renderer* const renderer)
 	//walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	//walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	punchRight->FramePlayed.attach(this, &Player::PunchSprites_FramePlayed);
-	punchLeft->FramePlayed.attach(this, &Player::PunchSprites_FramePlayed);
+	punchRight->FramePlayed.attach(this, &Player::OnPunchSprite);
+	punchLeft->FramePlayed.attach(this, &Player::OnPunchSprite);
 
 	SetDirection(Right);
 	Stop();
 }
 
 
-void Player::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+void Player::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
 {
 	if(e->FrameIndex == 1 || e->FrameIndex == 4 || e->FrameIndex == 8)
 	{
@@ -281,8 +281,8 @@ void Player::Draw(SDL_Renderer* const renderer) const
 
 Player::~Player()
 {
-	punchLeft->FramePlayed.detach(this, &Player::PunchSprites_FramePlayed);
-	punchRight->FramePlayed.detach(this, &Player::PunchSprites_FramePlayed);
+	punchLeft->FramePlayed.detach(this, &Player::OnPunchSprite);
+	punchRight->FramePlayed.detach(this, &Player::OnPunchSprite);
 
 	util::Delete(walkRight);
 	util::Delete(walkLeft);

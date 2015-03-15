@@ -61,8 +61,13 @@ public:
 private:
 	void Translate(bool anim);
 	void Translate();
-	void HandleKnockedDown();
-	void PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+	void OnKnockDown();
+	void OnPatrol();
+	void OnRecovery();
+	void OnChase();
+	void OnPunch();
+	void OnIdle();
+	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 
 
 private:
@@ -82,6 +87,9 @@ private:
 	Uint32 recoveryTimer;
 	Uint8 hitCount;
 	const Uint8 KnockDownHitCount;
+
+	float patrolRange;
+	float vision;
 
 	//jumping
 	enum JumpState
