@@ -119,7 +119,7 @@ void Enemy::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::F
 {
 	if(e->FrameIndex == 1)
 	{
-		if(CollidedWith(GAME.player) && GetDirection() != GAME.player->GetDirection())
+		if(CollidedWith(GAME.player))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.player->OnEnemyAttack();

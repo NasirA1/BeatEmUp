@@ -44,6 +44,8 @@ private:
 	void Translate(bool anim);
 	void PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 	void OnKnockDown();
+	bool CantMove() const;
+	bool CantAttack() const;
 
 private:
 	Sprite* walkRight;

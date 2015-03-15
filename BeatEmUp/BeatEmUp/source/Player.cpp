@@ -17,10 +17,10 @@ Player::Player(SDL_Renderer* const renderer)
 	, walkLeft(Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7))
 	, punchRight(Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 5, 0, 0xFF, 0xFF, 0xFF))
 	, punchLeft(Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 5, 0, 0xFF, 0xFF, 0xFF))
-	,	hitLeft(Sprite::FromFile("resources/andore_hitleft.png", renderer, 70, 124, 5, 0)) 
-	,	hitRight(Sprite::FromFile("resources/andore_hitright.png", renderer, 70, 124, 5, 0))
-	,	fallLeft(Sprite::FromFile("resources/andore_fallleft.png", renderer, 150, 120, 1, 0))
-	,	fallRight(Sprite::FromFile("resources/andore_fallright.png", renderer, 150, 120, 1, 0)) 
+	,	hitLeft(Sprite::FromFile("resources/baddude_hitleft.png", renderer, 70, 108, 5, 0)) 
+	,	hitRight(Sprite::FromFile("resources/baddude_hitright.png", renderer, 70, 108, 5, 0))
+	,	fallLeft(Sprite::FromFile("resources/baddude_fallleft.png", renderer, 133, 121, 1, 0))
+	,	fallRight(Sprite::FromFile("resources/baddude_fallright.png", renderer, 133, 121, 1, 0)) 
 	, current(NULL)
 	, jumpState(JS_Ground)
 	, pState(PS_Idle)
@@ -317,6 +317,8 @@ void Player::Jump(float xAccel, float yAccel)
 
 void Player::Punch()
 {
+	if(CantAttack()) return;
+
 	if(pState == PS_Punching)
 	{
 		punchTimeout += 250;
@@ -343,9 +345,31 @@ void Player::Stop()
 }
 
 
+
+bool Player::CantAttack() const
+{
+	return ( 
+		pState == PS_Dead ||
+		pState == PS_KnockedDown
+	);
+}
+
+
+bool Player::CantMove() const
+{
+	return (jumpState != JS_Ground || 
+		pState == PS_Punching ||
+		pState == PS_Hit ||
+		pState == PS_Jumping ||
+		pState == PS_Dead ||
+		pState == PS_KnockedDown
+	);
+}
+
+
 void Player::GoUp()
 {
-	if(jumpState != JS_Ground || pState == PS_Punching) return;
+	if(CantMove()) return;
 
 	current = GetDirection() == Right? walkRight: walkLeft;
 
@@ -361,7 +385,7 @@ void Player::GoUp()
 
 void Player::GoDown()
 {
-	if(jumpState != JS_Ground || pState == PS_Punching) return;
+	if(CantMove()) return;
 	
 	current = GetDirection() == Right? walkRight: walkLeft;
 	
@@ -377,7 +401,7 @@ void Player::GoDown()
 
 void Player::GoRight()
 {
-	if(jumpState != JS_Ground || pState == PS_Punching) return;
+	if(CantMove()) return;
 
 	current = GetDirection() == Right? walkRight: walkLeft;
 
@@ -394,7 +418,7 @@ void Player::GoRight()
 
 void Player::GoLeft()
 {
-	if(jumpState != JS_Ground || pState == PS_Punching) return;
+	if(CantMove()) return;
 	
 	current = GetDirection() == Right? walkRight: walkLeft;
 
