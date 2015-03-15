@@ -14,7 +14,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY)
-	: GameObject(GT_Enemy, 50)	
+	: GameObject(GT_Enemy, 50, Left)	
 	, walkLeft(walkLeftSprite)
 	, walkRight(walkRightSprite)
 	, punchLeft(punchLeftSprite)
@@ -23,7 +23,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, hitRight(hitRightSprite)
 	, fallLeft(fallLeftSprite)
 	, fallRight(fallRightSprite)
-	, current(NULL)
+	, current(walkLeft)
 	, state(ES_Patrolling)
 	, punchTimer(0)
 	, idleTimer(0)
@@ -32,7 +32,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, jumpState(JS_Ground)
 	, KnockDownHitCount(3)
 	, patrolRange(200.0f)
-	, vision(50.0f)
+	, vision(40.0f)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -171,10 +171,18 @@ void Enemy::OnKnockDown()
 
 void Enemy::OnPatrol()
 {
-	if(position.x >= patrolRange) SetDirection(Left);
-	else if(position.x < -patrolRange) SetDirection(Right);
+	float distanceToPlayer = util::GetDistance(GAME.player->Position(), position);
+	if(distanceToPlayer <= vision) {
+		state = ES_Chasing;
+	}
+
+	static float patrolVectX = 0;
+	//logPrintf("dist %f", patrolVectX);
+	if(patrolVectX >= patrolRange) SetDirection(Left), patrolVectX = 0;
+	else if(patrolVectX < -patrolRange) SetDirection(Right), patrolVectX = 0;
 	if(GetDirection() == Left) xVel = -speed;
 	else xVel = speed;
+	patrolVectX += xVel;
 }
 
 
