@@ -49,11 +49,17 @@ void Player::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::
 {
 	if(e->FrameIndex == 1 || e->FrameIndex == 4 || e->FrameIndex == 8)
 	{
-		if(CollidedWith(GAME.andore) && GetDirection() != GAME.andore->GetDirection())
+		if(GAME.andore->IsAttackable() && GAME.andore-> CollidedWith(GAME.andore) 
+			&& GetDirection() != GAME.andore->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.andore->OnPlayerAttack();
 		}
+		//if(CollidedWith(GAME.andore2) && GetDirection() != GAME.andore2->GetDirection())
+		//{
+		//	MIXER.Play(Mixer::SE_PunchHit);
+		//	GAME.andore2->OnPlayerAttack();
+		//}
 		else
 		{
 			MIXER.Play(Mixer::SE_Punch);

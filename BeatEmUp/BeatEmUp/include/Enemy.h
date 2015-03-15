@@ -40,6 +40,11 @@ public:
 	void Attack();
 	void OnPlayerAttack();
 	void Jump(float xAccel, float yAccel);
+
+	__forceinline bool IsAttackable()
+	{
+		return state !=	ES_KnockedDown && state != ES_Dead;
+	}
 	
 	enum EState
 	{
