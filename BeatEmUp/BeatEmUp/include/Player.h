@@ -43,6 +43,8 @@ public:
 private:
 	void Translate(bool anim);
 	void PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+	void KnockedDown();
+	void OnHit();
 	void OnKnockDown();
 	bool CantMove() const;
 	bool CantAttack() const;

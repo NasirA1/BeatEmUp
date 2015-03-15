@@ -44,12 +44,11 @@ Player::Player(SDL_Renderer* const renderer)
 }
 
 
-
 void Player::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
 {
 	if(e->FrameIndex == 1 || e->FrameIndex == 4 || e->FrameIndex == 8)
 	{
-		if(GAME.andore->IsAttackable() && GAME.andore-> CollidedWith(GAME.andore) 
+		if(GAME.andore->IsAttackable() && CollidedWith(GAME.andore) 
 			&& GetDirection() != GAME.andore->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
@@ -68,31 +67,43 @@ void Player::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::
 }
 
 
+void Player::KnockedDown()
+{
+	hitCount = 0;
+	current = GetDirection() == Left? fallLeft: fallRight;
+	current->SetCurrentFrame(0);
+	pState = PS_KnockedDown;
+	recoveryTimer = 0;
+	Jump(8.0f, 10.0f);
+}
+
+
+void Player::OnHit()
+{
+	Stop();
+	current = GetDirection() == Left? hitLeft: hitRight;
+	pState = PS_Hit;
+	hitCount++;
+	SetHealth(GetHealth() - 1);
+}
+
+
 void Player::OnEnemyAttack()
 {
 	if(pState != PS_KnockedDown && pState != PS_Dead)
 	{
-		Stop();
-		current = GetDirection() == Left? hitLeft: hitRight;
-		pState = PS_Hit;
-		hitCount++;
-		SetHealth(GetHealth() - 1);
-	
-		if(GetHealth() > 0 && hitCount < KnockDownHitCount){
+		OnHit();
+
+		if(GetHealth() > 0 && hitCount < KnockDownHitCount)
+		{
 			recoveryTimer = SDL_GetTicks() + 300;
 		}
 		else
 		{
-			hitCount = 0;
-			current = GetDirection() == Left? fallLeft: fallRight;
-			current->SetCurrentFrame(0);
-			pState = PS_KnockedDown;
-			recoveryTimer = 0;
-			Jump(8.0f, 10.0f);
+			KnockedDown();
 		}
 	}
 }
-
 
 
 void Player::OnKnockDown()
@@ -172,7 +183,6 @@ void Player::OnKnockDown()
 }
 
 
-
 void Player::Update()
 {
 	//Dead...
@@ -209,8 +219,7 @@ void Player::Update()
 			SetDirection(Left);
 		else 
 			SetDirection(Right);
-
-		Jump(0, 30);
+		KnockedDown();
 		SetHealth(GetHealth() - 1);
 		MIXER.Play(Mixer::SE_Grunt);
 	}
@@ -314,6 +323,7 @@ void Player::Jump()
 	Jump(1, 20);
 }
 
+
 void Player::Jump(float xAccel, float yAccel)
 {
 	jumpLocation.x = position.x;
@@ -357,7 +367,6 @@ void Player::Stop()
 	current->SetAnimation(true);
 	pState = PS_Idle;
 }
-
 
 
 bool Player::CantAttack() const
