@@ -43,15 +43,13 @@ public:
 	
 	enum EState
 	{
+		ES_Idle,
 		ES_Patrolling,
 		ES_Chasing,
 		ES_Attacking,
 		ES_Hit,
 		ES_KnockedDown,
-		ES_Idle
-		/*No ES_Dead state
-		health of 0 indicates death
-		*/
+		ES_Dead
 	};
 
 

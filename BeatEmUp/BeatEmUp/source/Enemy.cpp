@@ -82,7 +82,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY)
-	: GameObject(GT_Enemy, 1000)	
+	: GameObject(GT_Enemy, 50)	
 	, walkLeft(walkLeftSprite)
 	, walkRight(walkRightSprite)
 	, punchLeft(punchLeftSprite)
@@ -207,6 +207,13 @@ void Enemy::HandleKnockedDown()
 					recoveryTimer = 0;
 				}
 			}
+		}
+		//Enemy is dead.. 
+		//TODO: Garbage collect
+		else
+		{
+			state = ES_Dead;
+			MIXER.Play(Mixer::SE_DragonRoar);
 		}
 	}
 

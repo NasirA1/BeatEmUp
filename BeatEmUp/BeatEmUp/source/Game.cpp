@@ -45,7 +45,7 @@ bool Game::Init()
 	Roamer* knight1 = new Roamer(renderer_, 
 		Sprite::FromFile("resources/knightwalk_left.png", renderer_, 128, 128, 4, 15),
 		Sprite::FromFile("resources/knightwalk_right.png", renderer_, 128, 128, 4, 3), 
-		5000, 450, -5000, 5000, false);
+		5000, 480, -5000, 5000, false);
 
 
 	andore = new Enemy(renderer_, 
