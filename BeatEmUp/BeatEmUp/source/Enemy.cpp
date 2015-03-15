@@ -119,12 +119,14 @@ void Enemy::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::F
 {
 	if(e->FrameIndex == 1)
 	{
-		MIXER.Play(Mixer::SE_Punch);
+		if(CollidedWith(GAME.player) && GetDirection() != GAME.player->GetDirection())
 		{
-			if(CollidedWith(GAME.player) && GetDirection() != GAME.player->GetDirection())
-			{
-				GAME.player->OnEnemyAttack();
-			}
+			MIXER.Play(Mixer::SE_PunchHit);
+			GAME.player->OnEnemyAttack();
+		}
+		else
+		{
+			MIXER.Play(Mixer::SE_Punch);
 		}
 	}
 }
@@ -309,7 +311,7 @@ void Enemy::Update()
 		}
 		else
 		{
-			if(SDL_GetTicks() >= idleTimer || GAME.player->isMoving())
+			if(SDL_GetTicks() >= idleTimer)
 			{
 				state = ES_Chasing;
 				idleTimer = 0;

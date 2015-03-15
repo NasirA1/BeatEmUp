@@ -126,7 +126,7 @@ void Game::ProcessEvent(const SDL_Event& e)
 			bg->SetScroll(player->GetDirection() == Right? Left : Right);
 			break;
 		case SDLK_SPACE:
-			player->Jump(1, 20);
+			player->Jump();
 			break;
 		case SDLK_a:
 			player->Punch();

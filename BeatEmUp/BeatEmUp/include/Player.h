@@ -15,13 +15,14 @@ public:
 
 enum PState
 {
-	PS_Stance,
+	PS_Idle,
 	PS_Walking,
 	PS_Jumping,
 	PS_Punching,
 	PS_Kicking,
 	PS_Hit,
-	PS_KnockedDown
+	PS_KnockedDown,
+	PS_Dead
 };
 
 public:
@@ -30,7 +31,8 @@ public:
 	void GoDown();
 	void GoRight();
 	void GoLeft();
-	void Jump(float xForce, float yForce);
+	void Jump();
+	void Jump(float xAccel, float yAccel);
 	void Punch();
 	void OnEnemyAttack();
 	
@@ -41,6 +43,7 @@ public:
 private:
 	void Translate(bool anim);
 	void PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+	void OnKnockDown();
 
 private:
 	Sprite* walkRight;

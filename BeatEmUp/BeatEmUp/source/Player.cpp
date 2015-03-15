@@ -23,7 +23,7 @@ Player::Player(SDL_Renderer* const renderer)
 	,	fallRight(Sprite::FromFile("resources/andore_fallright.png", renderer, 150, 120, 1, 0)) 
 	, current(NULL)
 	, jumpState(JS_Ground)
-	, pState(PS_Stance)
+	, pState(PS_Idle)
 	, punchTimeout(0)
 	, hitCount(0)
 	, recoveryTimer(0)
@@ -46,10 +46,7 @@ Player::Player(SDL_Renderer* const renderer)
 
 void Player::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
 {
-	if(e->FrameIndex == 1 || 
-		e->FrameIndex == 4 || 
-		e->FrameIndex == 8
-	)
+	if(e->FrameIndex == 1 || e->FrameIndex == 4 || e->FrameIndex == 8)
 	{
 		if(CollidedWith(GAME.andore) && GetDirection() != GAME.andore->GetDirection())
 		{
@@ -64,7 +61,7 @@ void Player::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::
 }
 
 
-const Uint8 KnockDownHitCount = 15;
+const Uint8 KnockDownHitCount = 1;
 void Player::OnEnemyAttack()
 {
 	if(pState != PS_KnockedDown)
@@ -76,7 +73,7 @@ void Player::OnEnemyAttack()
 		SetHealth(GetHealth() - 1);
 	
 		if(GetHealth() > 0 && hitCount < KnockDownHitCount){
-			recoveryTimer = SDL_GetTicks() + 200;
+			recoveryTimer = SDL_GetTicks() + 300;
 		}
 		else
 		{
@@ -85,35 +82,115 @@ void Player::OnEnemyAttack()
 			current->SetCurrentFrame(0);
 			pState = PS_KnockedDown;
 			recoveryTimer = 0;
-			//Jump(8.0f, 10.0f);
+			Jump(8.0f, 10.0f);
 		}
 	}
 }
 
 
+
+void Player::OnKnockDown()
+{
+	//Jump start..
+	//Shoot up (yVel acceleration)...
+	if(jumpState == JS_Jumped)
+	{
+		yVel += Gravity/(float)JumpHeight;
+		if(position.y <= jumpLocation.y - JumpHeight) 
+			jumpState = JS_Landing;
+
+		if( (position.right() + xVel >= GAME.MoveBounds.right() - position.w)
+			|| (position.left() + xVel <= GAME.MoveBounds.x))
+				xVel = 0;
+	}
+	//Landing (in the air)..
+	else if(jumpState == JS_Landing)
+	{
+		//Not landed yet..
+		if(position.y < jumpLocation.y)
+		{
+			yVel += Gravity;
+			if( (position.right() + (xVel + 0.15f) >= GAME.MoveBounds.right() - position.w)
+				|| (position.left() + (xVel - 0.15f)  <= GAME.MoveBounds.x))
+					xVel = 0;
+			else
+				xVel += GetDirection() == Right? 0.15f: -0.15f;
+		}
+		//Landed. On the ground now...
+		else 
+		{
+			jumpState = JS_Ground;
+			xVel = 0, yVel = 0;
+			position.y = jumpLocation.y;
+			current->SetCurrentFrame(1);
+			MIXER.Play(Mixer::SE_Thud);
+		}
+	}
+	//On-the-ground logic...
+	else if(jumpState == JS_Ground)
+	{
+		//Getting up...
+		if(GetHealth() > 0)
+		{
+			if(current->GetCurrentFrame() == 1)
+			{
+				if(recoveryTimer == 0) {
+					recoveryTimer = SDL_GetTicks() + 2000;
+				} else if (SDL_GetTicks() > recoveryTimer) {
+					current->SetCurrentFrame(2);
+					recoveryTimer = SDL_GetTicks() + 500;
+				}
+			}
+			//Half up...
+			else if(current->GetCurrentFrame() == 2)
+			{
+				//full up.. go to stance..
+				if(SDL_GetTicks() > recoveryTimer) {
+					Stop();
+					recoveryTimer = 0;
+				}
+			}
+		}
+		//Player is dead..
+		else
+		{
+			pState = PS_Dead;
+			MIXER.Play(Mixer::SE_Grunt);
+		}
+	}
+
+	Translate(false);
+	current->Position().x = position.x;
+	current->Position().y = position.y;
+	current->Update();
+}
+
+
+
 void Player::Update()
 {
+	//Knocked down.. get up or die...
+	if(pState == PS_KnockedDown)
+	{
+		OnKnockDown();
+		return;
+	}
+
+	//Recovery (when hit)
+	if(pState == PS_Hit && SDL_GetTicks() > recoveryTimer)
+	{
+		Stop();
+		recoveryTimer = 0;
+		hitCount = 0;
+	}
+
 	//punching
 	if(pState == PS_Punching)
 	{
 		if(SDL_GetTicks() > punchTimeout) {
-			Stop(); //sets pState to PS_Stance
+			Stop(); //sets pState to PS_Idle
 			punchTimeout = 0;
 		}
-		//else if(current->GetCurrentFrame() == 1
-		//	|| current->GetCurrentFrame() == 4
-		//	|| current->GetCurrentFrame() == 8)
-		//{
-		//	////TODO: remove this test-hardcoded code
-		//	//if(CollidedWith(GAME.andore) && GetDirection() != GAME.andore->GetDirection())
-		//	//{
-		//	//	GAME.andore->OnPlayerAttack();
-		//	//}
-		//	//if(CollidedWith(GAME.andore2) && GetDirection() != GAME.andore2->GetDirection())
-		//	//{
-		//	//	GAME.andore2->OnPlayerAttack();
-		//	//}
-		//}
 	}
 
 	//Hit by rock..
@@ -136,7 +213,7 @@ void Player::Update()
 	else {
 		SetAngle(0);
 		if(pState == PS_Jumping) {
-			Stop(); //jump complete set pState to PS_Stance
+			Stop(); //jump complete set pState to PS_Idle
 		}
 	}
 
@@ -188,12 +265,17 @@ Player::~Player()
 {
 	punchLeft->FramePlayed.detach(this, &Player::PunchSprites_FramePlayed);
 	punchRight->FramePlayed.detach(this, &Player::PunchSprites_FramePlayed);
+
 	util::Delete(walkRight);
 	util::Delete(walkLeft);
 	util::Delete(stanceRight);
 	util::Delete(stanceLeft);
 	util::Delete(punchRight);
 	util::Delete(punchLeft);
+	util::Delete(hitLeft);
+	util::Delete(hitRight);
+	util::Delete(fallLeft);
+	util::Delete(fallRight);
 	logPrintf("Player object released");
 }
 
@@ -213,18 +295,23 @@ void Player::SetAngle(double theta)
 }
 
 
-void Player::Jump(float xForce, float yForce)
+void Player::Jump()
 {
 	//Can only jump whilst on the ground
 	if(jumpState != JS_Ground) return;
+	
+	current = GetDirection() == Right? stanceRight: stanceLeft;
+	pState = PS_Jumping;
+	Jump(1, 20);
+}
 
+void Player::Jump(float xAccel, float yAccel)
+{
 	jumpLocation.x = position.x;
 	jumpLocation.y = position.y;
-	current = GetDirection() == Right? stanceRight: stanceLeft;
-	xVel = GetDirection() == Right? xForce: -xForce;
-	yVel = -yForce;
+	xVel = GetDirection() == Right? -xAccel: xAccel;
+	yVel = -yAccel;
 	jumpState = JS_Jumped;
-	pState = PS_Jumping;
 }
 
 
@@ -252,7 +339,7 @@ void Player::Stop()
 	xVel = yVel = 0;
 	current = GetDirection() == Right? stanceRight: stanceLeft;
 	current->SetAnimation(true);
-	pState = PS_Stance;
+	pState = PS_Idle;
 }
 
 
