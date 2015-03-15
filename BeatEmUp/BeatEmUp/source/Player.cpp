@@ -27,6 +27,7 @@ Player::Player(SDL_Renderer* const renderer)
 	, punchTimeout(0)
 	, hitCount(0)
 	, recoveryTimer(0)
+	, KnockDownHitCount(3)
 {
 	position.x  = 100.0f , position.w = 76.0f, position.h = 120.0f;
 	position.y = (float)GAME.MidSectionY((int)position.h);
@@ -61,10 +62,9 @@ void Player::PunchSprites_FramePlayed(const Sprite* const sender, const Sprite::
 }
 
 
-const Uint8 KnockDownHitCount = 1;
 void Player::OnEnemyAttack()
 {
-	if(pState != PS_KnockedDown)
+	if(pState != PS_KnockedDown && pState != PS_Dead)
 	{
 		Stop();
 		current = GetDirection() == Left? hitLeft: hitRight;
@@ -169,6 +169,9 @@ void Player::OnKnockDown()
 
 void Player::Update()
 {
+	//Dead...
+	if(pState == PS_Dead) return;
+
 	//Knocked down.. get up or die...
 	if(pState == PS_KnockedDown)
 	{
@@ -336,6 +339,11 @@ void Player::Punch()
 
 void Player::Stop()
 {
+	if(pState == PS_Dead){
+		logPrintf("Player dead");
+		return;
+	}
+
 	position.x -= xVel;
 	position.y -= yVel;
 	xVel = yVel = 0;

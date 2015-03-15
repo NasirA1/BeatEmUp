@@ -50,7 +50,6 @@ public:
 	__forceinline RectF& Position() { return position; }
 	__forceinline Directions GetDirection() const { return direction; }
 	__forceinline double GetAngle() const { return angle; }
-	__forceinline bool IsDead() const { return health <= 0; }
 	__forceinline float XVel() const { return xVel; }
 	__forceinline float YVel() const { return yVel; }
 	__forceinline float GetSpeed() const { return speed; }
@@ -61,7 +60,6 @@ public:
 	
 	//Mutators
 	__forceinline void SetHealth(int value) { health = value; }
-	__forceinline void Kill() { health = 0; }
 	__forceinline void SetSpeed(float sp) { speed = sp; }
 
 

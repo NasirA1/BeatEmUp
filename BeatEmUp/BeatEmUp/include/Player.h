@@ -65,7 +65,7 @@ private:
 	Uint32 punchTimeout;
 	Uint32 recoveryTimer;
 	Uint8 hitCount;
-
+  const Uint8 KnockDownHitCount;
 	//jumping
 	enum JumpState
 	{
