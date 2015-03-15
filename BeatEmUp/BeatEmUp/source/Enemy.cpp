@@ -343,7 +343,7 @@ void Enemy::Translate(bool anim)
 
 #pragma region Rock
 
-const float Rock::Range(1.0f * (float)GAME.ClientWidth());
+const float Rock::Range(10.0f * (float)GAME.ClientWidth());
 
 
 Rock::Rock(const string& file, SDL_Renderer* const renderer)
