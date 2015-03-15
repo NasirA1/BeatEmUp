@@ -89,6 +89,7 @@ private:
 	const Uint8 KnockDownHitCount;
 
 	float patrolRange;
+	float patrolVecX;
 	float vision;
 
 	//jumping

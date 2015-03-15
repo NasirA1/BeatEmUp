@@ -31,7 +31,8 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, jumpState(JS_Ground)
 	, KnockDownHitCount(3)
 	, patrolRange(200.0f)
-	, vision(200.0f)
+	, patrolVecX(0.0f)
+	, vision(250.0f)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -290,13 +291,12 @@ void Enemy::OnPatrol()
 		}
 	}
 
-	static float patrolVectX = 0;
-	//logPrintf("dist %f", patrolVectX);
-	if(patrolVectX >= patrolRange) SetDirection(Left), patrolVectX = 0;
-	else if(patrolVectX < -patrolRange) SetDirection(Right), patrolVectX = 0;
+	//logPrintf("dist %f", patrolVecX)
+	if(patrolVecX >= patrolRange) SetDirection(Left), patrolVecX = 0;
+	else if(patrolVecX < -patrolRange) SetDirection(Right), patrolVecX = 0;
 	if(GetDirection() == Left) xVel = -speed;
 	else xVel = speed;
-	patrolVectX += xVel;
+	patrolVecX += xVel;
 }
 
 
