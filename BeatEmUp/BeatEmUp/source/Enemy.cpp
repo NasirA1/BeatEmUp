@@ -3,7 +3,6 @@
 #include "Player.h"
 
 
-
 const float Enemy::Gravity(2.0f);
 const int Enemy::JumpHeight(50);
 
@@ -43,6 +42,117 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	punchRight->FramePlayed.attach(this, &Enemy::OnPunchSprite);
 }
 
+
+
+void Enemy::Update()
+{
+	switch(state)
+	{
+	case ES_KnockedDown:
+		OnKnockDown();
+		return;
+
+	//Recovery (when hit)
+	case ES_Hit:
+		if(SDL_GetTicks() > recoveryTimer)
+			OnRecovery();
+		break;
+
+	case ES_Patrolling:
+		OnPatrol();
+		break;
+
+	case ES_Chasing:
+		OnChase();
+		break;
+
+	case ES_Attacking:
+		OnPunch();
+		break;
+
+	case ES_Idle:
+		OnIdle();
+		break;
+	}
+
+	//Translate/animate
+	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking);
+	
+	//Propagate to the underlying currently active sprite
+	current->Position().x = position.x;
+	current->Position().y = position.y;
+	current->Update();
+}
+
+
+void Enemy::Draw(SDL_Renderer* const renderer) const
+{
+	current->Draw(renderer);
+}
+
+
+Enemy::~Enemy()
+{
+	punchLeft->FramePlayed.detach(this, &Enemy::OnPunchSprite);
+	punchRight->FramePlayed.detach(this, &Enemy::OnPunchSprite);
+	current = NULL;
+	util::Delete(walkLeft);
+	util::Delete(walkRight);
+	util::Delete(punchLeft);
+	util::Delete(punchRight);
+	util::Delete(hitLeft);
+	util::Delete(hitRight);
+	util::Delete(fallLeft);
+	util::Delete(fallRight);
+	logPrintf("Enemy object released");
+}
+
+
+void Enemy::SetDirection(Directions dir)
+{
+	GameObject::SetDirection(dir);
+	if (GetDirection() == Right) current = walkRight;
+	else if(GetDirection() == Left) current = walkLeft;
+}
+
+
+void Enemy::Stop()
+{
+	xVel = yVel = 0;
+	current = GetDirection() == Left? walkLeft: walkRight;
+	current->SetStill();
+}
+
+
+void Enemy::Translate()
+{
+	//Handle BG scrolling
+	if(GAME.bg->IsScrolling())
+	{
+		position.x += GAME.bg->GetDirection() == Left?
+			-GAME.bg->GetSpeed(): GAME.bg->GetSpeed();
+	}
+
+	//Translate
+	position.x += xVel;
+	position.y += yVel;
+
+	//Z rules dont apply to jumping
+	if(jumpState == JS_Ground)
+	{
+		position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;
+		AdjustZToGameDepth();
+	}
+
+	//logPrintf("Enemy Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
+}
+
+
+void Enemy::Translate(bool anim)
+{
+	current->SetAnimation(anim);
+	Translate();
+}
 
 
 void Enemy::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
@@ -238,6 +348,13 @@ void Enemy::OnPunch()
 }
 
 
+void Enemy::Attack()
+{
+	state = ES_Attacking;
+	punchTimer = SDL_GetTicks();
+}
+
+
 void Enemy::OnIdle()
 {
 	if(!idleTimer)
@@ -261,121 +378,6 @@ void Enemy::OnIdle()
 }
 
 
-void Enemy::Update()
-{
-	switch(state)
-	{
-	case ES_KnockedDown:
-		OnKnockDown();
-		return;
-
-	//Recovery (when hit)
-	case ES_Hit:
-		if(SDL_GetTicks() > recoveryTimer)
-			OnRecovery();
-		break;
-
-	case ES_Patrolling:
-		OnPatrol();
-		break;
-
-	case ES_Chasing:
-		OnChase();
-		break;
-
-	case ES_Attacking:
-		OnPunch();
-		break;
-
-	case ES_Idle:
-		OnIdle();
-		break;
-	}
-
-	//Translate/animate
-	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking);
-	//Propagate to the underlying currently active sprite
-	current->Position().x = position.x;
-	current->Position().y = position.y;
-	current->Update();
-}
-
-
-void Enemy::Attack()
-{
-	state = ES_Attacking;
-	punchTimer = SDL_GetTicks();
-}
-
-
-void Enemy::Draw(SDL_Renderer* const renderer) const
-{
-	current->Draw(renderer);
-}
-
-
-Enemy::~Enemy()
-{
-	punchLeft->FramePlayed.detach(this, &Enemy::OnPunchSprite);
-	punchRight->FramePlayed.detach(this, &Enemy::OnPunchSprite);
-	current = NULL;
-	util::Delete(walkLeft);
-	util::Delete(walkRight);
-	util::Delete(punchLeft);
-	util::Delete(punchRight);
-	util::Delete(hitLeft);
-	util::Delete(hitRight);
-	util::Delete(fallLeft);
-	util::Delete(fallRight);
-	logPrintf("Enemy object released");
-}
-
-
-void Enemy::SetDirection(Directions dir)
-{
-	GameObject::SetDirection(dir);
-	if (GetDirection() == Right) current = walkRight;
-	else if(GetDirection() == Left) current = walkLeft;
-}
-
-
-void Enemy::Stop()
-{
-	xVel = yVel = 0;
-	current = GetDirection() == Left? walkLeft: walkRight;
-	current->SetStill();
-}
-
-
-void Enemy::Translate()
-{
-	//Handle BG scrolling
-	if(GAME.bg->IsScrolling())
-	{
-		position.x += GAME.bg->GetDirection() == Left?
-			-GAME.bg->GetSpeed(): GAME.bg->GetSpeed();
-	}
-
-	//Translate
-	position.x += xVel;
-	position.y += yVel;
-
-	//Z rules dont apply to jumping
-	if(jumpState == JS_Ground)
-	{
-		position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;
-		AdjustZToGameDepth();
-	}
-
-	//logPrintf("Enemy Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
-}
-
-
-void Enemy::Translate(bool anim)
-{
-	current->SetAnimation(anim);
-	Translate();
-}
 
 
 
