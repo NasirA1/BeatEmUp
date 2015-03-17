@@ -142,6 +142,39 @@
     <None Include="resources\thud.wav">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\andore_hitleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\andore_hitright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude_fallleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude_kickright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude_fallright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude_hitleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude_hitright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\baddude_kickleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\punch_hit.wav">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\ryu.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">

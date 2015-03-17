@@ -184,7 +184,7 @@ void Enemy::OnPlayerAttack()
 		SetHealth(GetHealth() - 1);
 	
 		if(GetHealth() > 0 && hitCount < KnockDownHitCount){
-			recoveryTimer = SDL_GetTicks() + 300;
+			recoveryTimer = SDL_GetTicks() + 400;
 		}
 		else
 		{
@@ -307,9 +307,12 @@ void Enemy::OnChase()
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.y - GAME.player->Position().y;
 
-	if(distY > MaxDistY) yVel = -speed;
-	else if(distY < -MaxDistY) yVel = speed;
-	else yVel = 0.0f;
+	if(GAME.player->GetState() != Player::PS_Jumping)
+	{
+		if(distY > MaxDistY) yVel = -speed;
+		else if(distY < -MaxDistY) yVel = speed;
+	}
+	else { yVel = 0.0f; }
 
 	if(distX > MaxDistX)
 	{
