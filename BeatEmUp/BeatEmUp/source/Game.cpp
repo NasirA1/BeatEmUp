@@ -69,8 +69,8 @@ bool Game::Init()
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
 		2400, 450);
 	joker = new Enemy(renderer_, 
-		Sprite::FromFile("resources/joker_walkleft.png", renderer_, 60, 97, 10, 0, true),
-		Sprite::FromFile("resources/joker_walkright.png", renderer_, 60, 97, 10, 2), 
+		Sprite::FromFile("resources/joker_walkleft.png", renderer_, 60, 97, 10, 3, true),
+		Sprite::FromFile("resources/joker_walkright.png", renderer_, 60, 97, 10, 0), 
 		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
 		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
 		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
