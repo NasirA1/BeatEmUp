@@ -34,6 +34,7 @@ public:
 	void Jump();
 	void Jump(float xAccel, float yAccel);
 	void Punch();
+	void Kick();
 	void OnEnemyAttack();
 	
 	__forceinline bool isMoving() const { return !(xVel == 0.0f && yVel == 0.0f); }
@@ -44,6 +45,7 @@ public:
 private:
 	void Translate(bool anim);
 	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+	void OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 	void KnockedDown();
 	void OnHit();
 	void OnKnockDown();
@@ -62,10 +64,13 @@ private:
 	Sprite* hitRight;
 	Sprite* fallLeft;
 	Sprite* fallRight;
+	Sprite* kickLeft;
+	Sprite* kickRight;
 
 	//player state
 	PState pState;
 	Uint32 punchTimeout;
+	Uint32 kickTimeout;
 	Uint32 recoveryTimer;
 	Uint8 hitCount;
   const Uint8 KnockDownHitCount;

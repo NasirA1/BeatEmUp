@@ -15,16 +15,19 @@ Player::Player(SDL_Renderer* const renderer)
 	, stanceLeft(Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0))
 	, walkRight(Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7))
 	, walkLeft(Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7))
-	, punchRight(Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 5, 0, 0xFF, 0xFF, 0xFF))
-	, punchLeft(Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 5, 0, 0xFF, 0xFF, 0xFF))
+	, punchRight(Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 6, 0, 0xFF, 0xFF, 0xFF))
+	, punchLeft(Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 6, 0, 0xFF, 0xFF, 0xFF))
+	,	kickLeft(Sprite::FromFile("resources/baddude_kickleft.png", renderer, 95, 120, 6, 0))
+	,	kickRight(Sprite::FromFile("resources/baddude_kickright.png", renderer, 95, 120, 6, 0))
 	,	hitLeft(Sprite::FromFile("resources/baddude_hitleft.png", renderer, 70, 108, 5, 0)) 
 	,	hitRight(Sprite::FromFile("resources/baddude_hitright.png", renderer, 70, 108, 5, 0))
 	,	fallLeft(Sprite::FromFile("resources/baddude_fallleft.png", renderer, 133, 121, 1, 0))
-	,	fallRight(Sprite::FromFile("resources/baddude_fallright.png", renderer, 133, 121, 1, 0)) 
+	,	fallRight(Sprite::FromFile("resources/baddude_fallright.png", renderer, 133, 121, 1, 0))
 	, current(NULL)
 	, jumpState(JS_Ground)
 	, pState(PS_Idle)
 	, punchTimeout(0)
+	, kickTimeout(0)
 	, hitCount(0)
 	, recoveryTimer(0)
 	, KnockDownHitCount(3)
@@ -38,9 +41,34 @@ Player::Player(SDL_Renderer* const renderer)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
 	punchRight->FramePlayed.attach(this, &Player::OnPunchSprite);
 	punchLeft->FramePlayed.attach(this, &Player::OnPunchSprite);
-
+	kickRight->FramePlayed.attach(this, &Player::OnKickSprite);
+	kickLeft->FramePlayed.attach(this, &Player::OnKickSprite);
 	SetDirection(Right);
 	Stop();
+}
+
+
+
+Player::~Player()
+{
+	punchLeft->FramePlayed.detach(this, &Player::OnPunchSprite);
+	punchRight->FramePlayed.detach(this, &Player::OnPunchSprite);
+	kickRight->FramePlayed.detach(this, &Player::OnKickSprite);
+	kickLeft->FramePlayed.detach(this, &Player::OnKickSprite);
+
+	util::Delete(walkRight);
+	util::Delete(walkLeft);
+	util::Delete(stanceRight);
+	util::Delete(stanceLeft);
+	util::Delete(punchRight);
+	util::Delete(punchLeft);
+	util::Delete(hitLeft);
+	util::Delete(hitRight);
+	util::Delete(fallLeft);
+	util::Delete(fallRight);
+	util::Delete(kickLeft);
+	util::Delete(kickRight);
+	logPrintf("Player object released");
 }
 
 
@@ -58,6 +86,30 @@ void Player::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 			&& GetDirection() != GAME.andore2->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
+			GAME.andore2->OnPlayerAttack();
+		}
+		else
+		{
+			MIXER.Play(Mixer::SE_Punch);
+		}
+	}
+}
+
+
+void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+{
+	if(e->FrameIndex == 1)
+	{
+		if(GAME.andore->IsAttackable() && CollidedWith(GAME.andore) 
+			&& GetDirection() != GAME.andore->GetDirection())
+		{
+			MIXER.Play(Mixer::SE_Kick);
+			GAME.andore->OnPlayerAttack();
+		}
+		if(GAME.andore2->IsAttackable() && CollidedWith(GAME.andore2) 
+			&& GetDirection() != GAME.andore2->GetDirection())
+		{
+			MIXER.Play(Mixer::SE_Kick);
 			GAME.andore2->OnPlayerAttack();
 		}
 		else
@@ -213,6 +265,16 @@ void Player::Update()
 		}
 	}
 
+	//kicking
+	if(pState == PS_Kicking)
+	{
+		if(SDL_GetTicks() > kickTimeout) {
+			Stop(); //sets pState to PS_Idle
+			kickTimeout = 0;
+		}
+	}
+
+
 	//Hit by rock..
 	if(CollidedWith(GAME.rock))
 	{
@@ -280,25 +342,6 @@ void Player::Draw(SDL_Renderer* const renderer) const
 }
 
 
-Player::~Player()
-{
-	punchLeft->FramePlayed.detach(this, &Player::OnPunchSprite);
-	punchRight->FramePlayed.detach(this, &Player::OnPunchSprite);
-
-	util::Delete(walkRight);
-	util::Delete(walkLeft);
-	util::Delete(stanceRight);
-	util::Delete(stanceLeft);
-	util::Delete(punchRight);
-	util::Delete(punchLeft);
-	util::Delete(hitLeft);
-	util::Delete(hitRight);
-	util::Delete(fallLeft);
-	util::Delete(fallRight);
-	logPrintf("Player object released");
-}
-
-
 void Player::SetDirection(Directions dir)
 {
 	GameObject::SetDirection(dir);
@@ -354,6 +397,17 @@ void Player::Punch()
 }
 
 
+void Player::Kick()
+{
+	if(CantAttack()) return;
+
+	current = GetDirection()==Right? kickRight: kickLeft;
+	current->SetAnimation(true);
+	kickTimeout = SDL_GetTicks() + 250;
+	pState = PS_Kicking;
+}
+
+
 void Player::Stop()
 {
 	if(pState == PS_Dead){
@@ -383,6 +437,7 @@ bool Player::CantMove() const
 {
 	return (jumpState != JS_Ground || 
 		pState == PS_Punching ||
+		pState == PS_Kicking ||
 		pState == PS_Hit ||
 		pState == PS_Jumping ||
 		pState == PS_Dead ||
