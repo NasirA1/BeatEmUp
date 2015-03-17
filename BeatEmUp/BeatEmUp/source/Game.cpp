@@ -13,7 +13,7 @@ Game::Game()
 	, tbFps(NULL), tbPlayerPos(NULL), tbEnemyPos(NULL)
 	, skaterboy(NULL)
 	, player(NULL)
-	, andore(NULL), andore2(NULL)
+	, andore(NULL), andore2(NULL), joker(NULL)
 	, leftDown(false)
 	, rightDown(false)
 	, upDown(false)
@@ -68,7 +68,16 @@ bool Game::Init()
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
 		2400, 450);
-
+	joker = new Enemy(renderer_, 
+		Sprite::FromFile("resources/joker_walkleft.png", renderer_, 60, 97, 10, 0, true),
+		Sprite::FromFile("resources/joker_walkright.png", renderer_, 60, 97, 10, 2), 
+		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
+		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
+		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
+		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
+		800, 400, 1.5f);
 
 	player = new Player(renderer_);
 	rock = new Rock("resources/rock.png", renderer_);
@@ -89,6 +98,7 @@ bool Game::Init()
 	gameObjects.push_back(knight1);
 	gameObjects.push_back(andore);
 	gameObjects.push_back(andore2);
+	gameObjects.push_back(joker);
 
 
 	MIXER.Instance();

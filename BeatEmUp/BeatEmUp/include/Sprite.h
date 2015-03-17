@@ -9,7 +9,7 @@ class Sprite : public GameObject
 
 public:
 	Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer, 
-		int frameWidth, int frameHeight, int frameSpeed_, int stillFrame_);
+		int frameWidth, int frameHeight, int frameSpeed_, int stillFrame_, bool playReverse = false);
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Sprite();
@@ -40,11 +40,11 @@ public:
 
 
 	static inline Sprite* FromFile(string filename, SDL_Renderer* const renderer, 
-		int frameWidth, int frameHeight, int frameSpeed, int stillFrame
+		int frameWidth, int frameHeight, int frameSpeed, int stillFrame, bool playReverse = false
 		, Uint8 colKeyR = 0x00, Uint8 colKeyG = 0x00, Uint8 colKeyB = 0x00)
 	{
 		util::SDLSurfaceFromFile surface(filename, true, colKeyR, colKeyG, colKeyB);
-		return new Sprite(surface.surface, renderer, frameWidth, frameHeight, frameSpeed, stillFrame);
+		return new Sprite(surface.surface, renderer, frameWidth, frameHeight, frameSpeed, stillFrame, playReverse);
 	}
 
 
@@ -61,4 +61,5 @@ private:
 	int fromIndex;
 	int toIndex;
 	bool loop;
+	bool reverse;
 };

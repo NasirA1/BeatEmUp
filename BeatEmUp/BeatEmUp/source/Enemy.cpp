@@ -12,8 +12,13 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, Sprite* punchLeftSprite, Sprite* punchRightSprite
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
-	, float posX, float posY)
-	: GameObject(GT_Enemy, 50, Left)	
+	, float posX, float posY
+	, float speed_
+	, float patrolRange_
+	, float patrolVecX_
+	, float vision_
+	)
+	: GameObject(GT_Enemy, 50, Left, speed_)
 	, walkLeft(walkLeftSprite)
 	, walkRight(walkRightSprite)
 	, punchLeft(punchLeftSprite)
@@ -30,13 +35,12 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, hitCount(0)
 	, jumpState(JS_Ground)
 	, KnockDownHitCount(3)
-	, patrolRange(200.0f)
-	, patrolVecX(0.0f)
-	, vision(250.0f)
+	, patrolRange(patrolRange_)
+	, patrolVecX(patrolVecX_)
+	, vision(vision_)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
-	speed = 1.0f;
 	AdjustZToGameDepth();
 
 	punchLeft->FramePlayed.attach(this, &Enemy::OnPunchSprite);

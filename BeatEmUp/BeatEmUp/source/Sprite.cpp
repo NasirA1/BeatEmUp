@@ -4,7 +4,7 @@
 
 
 Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer, 
-	int frameWidth, int frameHeight, int frameSpeed_, int stillFrame_)
+	int frameWidth, int frameHeight, int frameSpeed_, int stillFrame_, bool playReverse)
 	: GameObject(GT_Sprite)
 	, sheet(NULL)
 	, frameSpeed(frameSpeed_)
@@ -14,6 +14,7 @@ Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer,
 	, currentFrame(0)
 	, animationRunning(false)
 	, loop(true)
+	, reverse(playReverse)
 {
 	if(!spriteSheet || !renderer) return;
 
@@ -48,9 +49,18 @@ void Sprite::Update()
 	}
 
 	// update to the next frame if it is time
-	if (counter == (frameSpeed - 1)) {
-		currentFrame = (currentFrame + 1) % (toIndex + 1);
-    if(currentFrame < fromIndex) currentFrame = fromIndex;
+	if (counter == (frameSpeed - 1)) 
+	{
+		if(reverse)
+		{
+			currentFrame = (currentFrame - 1) % (toIndex + 1);        
+			if (currentFrame < 0) currentFrame = toIndex/* - 1*/;
+		}
+		else
+		{
+			currentFrame = (currentFrame + 1) % (toIndex + 1);
+			if(currentFrame < fromIndex) currentFrame = fromIndex;
+		}
 
 		//notify listeners (if any)
 		FramePlayed.notify(this, &FramePlayedEventArgs(currentFrame));

@@ -30,7 +30,12 @@ public:
 	, Sprite* punchLeftSprite, Sprite* punchRightSprite
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
-	, float posX, float posY);
+	, float posX, float posY
+	, float speed_ = 1.0f
+	, float patrolRange_ = 200.0f
+	, float patrolVecX_ = 0.0f
+	, float vision_ = 250.0f
+);
 
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;

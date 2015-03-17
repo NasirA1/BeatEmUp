@@ -27,14 +27,14 @@ public:
 	};
 
 protected:
-	GameObject(Type type_, int health_ = 1, Directions initialDirection = Right)
+	GameObject(Type type_, int health_ = 1, Directions initialDirection = Right, float speed_ = 1.0f)
 		: type(type_)
 		, health(health_)
 		, direction(initialDirection)
 		, xVel(0.0f)
 		, yVel(0.0f)
 		, angle(0.0000)
-		, speed(1.0f)
+		, speed(speed_)
 		, gc(false)
 	{}
 
