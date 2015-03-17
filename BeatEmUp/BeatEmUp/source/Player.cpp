@@ -48,7 +48,6 @@ Player::Player(SDL_Renderer* const renderer)
 }
 
 
-
 Player::~Player()
 {
 	punchLeft->FramePlayed.detach(this, &Player::OnPunchSprite);
