@@ -54,7 +54,7 @@ void Sprite::Update()
 		if(reverse)
 		{
 			currentFrame = (currentFrame - 1) % (toIndex + 1);        
-			if (currentFrame < 0) currentFrame = toIndex/* - 1*/;
+			if (currentFrame < 0) currentFrame = toIndex;
 		}
 		else
 		{
