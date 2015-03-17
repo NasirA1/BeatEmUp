@@ -2,21 +2,19 @@
 #include "Game.h"
 
 
-//Penetration threshold
-const int PenThreshold(25);
 
 
-bool GameObject::CollidedWith(const GameObject* const other) const
+bool GameObject::CollidedWith(const GameObject* const other, const int penThreshold) const
 {
 	//null case
 	if(!other) return false;
 
 	//If any of the sides from A are outside of B
-	if(position.bottom() - PenThreshold <= other->position.top()) return false;
-	if(position.top() + PenThreshold >= other->position.bottom()) return false;
-	if(position.right() - PenThreshold <= other->position.left()) return false;
-	if(position.left() + PenThreshold >= other->position.right()) return false;
-	if(SDL_abs( (int)position.z - (int)other->position.z ) > PenThreshold)  return false;
+	if(position.bottom() - penThreshold <= other->position.top()) return false;
+	if(position.top() + penThreshold >= other->position.bottom()) return false;
+	if(position.right() - penThreshold <= other->position.left()) return false;
+	if(position.left() + penThreshold >= other->position.right()) return false;
+	if(SDL_abs( (int)position.z - (int)other->position.z ) > penThreshold)  return false;
 
 	return true;
 }

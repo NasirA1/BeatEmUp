@@ -99,13 +99,13 @@ void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 {
 	if(e->FrameIndex == 1)
 	{
-		if(GAME.andore->IsAttackable() && CollidedWith(GAME.andore) 
+		if(GAME.andore->IsAttackable() && CollidedWith(GAME.andore, 15) 
 			&& GetDirection() != GAME.andore->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_Kick);
 			GAME.andore->OnPlayerAttack();
 		}
-		if(GAME.andore2->IsAttackable() && CollidedWith(GAME.andore2) 
+		if(GAME.andore2->IsAttackable() && CollidedWith(GAME.andore2, 15) 
 			&& GetDirection() != GAME.andore2->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_Kick);

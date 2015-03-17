@@ -160,7 +160,7 @@ void Enemy::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedE
 {
 	if(e->FrameIndex == 1)
 	{
-		if(CollidedWith(GAME.player))
+		if(CollidedWith(GAME.player, 30))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.player->OnEnemyAttack();
@@ -302,7 +302,7 @@ void Enemy::OnPatrol()
 
 void Enemy::OnChase()
 {
-	static const float MaxDistX = 50.0f;
+	static const float MaxDistX = 40.0f;
 	static const float MaxDistY = 0.0f;
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.y - GAME.player->Position().y;
