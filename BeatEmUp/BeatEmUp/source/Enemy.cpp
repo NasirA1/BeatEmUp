@@ -10,11 +10,11 @@ const int Enemy::JumpHeight(50);
 Enemy::Enemy(SDL_Renderer* const renderer
 	, Sprite* idleLeftSprite, Sprite* idleRightSprite
 	, Sprite* walkLeftSprite, Sprite* walkRightSprite
-	, Sprite* punchLeftSprite, Sprite* punchRightSprite
+	, Sprite* attackLeftSprite, Sprite* attackRightSprite
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY
-	, const Uint32 punchTimeout
+	, const Uint32 attackTimeout
 	, float speed_
 	, float patrolRange_
 	, float patrolVecX_
@@ -27,15 +27,15 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, idleRight(idleRightSprite)
 	, walkLeft(walkLeftSprite)
 	, walkRight(walkRightSprite)
-	, punchLeft(punchLeftSprite)
-	, punchRight(punchRightSprite)
+	, attackLeft(attackLeftSprite)
+	, attackRight(attackRightSprite)
 	, hitLeft(hitLeftSprite)
 	, hitRight(hitRightSprite)
 	, fallLeft(fallLeftSprite)
 	, fallRight(fallRightSprite)
 	, current(walkLeft)
 	, state(ES_Patrolling)
-	, punchTimer(0)
+	, attackTimer(0)
 	, idleTimer(0)
 	, recoveryTimer(0)
 	, hitCount(0)
@@ -44,16 +44,13 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, patrolRange(patrolRange_)
 	, patrolVecX(patrolVecX_)
 	, vision(vision_)
-	, PunchTimeOut(punchTimeout)
+	, AttackTimeOut(attackTimeout)
 	, MinDistX(minDistX)
 	, MinDistY(minDistY)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
 	AdjustZToGameDepth();
-
-	punchLeft->FramePlayed.attach(this, &Enemy::OnPunchSprite);
-	punchRight->FramePlayed.attach(this, &Enemy::OnPunchSprite);
 }
 
 
@@ -81,7 +78,7 @@ void Enemy::Update()
 		break;
 
 	case ES_Attacking:
-		OnPunch();
+		OnAttack();
 		break;
 
 	case ES_Idle:
@@ -91,18 +88,7 @@ void Enemy::Update()
 
 	//Translate/animate
 	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking);
-	
-	//Propagate to the underlying currently active sprite
-	//TODO: test code. Remove!!!
-	if(state == ES_Attacking) {
-		current->Position().x = position.x - (current->Position().w - idleLeft->Position().w);
-		current->Position().y = position.y - (current->Position().h - idleLeft->Position().h);
-	}
-	else
-	{
-		current->Position().x = position.x;
-		current->Position().y = position.y;
-	}
+	Propagate();
 	current->Update();
 }
 
@@ -115,13 +101,11 @@ void Enemy::Draw(SDL_Renderer* const renderer) const
 
 Enemy::~Enemy()
 {
-	punchLeft->FramePlayed.detach(this, &Enemy::OnPunchSprite);
-	punchRight->FramePlayed.detach(this, &Enemy::OnPunchSprite);
 	current = NULL;
 	util::Delete(walkLeft);
 	util::Delete(walkRight);
-	util::Delete(punchLeft);
-	util::Delete(punchRight);
+	util::Delete(attackLeft);
+	util::Delete(attackRight);
 	util::Delete(hitLeft);
 	util::Delete(hitRight);
 	util::Delete(fallLeft);
@@ -164,8 +148,15 @@ void Enemy::Translate()
 		position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;
 		AdjustZToGameDepth();
 	}
-
 	//logPrintf("Enemy Translate: Pos {%d, %d}", (int)position.x, (int)position.y);
+}
+
+
+void Enemy::Propagate()
+{
+	//Propagate to the underlying currently active sprite
+	current->Position().x = position.x;
+	current->Position().y = position.y;
 }
 
 
@@ -173,23 +164,6 @@ void Enemy::Translate(bool anim)
 {
 	current->SetAnimation(anim);
 	Translate();
-}
-
-
-void Enemy::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
-{
-	if(e->FrameIndex == 1)
-	{
-		if(CollidedWith(GAME.player, 30))
-		{
-			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.player->OnEnemyAttack();
-		}
-		else
-		{
-			MIXER.Play(Mixer::SE_Punch);
-		}
-	}
 }
 
 
@@ -368,15 +342,12 @@ void Enemy::OnRecovery()
 }
 
 
-void Enemy::OnPunch()
+void Enemy::OnAttack()
 {
-	current = GetDirection() == Left? punchLeft: punchRight;
-	current->SetCurrentFrame(0);
-
-	if(SDL_GetTicks() - punchTimer > PunchTimeOut)
+	if(SDL_GetTicks() - attackTimer > AttackTimeOut)
 	{
 		state = ES_Idle;
-		punchTimer = 0;
+		attackTimer = 0;
 	}
 }
 
@@ -384,7 +355,9 @@ void Enemy::OnPunch()
 void Enemy::Attack()
 {
 	state = ES_Attacking;
-	punchTimer = SDL_GetTicks();
+	attackTimer = SDL_GetTicks();
+	current = GetDirection() == Left? attackLeft: attackRight;
+	current->Rewind();
 }
 
 
@@ -413,6 +386,108 @@ void Enemy::OnIdle()
 
 
 
+Andore::Andore(SDL_Renderer* const renderer_, float posX, float posY)
+	: Enemy(renderer_, 
+		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 0),
+		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 0), 
+		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 115, 10, 5),
+		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 117, 10, 5), 
+		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
+		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
+		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
+		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
+		posX, posY, 300, 1.0f, 200.0f, 0.0f, 250.0f, 40.0f, 0.0f)
+{
+	attackLeft->FramePlayed.attach(this, &Andore::OnPunchSprite);
+	attackRight->FramePlayed.attach(this, &Andore::OnPunchSprite);
+}
+
+
+void Andore::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+{
+	if(e->FrameIndex == 1)
+	{
+		if(CollidedWith(GAME.player, 30))
+		{
+			MIXER.Play(Mixer::SE_PunchHit);
+			GAME.player->OnEnemyAttack();
+		}
+		else
+		{
+			MIXER.Play(Mixer::SE_Punch);
+		}
+	}
+}
+
+
+Andore::~Andore()
+{
+	attackLeft->FramePlayed.detach(this, &Andore::OnPunchSprite);
+	attackRight->FramePlayed.detach(this, &Andore::OnPunchSprite);
+	logPrintf("Andore released");
+}
+
+
+
+Joker::Joker(SDL_Renderer* const renderer_, float posX, float posY)
+	: Enemy(renderer_, 
+		Sprite::FromFile("resources/joker_idleleft.png", renderer_, 60, 97, 10, 0),
+		Sprite::FromFile("resources/joker_idleright.png", renderer_, 60, 97, 10, 0), 
+		Sprite::FromFile("resources/joker_walkleft.png", renderer_, 60, 97, 10, 0, true),
+		Sprite::FromFile("resources/joker_walkright.png", renderer_, 60, 97, 10, 0), 
+		Sprite::FromFile("resources/joker_attackleft.png", renderer_, 130, 130, 10, 3),
+		Sprite::FromFile("resources/joker_attackright.png", renderer_, 130, 130, 10, 3), 
+		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
+		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
+		posX, posY, 550, 1.0f, 200.0f, 0.0f, 250.0f, 90.0f, 0.0f)
+{
+	attackLeft->FramePlayed.attach(this, &Joker::OnStickSprite);
+	attackRight->FramePlayed.attach(this, &Joker::OnStickSprite);
+}
+
+
+Joker::~Joker()
+{
+	attackLeft->FramePlayed.detach(this, &Joker::OnStickSprite);
+	attackRight->FramePlayed.detach(this, &Joker::OnStickSprite);
+	logPrintf("Joker released");
+}
+
+
+void Joker::OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+{
+	if(e->FrameIndex == 2)
+	{
+		if(CollidedWith(GAME.player, 0))
+		{
+			MIXER.Play(Mixer::SE_PunchHit);
+			GAME.player->OnEnemyAttack();
+		}
+		else
+		{
+			MIXER.Play(Mixer::SE_Punch);
+		}
+	}
+}
+
+
+void Joker::Propagate()
+{
+	if(state == ES_Attacking) 
+	{
+		if(GetDirection()==Left)
+			current->Position().x = position.x - (current->Position().w - idleLeft->Position().w);
+		current->Position().y = position.y - (current->Position().h - idleLeft->Position().h);
+	}
+	else
+	{
+		Enemy::Propagate();
+	}
+}
 
 
 

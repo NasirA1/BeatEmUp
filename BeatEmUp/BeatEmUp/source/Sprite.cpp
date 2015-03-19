@@ -55,6 +55,7 @@ void Sprite::Update()
 		{
 			currentFrame = (currentFrame - 1) % (toIndex + 1);        
 			if (currentFrame < 0) currentFrame = toIndex;
+			//logPrintf("currentFrame: %d, toIndex: %d", currentFrame, toIndex);
 		}
 		else
 		{
@@ -81,9 +82,10 @@ void Sprite::Draw(SDL_Renderer* const renderer) const
 	util::Convert(position, nPos);
 	SDL_RenderCopyEx(renderer, sheet, &src, &nPos, GetAngle(), NULL, SDL_FLIP_NONE);
 
-	if(!loop && IsAnimationRunning() && currentFrame == toIndex)
+	if(!loop && IsAnimationRunning())
 	{
-		const_cast<Sprite*>(this)->SetAnimation(false);
+		if( (!reverse && currentFrame == toIndex) || (reverse && currentFrame == fromIndex) )
+			const_cast<Sprite*>(this)->SetAnimation(false);
 	}
 }
 

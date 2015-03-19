@@ -27,6 +27,7 @@ public:
 	__forceinline void SetFrameSpeed(int fps) { frameSpeed = fps; }
 	__forceinline void SetStill() { currentFrame = stillFrame; animationRunning = false; }
 	__forceinline void SetLoop(bool enabled) { loop = enabled; }
+	__forceinline void Rewind() { currentFrame = reverse? toIndex: fromIndex; }
 	void PlayFrames(int fromFrame, int toFrame, bool loop_);
 
 	//Event dispatch

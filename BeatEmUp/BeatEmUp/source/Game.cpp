@@ -48,42 +48,16 @@ bool Game::Init()
 		5000, 480, -5000, 5000, false);
 
 
-	andore = new Enemy(renderer_, 
-		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 0),
-		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 0), 
-		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 115, 10, 5),
-		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 117, 10, 5), 
-		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
-		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
-		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
-		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
-		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
-		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		1200, 450, 300);
-	andore2 = new Enemy(renderer_, 
-		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 0),
-		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 0), 
-		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 115, 10, 5),
-		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 117, 10, 5), 
-		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
-		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
-		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
-		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
-		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
-		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		2400, 450, 300);
-	joker = new Enemy(renderer_, 
-		Sprite::FromFile("resources/joker_idleleft.png", renderer_, 60, 97, 10, 0),
-		Sprite::FromFile("resources/joker_idleright.png", renderer_, 60, 97, 10, 0), 
-		Sprite::FromFile("resources/joker_walkleft.png", renderer_, 60, 97, 10, 0, true),
-		Sprite::FromFile("resources/joker_walkright.png", renderer_, 60, 97, 10, 3), 
-		Sprite::FromFile("resources/joker_attackleft.png", renderer_, 130, 130, 60, 3),
-		Sprite::FromFile("resources/joker_attackright.png", renderer_, 130, 130, 60, 0, true), 
-		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
-		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
-		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
-		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		300, 400, 1000, 1.5f, 200.0f, 0.0f, 250.0f, 70.0f);
+	andore = new Andore(renderer_, 1200, 450);
+
+	//, float speed_ = 1.0f
+	//, float patrolRange_ = 200.0f
+	//, float patrolVecX_ = 0.0f
+	//, float vision_ = 250.0f
+	//, const float minDistX = 40.0f, const float minDistY = 0.0f
+
+	andore2 = new Andore(renderer_, 2400, 450);
+	joker = new Joker(renderer_, 300, 400);
 
 	player = new Player(renderer_);
 	rock = new Rock("resources/rock.png", renderer_);

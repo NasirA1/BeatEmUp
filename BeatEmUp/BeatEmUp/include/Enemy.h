@@ -33,21 +33,18 @@ public:
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY
 	, const Uint32 punchTimeOut 
-	, float speed_ = 1.0f
-	, float patrolRange_ = 200.0f
-	, float patrolVecX_ = 0.0f
-	, float vision_ = 250.0f
-	, const float minDistX = 40.0f, const float minDistY = 0.0f
+	, float speed_
+	, float patrolRange_
+	, float patrolVecX_
+	, float vision_
+	, const float minDistX, const float minDistY
 );
 
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Enemy();
-	void Walk(Directions dir);
-	void Stop();
-	void Attack();
+
 	void OnPlayerAttack();
-	void Jump(float xAccel, float yAccel);
 
 	__forceinline bool IsAttackable()
 	{
@@ -66,19 +63,25 @@ public:
 	};
 
 
+protected:
+	virtual void Propagate();
+
 private:
-	void Translate(bool anim);
 	void Translate();
+	void Translate(bool anim);
+	void Walk(Directions dir);
+	void Stop();
+	void Attack();
+	void Jump(float xAccel, float yAccel);
 	void OnKnockDown();
 	void OnPatrol();
 	void OnRecovery();
 	void OnChase();
-	void OnPunch();
+	void OnAttack();
 	void OnIdle();
-	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 
 
-private:
+protected:
 	Sprite* idleRight;
 	Sprite* idleLeft;
 	Sprite* walkRight;
@@ -89,16 +92,16 @@ private:
 	Sprite* fallLeft;
 	Sprite* fallRight;
 
-	Sprite* punchRight;
-	Sprite* punchLeft;
+	Sprite* attackRight;
+	Sprite* attackLeft;
 	EState state;
-	Uint32 punchTimer;
+	Uint32 attackTimer;
 	Uint32 idleTimer;
 	Uint32 recoveryTimer;
 	Uint8 hitCount;
 	
 	const Uint8 KnockDownHitCount;
-	const Uint32 PunchTimeOut;
+	const Uint32 AttackTimeOut;
 
 	float patrolRange;
 	float patrolVecX;
@@ -115,8 +118,34 @@ private:
 		JS_Jumped,
 		JS_Landing
 	};
+
 	JumpState jumpState;
 	VectF jumpLocation;
 	static const float Gravity;
 	static const int JumpHeight;
+};
+
+
+class Andore : public Enemy
+{
+public:
+	Andore(SDL_Renderer* const renderer, float posX, float posY);
+	virtual ~Andore();
+
+private:
+	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+};
+
+
+class Joker : public Enemy
+{
+public:
+	Joker(SDL_Renderer* const renderer, float posX, float posY);
+	virtual ~Joker();
+
+protected:
+	virtual void Propagate() override;
+
+private:
+	void OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 };
