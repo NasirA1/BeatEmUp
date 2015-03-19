@@ -49,18 +49,11 @@ bool Game::Init()
 
 
 	andore = new Andore(renderer_, 1200, 450);
-
-	//, float speed_ = 1.0f
-	//, float patrolRange_ = 200.0f
-	//, float patrolVecX_ = 0.0f
-	//, float vision_ = 250.0f
-	//, const float minDistX = 40.0f, const float minDistY = 0.0f
-
 	andore2 = new Andore(renderer_, 2400, 450);
 	joker = new Joker(renderer_, 300, 400);
+	rock = new Rock("resources/rock.png", renderer_);
 
 	player = new Player(renderer_);
-	rock = new Rock("resources/rock.png", renderer_);
 
 	tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer_);	
 	tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer_);
