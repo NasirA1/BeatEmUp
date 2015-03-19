@@ -59,7 +59,7 @@ bool Game::Init()
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		1200, 450);
+		1200, 450, 300);
 	andore2 = new Enemy(renderer_, 
 		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 0),
 		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 0), 
@@ -71,19 +71,19 @@ bool Game::Init()
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		2400, 450);
+		2400, 450, 300);
 	joker = new Enemy(renderer_, 
 		Sprite::FromFile("resources/joker_idleleft.png", renderer_, 60, 97, 10, 0),
 		Sprite::FromFile("resources/joker_idleright.png", renderer_, 60, 97, 10, 0), 
 		Sprite::FromFile("resources/joker_walkleft.png", renderer_, 60, 97, 10, 3, true),
 		Sprite::FromFile("resources/joker_walkright.png", renderer_, 60, 97, 10, 0), 
-		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
-		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
+		Sprite::FromFile("resources/joker_attackleft.png", renderer_, 130, 130, 20, 3),
+		Sprite::FromFile("resources/joker_attackright.png", renderer_, 130, 130, 20, 3, true), 
 		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		800, 400, 1.5f);
+		300, 400, 300, 1.5f);
 
 	player = new Player(renderer_);
 	rock = new Rock("resources/rock.png", renderer_);

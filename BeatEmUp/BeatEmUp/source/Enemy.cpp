@@ -14,6 +14,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY
+	, const Uint32 punchTimeout
 	, float speed_
 	, float patrolRange_
 	, float patrolVecX_
@@ -41,6 +42,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, patrolRange(patrolRange_)
 	, patrolVecX(patrolVecX_)
 	, vision(vision_)
+	, PunchTimeOut(punchTimeout)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -87,8 +89,16 @@ void Enemy::Update()
 	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking);
 	
 	//Propagate to the underlying currently active sprite
-	current->Position().x = position.x;
-	current->Position().y = position.y;
+	//TODO: test code. Remove!!!
+	if(state == ES_Attacking) {
+		current->Position().x = position.x - 60;
+		current->Position().y = position.y - 20;
+	}
+	else
+	{
+		current->Position().x = position.x;
+		current->Position().y = position.y;
+	}
 	current->Update();
 }
 
@@ -359,7 +369,9 @@ void Enemy::OnRecovery()
 void Enemy::OnPunch()
 {
 	current = GetDirection() == Left? punchLeft: punchRight;
-	if(SDL_GetTicks() - punchTimer > 300)
+	current->SetCurrentFrame(0);
+
+	if(SDL_GetTicks() - punchTimer > PunchTimeOut)
 	{
 		state = ES_Idle;
 		punchTimer = 0;

@@ -32,6 +32,7 @@ public:
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY
+	, const Uint32 punchTimeOut 
 	, float speed_ = 1.0f
 	, float patrolRange_ = 200.0f
 	, float patrolVecX_ = 0.0f
@@ -94,7 +95,9 @@ private:
 	Uint32 idleTimer;
 	Uint32 recoveryTimer;
 	Uint8 hitCount;
+	
 	const Uint8 KnockDownHitCount;
+	const Uint32 PunchTimeOut;
 
 	float patrolRange;
 	float patrolVecX;
