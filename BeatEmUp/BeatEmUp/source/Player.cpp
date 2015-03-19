@@ -11,8 +11,8 @@ const int Player::JumpHeight(50);
 
 Player::Player(SDL_Renderer* const renderer)
 	: GameObject(GT_Player, 10, Right)	
-	, stanceRight(Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0))
-	, stanceLeft(Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0))
+	, idleRight(Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0))
+	, idleLeft(Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0))
 	, walkRight(Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7))
 	, walkLeft(Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7))
 	, punchRight(Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 6, 0, false, 0xFF, 0xFF, 0xFF))
@@ -57,8 +57,8 @@ Player::~Player()
 
 	util::Delete(walkRight);
 	util::Delete(walkLeft);
-	util::Delete(stanceRight);
-	util::Delete(stanceLeft);
+	util::Delete(idleRight);
+	util::Delete(idleLeft);
 	util::Delete(punchRight);
 	util::Delete(punchLeft);
 	util::Delete(hitLeft);
@@ -214,7 +214,7 @@ void Player::OnKnockDown()
 			//Half up...
 			else if(current->GetCurrentFrame() == 2)
 			{
-				//full up.. go to stance..
+				//full up.. go to idle..
 				if(SDL_GetTicks() > recoveryTimer) {
 					Stop();
 					recoveryTimer = 0;
@@ -362,7 +362,7 @@ void Player::Jump()
 	//Can only jump whilst on the ground
 	if(jumpState != JS_Ground) return;
 	
-	current = GetDirection() == Right? stanceRight: stanceLeft;
+	current = GetDirection() == Right? idleRight: idleLeft;
 	pState = PS_Jumping;
 	Jump(1, 20);
 }
@@ -418,7 +418,7 @@ void Player::Stop()
 	position.x -= xVel;
 	position.y -= yVel;
 	xVel = yVel = 0;
-	current = GetDirection() == Right? stanceRight: stanceLeft;
+	current = GetDirection() == Right? idleRight: idleLeft;
 	current->SetAnimation(true);
 	pState = PS_Idle;
 }

@@ -55,8 +55,8 @@ private:
 private:
 	Sprite* walkRight;
 	Sprite* walkLeft;
-	Sprite* stanceRight;
-	Sprite* stanceLeft;
+	Sprite* idleRight;
+	Sprite* idleLeft;
 	Sprite* current;
 	Sprite* punchLeft;
 	Sprite* punchRight;
