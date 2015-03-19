@@ -75,15 +75,15 @@ bool Game::Init()
 	joker = new Enemy(renderer_, 
 		Sprite::FromFile("resources/joker_idleleft.png", renderer_, 60, 97, 10, 0),
 		Sprite::FromFile("resources/joker_idleright.png", renderer_, 60, 97, 10, 0), 
-		Sprite::FromFile("resources/joker_walkleft.png", renderer_, 60, 97, 10, 3, true),
-		Sprite::FromFile("resources/joker_walkright.png", renderer_, 60, 97, 10, 0), 
-		Sprite::FromFile("resources/joker_attackleft.png", renderer_, 130, 130, 20, 3),
-		Sprite::FromFile("resources/joker_attackright.png", renderer_, 130, 130, 20, 3, true), 
+		Sprite::FromFile("resources/joker_walkleft.png", renderer_, 60, 97, 10, 0, true),
+		Sprite::FromFile("resources/joker_walkright.png", renderer_, 60, 97, 10, 3), 
+		Sprite::FromFile("resources/joker_attackleft.png", renderer_, 130, 130, 10, 3),
+		Sprite::FromFile("resources/joker_attackright.png", renderer_, 130, 130, 10, 0, true), 
 		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		300, 400, 300, 1.5f);
+		300, 400, 200, 1.5f, 200.0f, 0.0f, 250.0f, 70.0f);
 
 	player = new Player(renderer_);
 	rock = new Rock("resources/rock.png", renderer_);

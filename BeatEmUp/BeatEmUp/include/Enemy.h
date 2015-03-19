@@ -37,6 +37,7 @@ public:
 	, float patrolRange_ = 200.0f
 	, float patrolVecX_ = 0.0f
 	, float vision_ = 250.0f
+	, const float minDistX = 40.0f, const float minDistY = 0.0f
 );
 
 	virtual void Update() override;
@@ -102,6 +103,10 @@ private:
 	float patrolRange;
 	float patrolVecX;
 	float vision;
+
+	const float MinDistX;
+	const float MinDistY;
+
 
 	//jumping
 	enum JumpState

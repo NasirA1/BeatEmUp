@@ -19,6 +19,8 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, float patrolRange_
 	, float patrolVecX_
 	, float vision_
+	, float minDistX
+	, float minDistY
 	)
 	: GameObject(GT_Enemy, 50, Left, speed_)
 	, idleLeft(idleLeftSprite)
@@ -43,6 +45,8 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, patrolVecX(patrolVecX_)
 	, vision(vision_)
 	, PunchTimeOut(punchTimeout)
+	, MinDistX(minDistX)
+	, MinDistY(minDistY)
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
@@ -91,7 +95,7 @@ void Enemy::Update()
 	//Propagate to the underlying currently active sprite
 	//TODO: test code. Remove!!!
 	if(state == ES_Attacking) {
-		current->Position().x = position.x - 60;
+		current->Position().x = position.x - 30;
 		current->Position().y = position.y - 20;
 	}
 	else
@@ -318,32 +322,30 @@ void Enemy::OnPatrol()
 
 void Enemy::OnChase()
 {
-	static const float MaxDistX = 40.0f;
-	static const float MaxDistY = 0.0f;
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.y - GAME.player->Position().y;
 
 	if(GAME.player->GetState() != Player::PS_Jumping)
 	{
-		if(distY > MaxDistY) yVel = -speed;
-		else if(distY < -MaxDistY) yVel = speed;
+		if(distY > MinDistY) yVel = -speed;
+		else if(distY < -MinDistY) yVel = speed;
 	}
 	else { yVel = 0.0f; }
 
-	if(distX > MaxDistX)
+	if(distX > MinDistX)
 	{
 		Walk(Left);
 		xVel = -speed;
 	}
-	else if(distX < -MaxDistX)
+	else if(distX < -MinDistX)
 	{
 		Walk(Right);
 		xVel = speed;
 	}
 
 	//When close enough, attack
-	if(SDL_abs((int)distX) <= (int)MaxDistX 
-		&& SDL_abs((int)distY) <= (int)MaxDistY)
+	if(SDL_abs((int)distX) <= (int)MinDistX 
+		&& SDL_abs((int)distY) <= (int)MinDistY)
 	{
 		Stop();
 		Attack();
