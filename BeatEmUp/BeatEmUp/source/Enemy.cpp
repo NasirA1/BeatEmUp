@@ -95,8 +95,8 @@ void Enemy::Update()
 	//Propagate to the underlying currently active sprite
 	//TODO: test code. Remove!!!
 	if(state == ES_Attacking) {
-		current->Position().x = position.x - 30;
-		current->Position().y = position.y - 20;
+		current->Position().x = position.x - (current->Position().w - idleLeft->Position().w);
+		current->Position().y = position.y - (current->Position().h - idleLeft->Position().h);
 	}
 	else
 	{
