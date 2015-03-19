@@ -49,8 +49,8 @@ bool Game::Init()
 
 
 	andore = new Enemy(renderer_, 
-		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 5),
-		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 5), 
+		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 0),
+		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 0), 
 		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 115, 10, 5),
 		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 117, 10, 5), 
 		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
@@ -61,8 +61,8 @@ bool Game::Init()
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
 		1200, 450);
 	andore2 = new Enemy(renderer_, 
-		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 5),
-		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 5), 
+		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 0),
+		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 0), 
 		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 115, 10, 5),
 		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 117, 10, 5), 
 		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
