@@ -32,7 +32,8 @@ public:
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY
-	, const Uint32 punchTimeOut 
+	, int health
+	, const Uint32 attackTimeOut
 	, float speed_
 	, float patrolRange_
 	, float patrolVecX_

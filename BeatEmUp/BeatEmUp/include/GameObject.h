@@ -64,7 +64,8 @@ public:
 
 
 	//Rectangle-based collision detection
-	bool CollidedWith(const GameObject* const other, const int penThreshold = 25) const;
+	bool CollidedWith(const GameObject* const other, const int penThresholdX = 25
+		, const int penThresholdY = 25, const int penThresholdZ = 25) const;
 	void AdjustZToGameDepth();
 
 

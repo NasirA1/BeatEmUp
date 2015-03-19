@@ -87,6 +87,12 @@ void Player::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.andore2->OnPlayerAttack();
 		}
+		if(GAME.joker->IsAttackable() && CollidedWith(GAME.joker) 
+			&& GetDirection() != GAME.joker->GetDirection())
+		{
+			MIXER.Play(Mixer::SE_PunchHit);
+			GAME.joker->OnPlayerAttack();
+		}
 		else
 		{
 			MIXER.Play(Mixer::SE_Punch);
@@ -110,6 +116,12 @@ void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 		{
 			MIXER.Play(Mixer::SE_Kick);
 			GAME.andore2->OnPlayerAttack();
+		}
+		if(GAME.joker->IsAttackable() && CollidedWith(GAME.joker) 
+			&& GetDirection() != GAME.joker->GetDirection())
+		{
+			MIXER.Play(Mixer::SE_PunchHit);
+			GAME.joker->OnPlayerAttack();
 		}
 		else
 		{

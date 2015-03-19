@@ -14,6 +14,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
 	, float posX, float posY
+	, int health
 	, const Uint32 attackTimeout
 	, float speed_
 	, float patrolRange_
@@ -21,8 +22,8 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, float vision_
 	, float minDistX
 	, float minDistY
-	)
-	: GameObject(GT_Enemy, 50, Left, speed_)
+)
+	: GameObject(GT_Enemy, health, Left, speed_)
 	, idleLeft(idleLeftSprite)
 	, idleRight(idleRightSprite)
 	, walkLeft(walkLeftSprite)
@@ -53,6 +54,22 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	AdjustZToGameDepth();
 }
 
+
+Enemy::~Enemy()
+{
+	current = NULL;
+	util::Delete(idleLeft);
+	util::Delete(idleRight);
+	util::Delete(walkLeft);
+	util::Delete(walkRight);
+	util::Delete(attackLeft);
+	util::Delete(attackRight);
+	util::Delete(hitLeft);
+	util::Delete(hitRight);
+	util::Delete(fallLeft);
+	util::Delete(fallRight);
+	logPrintf("Enemy object released");
+}
 
 
 void Enemy::Update()
@@ -96,21 +113,6 @@ void Enemy::Update()
 void Enemy::Draw(SDL_Renderer* const renderer) const
 {
 	current->Draw(renderer);
-}
-
-
-Enemy::~Enemy()
-{
-	current = NULL;
-	util::Delete(walkLeft);
-	util::Delete(walkRight);
-	util::Delete(attackLeft);
-	util::Delete(attackRight);
-	util::Delete(hitLeft);
-	util::Delete(hitRight);
-	util::Delete(fallLeft);
-	util::Delete(fallRight);
-	logPrintf("Enemy object released");
 }
 
 
@@ -398,7 +400,7 @@ Andore::Andore(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		posX, posY, 300, 1.0f, 200.0f, 0.0f, 250.0f, 40.0f, 0.0f)
+		posX, posY, 30, 300, 1.0f, 200.0f, 0.0f, 250.0f, 40.0f, 0.0f)
 {
 	attackLeft->FramePlayed.attach(this, &Andore::OnPunchSprite);
 	attackRight->FramePlayed.attach(this, &Andore::OnPunchSprite);
@@ -409,7 +411,7 @@ void Andore::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 {
 	if(e->FrameIndex == 1)
 	{
-		if(CollidedWith(GAME.player, 30))
+		if(CollidedWith(GAME.player, 30, 30))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.player->OnEnemyAttack();
@@ -443,7 +445,7 @@ Joker::Joker(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		posX, posY, 550, 1.0f, 200.0f, 0.0f, 250.0f, 90.0f, 0.0f)
+		posX, posY, 10, 550, 1.0f, 200.0f, 0.0f, 250.0f, 90.0f, 0.0f)
 {
 	attackLeft->FramePlayed.attach(this, &Joker::OnStickSprite);
 	attackRight->FramePlayed.attach(this, &Joker::OnStickSprite);
@@ -462,7 +464,7 @@ void Joker::OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 {
 	if(e->FrameIndex == 2)
 	{
-		if(CollidedWith(GAME.player, 0))
+		if(CollidedWith(GAME.player, -40, 0, 0))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.player->OnEnemyAttack();

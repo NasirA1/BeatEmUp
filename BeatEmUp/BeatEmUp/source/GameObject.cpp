@@ -4,17 +4,18 @@
 
 
 
-bool GameObject::CollidedWith(const GameObject* const other, const int penThreshold) const
+bool GameObject::CollidedWith(const GameObject* const other, const int penThresholdX
+		, const int penThresholdY, const int penThresholdZ) const
 {
 	//null case
 	if(!other) return false;
 
 	//If any of the sides from A are outside of B
-	if(position.bottom() - penThreshold <= other->position.top()) return false;
-	if(position.top() + penThreshold >= other->position.bottom()) return false;
-	if(position.right() - penThreshold <= other->position.left()) return false;
-	if(position.left() + penThreshold >= other->position.right()) return false;
-	if(SDL_abs( (int)position.z - (int)other->position.z ) > penThreshold)  return false;
+	if(position.bottom() - penThresholdY <= other->position.top()) return false;
+	if(position.top() + penThresholdY >= other->position.bottom()) return false;
+	if(position.right() - penThresholdX <= other->position.left()) return false;
+	if(position.left() + penThresholdX >= other->position.right()) return false;
+	if(SDL_abs( (int)position.z - (int)other->position.z ) > penThresholdZ)  return false;
 
 	return true;
 }
