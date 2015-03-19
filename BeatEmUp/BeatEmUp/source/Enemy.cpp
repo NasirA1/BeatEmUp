@@ -8,6 +8,7 @@ const int Enemy::JumpHeight(50);
 
 
 Enemy::Enemy(SDL_Renderer* const renderer
+	, Sprite* idleLeftSprite, Sprite* idleRightSprite
 	, Sprite* walkLeftSprite, Sprite* walkRightSprite
 	, Sprite* punchLeftSprite, Sprite* punchRightSprite
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
@@ -19,6 +20,8 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, float vision_
 	)
 	: GameObject(GT_Enemy, 50, Left, speed_)
+	, idleLeft(idleLeftSprite)
+	, idleRight(idleRightSprite)
 	, walkLeft(walkLeftSprite)
 	, walkRight(walkRightSprite)
 	, punchLeft(punchLeftSprite)
@@ -113,7 +116,7 @@ Enemy::~Enemy()
 }
 
 
-void Enemy::SetDirection(Directions dir)
+void Enemy::Walk(Directions dir)
 {
 	GameObject::SetDirection(dir);
 	if (GetDirection() == Right) current = walkRight;
@@ -124,8 +127,7 @@ void Enemy::SetDirection(Directions dir)
 void Enemy::Stop()
 {
 	xVel = yVel = 0;
-	current = GetDirection() == Left? walkLeft: walkRight;
-	current->SetStill();
+	current = GetDirection() == Left? idleLeft: idleRight;
 }
 
 
@@ -296,8 +298,8 @@ void Enemy::OnPatrol()
 	}
 
 	//logPrintf("dist %f", patrolVecX)
-	if(patrolVecX >= patrolRange) SetDirection(Left), patrolVecX = 0;
-	else if(patrolVecX < -patrolRange) SetDirection(Right), patrolVecX = 0;
+	if(patrolVecX >= patrolRange) Walk(Left), patrolVecX = 0;
+	else if(patrolVecX < -patrolRange) Walk(Right), patrolVecX = 0;
 	if(GetDirection() == Left) xVel = -speed;
 	else xVel = speed;
 	patrolVecX += xVel;
@@ -320,12 +322,12 @@ void Enemy::OnChase()
 
 	if(distX > MaxDistX)
 	{
-		SetDirection(Left);
+		Walk(Left);
 		xVel = -speed;
 	}
 	else if(distX < -MaxDistX)
 	{
-		SetDirection(Right);
+		Walk(Right);
 		xVel = speed;
 	}
 
@@ -390,6 +392,7 @@ void Enemy::OnIdle()
 		{
 			//Face player all the time when on idle
 			SetDirection(position.x > GAME.player->Position().x? Left: Right);
+			Stop();
 		}
 	}
 }
@@ -435,12 +438,12 @@ void Rock::Update()
 
 	if(position.x >= Range)
 	{
-		position.y = GAME.RandomYWithinMoveBounds((int)position.h);
+		position.y = (float)GAME.RandomYWithinMoveBounds((int)position.h);
 		SetDirection(Left);
 	}
 	else if(position.x < -Range)
 	{
-		position.y = GAME.RandomYWithinMoveBounds((int)position.h);
+		position.y = (float)GAME.RandomYWithinMoveBounds((int)position.h);
 		SetDirection(Right);
 	}
 

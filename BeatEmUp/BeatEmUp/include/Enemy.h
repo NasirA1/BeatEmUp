@@ -26,6 +26,7 @@ class Enemy : public GameObject
 {
 public:
 	Enemy(SDL_Renderer* const renderer
+	, Sprite* idleLeftSprite, Sprite* idleRightSprite
 	, Sprite* walkLeftSprite, Sprite* walkRightSprite
 	, Sprite* punchLeftSprite, Sprite* punchRightSprite
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
@@ -40,7 +41,7 @@ public:
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Enemy();
-	virtual void SetDirection(Directions dir) override;
+	void Walk(Directions dir);
 	void Stop();
 	void Attack();
 	void OnPlayerAttack();
@@ -76,6 +77,8 @@ private:
 
 
 private:
+	Sprite* idleRight;
+	Sprite* idleLeft;
 	Sprite* walkRight;
 	Sprite* walkLeft;
 	Sprite* current;
