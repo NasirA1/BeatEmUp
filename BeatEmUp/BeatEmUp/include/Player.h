@@ -35,7 +35,7 @@ public:
 	void Jump(float xAccel, float yAccel);
 	void Punch();
 	void Kick();
-	void OnEnemyAttack();
+	void OnHit();
 	
 	__forceinline bool isMoving() const { return !(xVel == 0.0f && yVel == 0.0f); }
 	__forceinline bool IsDead() const { return pState == PS_Dead; }
@@ -47,7 +47,6 @@ private:
 	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 	void OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 	void KnockedDown();
-	void OnHit();
 	void OnKnockDown();
 	bool CantMove() const;
 	bool CantAttack() const;

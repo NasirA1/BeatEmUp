@@ -45,7 +45,7 @@ public:
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Enemy();
 
-	void OnPlayerAttack();
+	void OnHit();
 
 	__forceinline bool IsAttackable()
 	{

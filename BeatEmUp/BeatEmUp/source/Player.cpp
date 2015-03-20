@@ -80,19 +80,19 @@ void Player::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 			&& GetDirection() != GAME.andore->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.andore->OnPlayerAttack();
+			GAME.andore->OnHit();
 		}
 		if(GAME.andore2->IsAttackable() && CollidedWith(GAME.andore2) 
 			&& GetDirection() != GAME.andore2->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.andore2->OnPlayerAttack();
+			GAME.andore2->OnHit();
 		}
 		if(GAME.joker->IsAttackable() && CollidedWith(GAME.joker) 
 			&& GetDirection() != GAME.joker->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.joker->OnPlayerAttack();
+			GAME.joker->OnHit();
 		}
 		else
 		{
@@ -110,19 +110,19 @@ void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 			&& GetDirection() != GAME.andore->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_Kick);
-			GAME.andore->OnPlayerAttack();
+			GAME.andore->OnHit();
 		}
 		if(GAME.andore2->IsAttackable() && CollidedWith(GAME.andore2, 15) 
 			&& GetDirection() != GAME.andore2->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_Kick);
-			GAME.andore2->OnPlayerAttack();
+			GAME.andore2->OnHit();
 		}
 		if(GAME.joker->IsAttackable() && CollidedWith(GAME.joker) 
 			&& GetDirection() != GAME.joker->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.joker->OnPlayerAttack();
+			GAME.joker->OnHit();
 		}
 		else
 		{
@@ -145,19 +145,13 @@ void Player::KnockedDown()
 
 void Player::OnHit()
 {
-	Stop();
-	current = GetDirection() == Left? hitLeft: hitRight;
-	pState = PS_Hit;
-	hitCount++;
-	SetHealth(GetHealth() - 1);
-}
-
-
-void Player::OnEnemyAttack()
-{
 	if(pState != PS_KnockedDown && pState != PS_Dead)
 	{
-		OnHit();
+		Stop();
+		current = GetDirection() == Left? hitLeft: hitRight;
+		pState = PS_Hit;
+		hitCount++;
+		SetHealth(GetHealth() - 1);
 
 		if(GetHealth() > 0 && hitCount < KnockDownHitCount)
 		{

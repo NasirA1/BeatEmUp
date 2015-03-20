@@ -169,7 +169,7 @@ void Enemy::Translate(bool anim)
 }
 
 
-void Enemy::OnPlayerAttack()
+void Enemy::OnHit()
 {
 	if(state != ES_Attacking && state != ES_KnockedDown)
 	{
@@ -299,7 +299,7 @@ void Enemy::OnPatrol()
 void Enemy::OnChase()
 {
 	float distX = position.x - GAME.player->Position().x;
-	float distY = position.y - GAME.player->Position().y;
+	float distY = position.bottom() - (GAME.player->Position().bottom() - 10);
 
 	if(GAME.player->GetState() != Player::PS_Jumping)
 	{
@@ -414,7 +414,7 @@ void Andore::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 		if(CollidedWith(GAME.player, 30, 30))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.player->OnEnemyAttack();
+			GAME.player->OnHit();
 		}
 		else
 		{
@@ -467,7 +467,7 @@ void Joker::OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 		if(CollidedWith(GAME.player, -40, 0, 0))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.player->OnEnemyAttack();
+			GAME.player->OnHit();
 		}
 		else
 		{
