@@ -464,7 +464,7 @@ void Joker::OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 {
 	if(e->FrameIndex == 2)
 	{
-		if(CollidedWith(GAME.player, -40, 0, 0))
+		if(CollidedWith(GAME.player, -40, 0, 15))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.player->OnHit();
