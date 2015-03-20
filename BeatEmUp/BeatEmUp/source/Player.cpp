@@ -118,7 +118,7 @@ void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 			MIXER.Play(Mixer::SE_Kick);
 			GAME.andore2->OnHit();
 		}
-		if(GAME.joker->IsAttackable() && CollidedWith(GAME.joker) 
+		if(GAME.joker->IsAttackable() && CollidedWith(GAME.joker, 15) 
 			&& GetDirection() != GAME.joker->GetDirection())
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
