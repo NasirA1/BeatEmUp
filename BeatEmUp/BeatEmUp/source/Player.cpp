@@ -121,7 +121,7 @@ void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 		if(GAME.joker->IsAttackable() && CollidedWith(GAME.joker, 15) 
 			&& GetDirection() != GAME.joker->GetDirection())
 		{
-			MIXER.Play(Mixer::SE_PunchHit);
+			MIXER.Play(Mixer::SE_Kick);
 			GAME.joker->OnHit();
 		}
 		else
