@@ -55,6 +55,7 @@ Player::~Player()
 	kickRight->FramePlayed.detach(this, &Player::OnKickSprite);
 	kickLeft->FramePlayed.detach(this, &Player::OnKickSprite);
 
+	current = NULL;
 	util::Delete(walkRight);
 	util::Delete(walkLeft);
 	util::Delete(idleRight);
