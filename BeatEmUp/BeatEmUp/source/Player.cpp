@@ -76,28 +76,19 @@ void Player::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 {
 	if(e->FrameIndex == 1 || e->FrameIndex == 4 || e->FrameIndex == 8)
 	{
-		if(GAME.andore->IsAttackable() && CollidedWith(GAME.andore) 
-			&& GetDirection() != GAME.andore->GetDirection())
+		bool hit = false;
+		for(unsigned int i = 0; i < GAME.enemies.size(); ++i)
 		{
-			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.andore->OnHit();
+			Enemy* const enemy = GAME.enemies[i];
+			if(enemy->IsAttackable() && CollidedWith(enemy) && GetDirection() != enemy->GetDirection())
+			{
+				enemy->OnHit();
+				hit = true;
+			}
 		}
-		if(GAME.andore2->IsAttackable() && CollidedWith(GAME.andore2) 
-			&& GetDirection() != GAME.andore2->GetDirection())
-		{
-			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.andore2->OnHit();
-		}
-		if(GAME.joker->IsAttackable() && CollidedWith(GAME.joker) 
-			&& GetDirection() != GAME.joker->GetDirection())
-		{
-			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.joker->OnHit();
-		}
-		else
-		{
-			MIXER.Play(Mixer::SE_Punch);
-		}
+
+		if(hit)		MIXER.Play(Mixer::SE_PunchHit);
+		else 			MIXER.Play(Mixer::SE_Punch);
 	}
 }
 
@@ -106,28 +97,19 @@ void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 {
 	if(e->FrameIndex == 1)
 	{
-		if(GAME.andore->IsAttackable() && CollidedWith(GAME.andore, 15) 
-			&& GetDirection() != GAME.andore->GetDirection())
+		bool hit = false;
+		for(unsigned int i = 0; i < GAME.enemies.size(); ++i)
 		{
-			MIXER.Play(Mixer::SE_Kick);
-			GAME.andore->OnHit();
+			Enemy* const enemy = GAME.enemies[i];
+			if(enemy->IsAttackable() && CollidedWith(enemy) && GetDirection() != enemy->GetDirection())
+			{
+				enemy->OnHit();
+				hit = true;
+			}
 		}
-		if(GAME.andore2->IsAttackable() && CollidedWith(GAME.andore2, 15) 
-			&& GetDirection() != GAME.andore2->GetDirection())
-		{
-			MIXER.Play(Mixer::SE_Kick);
-			GAME.andore2->OnHit();
-		}
-		if(GAME.joker->IsAttackable() && CollidedWith(GAME.joker, 15) 
-			&& GetDirection() != GAME.joker->GetDirection())
-		{
-			MIXER.Play(Mixer::SE_Kick);
-			GAME.joker->OnHit();
-		}
-		else
-		{
-			MIXER.Play(Mixer::SE_Punch);
-		}
+
+		if(hit)		MIXER.Play(Mixer::SE_Kick);
+		else 			MIXER.Play(Mixer::SE_Punch);
 	}
 }
 

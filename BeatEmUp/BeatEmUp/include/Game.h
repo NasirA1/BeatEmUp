@@ -29,11 +29,7 @@ public:
 	Background* bg;
 	TextBlock *tbFps, *tbPlayerPos, *tbEnemyPos;
 	Player* player;
-	Roamer* skaterboy;
-
-	vector<GameObject*> enemies;
-	Rock* rock;
-	Enemy *andore, *andore2, *joker;
+	vector<Enemy*> enemies;
 
 private:
 	bool leftDown;

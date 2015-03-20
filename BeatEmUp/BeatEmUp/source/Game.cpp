@@ -11,9 +11,7 @@ Game::Game()
 	, MoveBounds(0.0f, 370.0f, (float)SCREEN_WIDTH, 120.0f)
 	, bg(NULL)
 	, tbFps(NULL), tbPlayerPos(NULL), tbEnemyPos(NULL)
-	, skaterboy(NULL)
 	, player(NULL)
-	, andore(NULL), andore2(NULL), joker(NULL)
 	, leftDown(false)
 	, rightDown(false)
 	, upDown(false)
@@ -37,7 +35,7 @@ bool Game::Init()
 
 	bg = new Background(clientWidth_, clientHeight_, renderer_);
 	
-	skaterboy = new Roamer(renderer_, 
+	Roamer* skaterboy = new Roamer(renderer_, 
 		Sprite::FromFile("resources/skater_left.png", renderer_, 71, 90, 11, 0),
 		Sprite::FromFile("resources/skater_right.png", renderer_, 71, 90, 11, 0), 
 		-200, 390, -200, 1000, true);
@@ -47,11 +45,9 @@ bool Game::Init()
 		Sprite::FromFile("resources/knightwalk_right.png", renderer_, 128, 128, 4, 3), 
 		5000, 480, -5000, 5000, false);
 
-
-	andore = new Andore(renderer_, 1200, 450);
-	andore2 = new Andore(renderer_, 2400, 450);
-	joker = new Joker(renderer_, 300, 400);
-	rock = new Rock("resources/rock.png", renderer_);
+	enemies.push_back(new Andore(renderer_, 1200, 450));
+	enemies.push_back(new Andore(renderer_, 2400, 450));
+	enemies.push_back(new Joker(renderer_, 300, 400));
 
 	player = new Player(renderer_);
 
@@ -63,16 +59,12 @@ bool Game::Init()
 	gameObjects.push_back(tbFps);
 	gameObjects.push_back(tbPlayerPos);
 	gameObjects.push_back(tbEnemyPos);
-
-	gameObjects.push_back(skaterboy);
 	gameObjects.push_back(player);
-
+	gameObjects.push_back(skaterboy);
 	gameObjects.push_back(knight1);
-	gameObjects.push_back(andore);
-	gameObjects.push_back(andore2);
-	gameObjects.push_back(joker);
-	gameObjects.push_back(rock);
-
+	for(unsigned int i = 0; i < enemies.size(); ++i)
+		gameObjects.push_back(enemies[i]);
+	gameObjects.push_back(new Rock("resources/rock.png", renderer_));
 
 	MIXER.Instance();
 	//MIXER.Play(Mixer::ST_Track1);
@@ -168,13 +160,13 @@ void Game::Update()
 		<< "," << (int)player->Position().z 
 		<< "}  Health: " << player->GetHealth();
 	tbPlayerPos->SetText(ss.str());
-	ss.str("");
-	ss.clear();
-	ss << "Enemy Pos: {" << (int)andore->Position().x 
-		<< "," << (int)andore->Position().y 
-		<< "," << (int)andore->Position().z 
-		<< "}  Health: " << andore->GetHealth();
-	tbEnemyPos->SetText(ss.str());
+	//ss.str("");
+	//ss.clear();
+	//ss << "Enemy Pos: {" << (int)andore->Position().x 
+	//	<< "," << (int)andore->Position().y 
+	//	<< "," << (int)andore->Position().z 
+	//	<< "}  Health: " << andore->GetHealth();
+	//tbEnemyPos->SetText(ss.str());
 
 
 	//Other game logic

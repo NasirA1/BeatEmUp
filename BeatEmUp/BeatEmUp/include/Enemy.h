@@ -47,8 +47,7 @@ public:
 
 	void OnHit();
 
-	__forceinline bool IsAttackable()
-	{
+	__forceinline bool IsAttackable() const{
 		return state !=	ES_KnockedDown && state != ES_Dead;
 	}
 	
