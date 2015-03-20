@@ -66,12 +66,12 @@ bool Game::Init()
 
 	gameObjects.push_back(skaterboy);
 	gameObjects.push_back(player);
-	gameObjects.push_back(rock);
 
 	gameObjects.push_back(knight1);
 	gameObjects.push_back(andore);
 	gameObjects.push_back(andore2);
 	gameObjects.push_back(joker);
+	gameObjects.push_back(rock);
 
 
 	MIXER.Instance();

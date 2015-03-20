@@ -143,15 +143,15 @@ void Player::KnockedDown()
 }
 
 
-void Player::OnHit()
+void Player::OnHit(Uint8 damage)
 {
 	if(pState != PS_KnockedDown && pState != PS_Dead)
 	{
 		Stop();
 		current = GetDirection() == Left? hitLeft: hitRight;
 		pState = PS_Hit;
-		hitCount++;
-		SetHealth(GetHealth() - 1);
+		hitCount += damage;
+		SetHealth(GetHealth() - damage);
 
 		if(GetHealth() > 0 && hitCount < KnockDownHitCount)
 		{
@@ -243,6 +243,51 @@ void Player::OnKnockDown()
 }
 
 
+void Player::HandleJump()
+{
+	//Jump rotation...
+	if(jumpState == JS_Jumped || jumpState == JS_Landing) {
+		SetAngle(GetAngle() + (GetDirection()==Right? 13: -13));
+	}
+	else {
+		SetAngle(0);
+		if(pState == PS_Jumping) {
+			Stop(); //jump complete set pState to PS_Idle
+		}
+	}
+
+	//Jump start..
+	//Shoot up (yVel acceleration)...
+	if(jumpState == JS_Jumped)
+	{
+		yVel += Gravity/(float)JumpHeight;
+		if(position.y > jumpLocation.y - JumpHeight) 
+			Translate(false);
+		else 
+			jumpState = JS_Landing;
+	}
+	//Landing (in the air)..
+	else if(jumpState == JS_Landing)
+	{
+		//Not landed yet..
+		if(position.y < jumpLocation.y)
+		{
+			yVel += Gravity;
+			xVel += GetDirection() == Right? 0.15f: -0.15f;
+			Translate(false);
+		}
+		//On the ground now...
+		else 
+		{
+			jumpState = JS_Ground;
+			xVel = 0, yVel = 0;
+			position.y = jumpLocation.y;
+			Translate(false);
+		}
+	}
+}
+
+
 void Player::Update()
 {
 	//Dead...
@@ -281,60 +326,8 @@ void Player::Update()
 		}
 	}
 
-
-	//Hit by rock..
-	if(CollidedWith(GAME.rock))
-	{
-		if(GAME.rock->GetDirection() == Right) 
-			SetDirection(Left);
-		else 
-			SetDirection(Right);
-		KnockedDown();
-		SetHealth(GetHealth() - 1);
-		MIXER.Play(Mixer::SE_Grunt);
-	}
-
-	//Jump rotation...
-	if(jumpState == JS_Jumped || jumpState == JS_Landing) {
-		SetAngle(GetAngle() + (GetDirection()==Right? 13: -13));
-	}
-	else {
-		SetAngle(0);
-		if(pState == PS_Jumping) {
-			Stop(); //jump complete set pState to PS_Idle
-		}
-	}
-
-	//Jump start..
-	//Shoot up (yVel acceleration)...
-	if(jumpState == JS_Jumped)
-	{
-		yVel += Gravity/(float)JumpHeight;
-		if(position.y > jumpLocation.y - JumpHeight) 
-			Translate(false);
-		else 
-			jumpState = JS_Landing;
-	}
-
-	//Landing (in the air)..
-	else if(jumpState == JS_Landing)
-	{
-		//Not landed yet..
-		if(position.y < jumpLocation.y)
-		{
-			yVel += Gravity;
-			xVel += GetDirection() == Right? 0.15f: -0.15f;
-			Translate(false);
-		}
-		//On the ground now...
-		else 
-		{
-			jumpState = JS_Ground;
-			xVel = 0, yVel = 0;
-			position.y = jumpLocation.y;
-			Translate(false);
-		}
-	}
+	//jumping
+	HandleJump();
 
 	//Propagate to the underlying currently active sprite
 	current->Position().x = position.x;

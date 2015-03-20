@@ -35,18 +35,27 @@ public:
 	void Jump(float xAccel, float yAccel);
 	void Punch();
 	void Kick();
-	void OnHit();
+	void OnHit(Uint8 damage = 1);
 	
 	__forceinline bool isMoving() const { return !(xVel == 0.0f && yVel == 0.0f); }
 	__forceinline bool IsDead() const { return pState == PS_Dead; }
 	__forceinline PState GetState() const { return pState; }
+	__forceinline bool IsAttackable() {
+		return pState !=	PS_KnockedDown && pState != PS_Dead;
+	}
+
 	
 
 private:
 	void Translate(bool anim);
+	void HandleJump();
 	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 	void OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+
+public:
 	void KnockedDown();
+
+private:
 	void OnKnockDown();
 	bool CantMove() const;
 	bool CantAttack() const;

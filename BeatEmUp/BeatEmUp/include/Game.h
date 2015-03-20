@@ -29,8 +29,10 @@ public:
 	Background* bg;
 	TextBlock *tbFps, *tbPlayerPos, *tbEnemyPos;
 	Player* player;
-	Rock* rock;
 	Roamer* skaterboy;
+
+	vector<GameObject*> enemies;
+	Rock* rock;
 	Enemy *andore, *andore2, *joker;
 
 private:

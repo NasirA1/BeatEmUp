@@ -539,8 +539,17 @@ void Rock::Update()
 	}
 
 	position.x += xVel;
-
 	AdjustZToGameDepth();
+
+
+	//collision detection
+	if(GAME.player->IsAttackable() && CollidedWith(GAME.player))
+	{
+		GAME.player->Stop();
+		GAME.player->OnHit();
+		GAME.player->KnockedDown();
+		MIXER.Play(Mixer::SE_Grunt);
+	}
 }
 
 
@@ -564,3 +573,4 @@ Rock::~Rock()
 }
 
 #pragma endregion
+
