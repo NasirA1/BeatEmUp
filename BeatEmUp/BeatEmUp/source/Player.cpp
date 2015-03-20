@@ -101,7 +101,7 @@ void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 		for(unsigned int i = 0; i < GAME.enemies.size(); ++i)
 		{
 			Enemy* const enemy = GAME.enemies[i];
-			if(enemy->IsAttackable() && CollidedWith(enemy) && GetDirection() != enemy->GetDirection())
+			if(enemy->IsAttackable() && CollidedWith(enemy, -10) && GetDirection() != enemy->GetDirection())
 			{
 				enemy->OnHit();
 				hit = true;

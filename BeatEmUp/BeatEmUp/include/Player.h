@@ -1,6 +1,6 @@
 #pragma once
 #include "Sprite.h"
-
+#include <memory>
 
 class Player : public GameObject
 {
