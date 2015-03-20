@@ -443,8 +443,8 @@ Joker::Joker(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/joker_attackright.png", renderer_, 130, 130, 10, 3), 
 		Sprite::FromFile("resources/joker_hitleft.png", renderer_, 50, 90, 5, 0), 
 		Sprite::FromFile("resources/joker_hitright.png", renderer_, 50, 90, 5, 0), 
-		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
-		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
+		Sprite::FromFile("resources/joker_fallleft.png", renderer_, 90, 90, 1, 0), 
+		Sprite::FromFile("resources/joker_fallright.png", renderer_, 90, 90, 1, 0), 
 		posX, posY, 10, 550, 1.0f, 200.0f, 0.0f, 250.0f, 90.0f, 0.0f)
 {
 	attackLeft->FramePlayed.attach(this, &Joker::OnStickSprite);
