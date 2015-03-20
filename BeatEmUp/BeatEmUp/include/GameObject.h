@@ -27,8 +27,9 @@ public:
 	};
 
 protected:
-	GameObject(Type type_, int health_ = 1, Directions initialDirection = Right, float speed_ = 1.0f)
-		: type(type_)
+	GameObject(const string& name_, Type type_, int health_ = 1, Directions initialDirection = Right, float speed_ = 1.0f)
+		: name(name_) 
+		, type(type_)
 		, health(health_)
 		, direction(initialDirection)
 		, xVel(0.0f)
@@ -55,6 +56,7 @@ public:
 	__forceinline float GetSpeed() const { return speed; }
 	__forceinline int GetHealth() const { return health; }
 	__forceinline Type GetType() const { return type; }
+	__forceinline string GetName() const { return name; }
 	__forceinline bool IsMarkedForGC() const { return gc; }
 	__forceinline void MarkForGC() { gc = true; }
 	
@@ -79,6 +81,7 @@ protected:
 	float speed;
 
 private:
+	string name;
 	Directions direction;
 	double angle; //rotation angle
 	int health;

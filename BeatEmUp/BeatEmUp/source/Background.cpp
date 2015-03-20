@@ -6,7 +6,7 @@ using namespace util;
 
 
 Background::Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer)
-	: GameObject(GT_Background, 1, Left)
+	: GameObject("", GT_Background, 1, Left)
 	, scroll(false)
 	, bg1(new BackgroundLayer("resources/bg1.gif", renderer, clientWidth, clientHeight, 0.25f))
 	, bg2(new BackgroundLayer("resources/bg2.gif", renderer, clientWidth, clientHeight, 2.0f))
@@ -54,7 +54,7 @@ Background::~Background()
 
 BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer* const renderer,
 	int _screenWidth, int _screenHeight, float xVel)
-	: GameObject(GT_Background, 1, Left)
+	: GameObject("", GT_Background, 1, Left)
 {
 	SDLSurfaceFromFile fileSurface(filename);
 	texture = SDL_CreateTextureFromSurface(renderer, fileSurface.surface);

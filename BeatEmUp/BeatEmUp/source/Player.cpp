@@ -10,7 +10,7 @@ const int Player::JumpHeight(50);
 
 
 Player::Player(SDL_Renderer* const renderer)
-	: GameObject(GT_Player, 10, Right)	
+	: GameObject("Bad Dude", GT_Player, 10, Right)	
 	, idleRight(Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0))
 	, idleLeft(Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0))
 	, walkRight(Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7))

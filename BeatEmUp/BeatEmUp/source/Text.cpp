@@ -4,7 +4,7 @@
 
 
 TextBlock::TextBlock(const string& text_, size_t size, float x, float y, SDL_Renderer* const renderer_)
-	: GameObject(GT_Background)
+	: GameObject("", GT_Background)
 	, text(text_)
 	, font(new TTFont("resources/calibri.ttf", size))
 {

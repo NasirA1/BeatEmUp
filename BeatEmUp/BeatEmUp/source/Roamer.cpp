@@ -4,7 +4,7 @@
 
 Roamer::Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
 	, float posX, float posY, float roamMinX_, float roamMaxX_,  bool backgroundObj)
-	: GameObject(GT_Background)	
+	: GameObject("", GT_Background)	
 	, walkRight(walkRightSprite)
 	, walkLeft(walkLeftSprite)
 	, current(NULL)

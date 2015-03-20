@@ -13,6 +13,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, Sprite* attackLeftSprite, Sprite* attackRightSprite
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
+	, const string& name_
 	, float posX, float posY
 	, int health
 	, const Uint32 attackTimeout
@@ -23,7 +24,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, float minDistX
 	, float minDistY
 )
-	: GameObject(GT_Enemy, health, Left, speed_)
+	: GameObject(name_, GT_Enemy, health, Left, speed_)
 	, idleLeft(idleLeftSprite)
 	, idleRight(idleRightSprite)
 	, walkLeft(walkLeftSprite)
@@ -400,7 +401,7 @@ Andore::Andore(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		posX, posY, 30, 300, 1.0f, 200.0f, 0.0f, 250.0f, 40.0f, 0.0f)
+		"Andore", posX, posY, 30, 300, 1.0f, 200.0f, 0.0f, 250.0f, 40.0f, 0.0f)
 {
 	attackLeft->FramePlayed.attach(this, &Andore::OnPunchSprite);
 	attackRight->FramePlayed.attach(this, &Andore::OnPunchSprite);
@@ -445,7 +446,7 @@ Joker::Joker(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/joker_hitright.png", renderer_, 50, 90, 5, 0), 
 		Sprite::FromFile("resources/joker_fallleft.png", renderer_, 90, 90, 1, 0), 
 		Sprite::FromFile("resources/joker_fallright.png", renderer_, 90, 90, 1, 0), 
-		posX, posY, 10, 550, 1.0f, 200.0f, 0.0f, 250.0f, 90.0f, 0.0f)
+		"Joker", posX, posY, 10, 550, 1.0f, 200.0f, 0.0f, 250.0f, 90.0f, 0.0f)
 {
 	attackLeft->FramePlayed.attach(this, &Joker::OnStickSprite);
 	attackRight->FramePlayed.attach(this, &Joker::OnStickSprite);
@@ -499,7 +500,7 @@ const float Rock::Range(10.0f * (float)GAME.ClientWidth());
 
 
 Rock::Rock(const string& file, SDL_Renderer* const renderer)
- : GameObject(GT_Enemy, 1, Left) 
+ : GameObject("Rock", GT_Enemy, 1, Left) 
  , texture(NULL)
 {
 	util::SDLSurfaceFromFile surf(file, true);

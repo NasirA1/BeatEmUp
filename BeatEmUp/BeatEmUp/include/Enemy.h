@@ -31,6 +31,7 @@ public:
 	, Sprite* punchLeftSprite, Sprite* punchRightSprite
 	, Sprite* hitLeftSprite, Sprite* hitRightSprite
 	, Sprite* fallLeftSprite, Sprite* fallRightSprite
+	, const string& name_
 	, float posX, float posY
 	, int health
 	, const Uint32 attackTimeOut
