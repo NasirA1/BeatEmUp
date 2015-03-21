@@ -321,7 +321,8 @@ void Enemy::OnChase()
 	}
 
 	//When close enough, attack
-	if(SDL_abs((int)distX) <= (int)MinDistX 
+	if(SDL_abs((int)distX) <= (int)(position.left() 
+		< GAME.player->Position().left()? 2*MinDistX: MinDistX) 
 		&& SDL_abs((int)distY) <= (int)MinDistY)
 	{
 		Stop();
@@ -412,7 +413,7 @@ void Andore::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 {
 	if(e->FrameIndex == 1)
 	{
-		if(CollidedWith(GAME.player, 30, 30))
+		if(CollidedWith(GAME.player, 0, 0))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.player->OnHit();
@@ -436,17 +437,17 @@ Andore::~Andore()
 
 Axl::Axl(SDL_Renderer* const renderer_, float posX, float posY)
 	: Enemy(renderer_, 
-		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 0),
-		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 0), 
+		Sprite::FromFile("resources/axl_idleleft.png", renderer_, 85, 112, 10, 0),
+		Sprite::FromFile("resources/axl_idleright.png", renderer_, 85, 112, 10, 0), 
 		Sprite::FromFile("resources/axl_walkleft.png", renderer_, 85, 112, 10, 0, true),
 		Sprite::FromFile("resources/axl_walkright.png", renderer_, 85, 112, 10, 5), 
-		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1), 
-		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 
-		Sprite::FromFile("resources/andore_hitleft.png", renderer_, 70, 124, 5, 0), 
-		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
+		Sprite::FromFile("resources/axl_kickleft.png", renderer_, 110, 112, 10, 0, true), 
+		Sprite::FromFile("resources/axl_kickright.png", renderer_, 110, 112, 10, 1), 
+		Sprite::FromFile("resources/axl_hitleft.png", renderer_, 85, 112, 5, 0), 
+		Sprite::FromFile("resources/axl_hitright.png", renderer_, 85, 112, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		"Axl", posX, posY, 30, 300, 1.0f, 200.0f, 0.0f, 250.0f, 40.0f, 0.0f)
+		"Axl", posX, posY, 30, 300, 2.0f, 200.0f, 0.0f, 250.0f, 30.0f, 0.0f)
 {
 	attackLeft->FramePlayed.attach(this, &Axl::OnPunchSprite);
 	attackRight->FramePlayed.attach(this, &Axl::OnPunchSprite);
@@ -457,9 +458,9 @@ void Axl::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEve
 {
 	if(e->FrameIndex == 1)
 	{
-		if(CollidedWith(GAME.player, 30, 30))
+		if(CollidedWith(GAME.player, 0, 0))
 		{
-			MIXER.Play(Mixer::SE_PunchHit);
+			MIXER.Play(Mixer::SE_Kick);
 			GAME.player->OnHit();
 		}
 		else
