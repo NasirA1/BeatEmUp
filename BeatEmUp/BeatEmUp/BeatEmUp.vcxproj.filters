@@ -175,6 +175,75 @@
     <None Include="resources\ryu.png">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\andore_idleleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_fallleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\andore_idleright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_fallright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_walkright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_hitleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_hitright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_idleleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_idleright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_kickleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_kickright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\axl_walkleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_walkright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_attackleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_attackright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_fallleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_fallright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_hitleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_hitright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_idleleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_idleright.png">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\joker_walkleft.png">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\GameObject.h">

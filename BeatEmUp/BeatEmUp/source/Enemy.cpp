@@ -326,7 +326,9 @@ void Enemy::OnChase()
 		&& SDL_abs((int)distY) <= (int)MinDistY)
 	{
 		Stop();
-		Attack();
+		Directions myOpposite = GetDirection()==Left? Right: Left;
+		if(!GAME.player->IsPunching(myOpposite) && !GAME.player->IsKicking(myOpposite))
+			Attack();
 		
 		if(GAME.player->IsDead())
 		{
