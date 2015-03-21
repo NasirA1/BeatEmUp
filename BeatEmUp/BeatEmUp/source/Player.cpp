@@ -351,7 +351,7 @@ void Player::Jump()
 	
 	current = GetDirection() == Right? idleRight: idleLeft;
 	pState = PS_Jumping;
-	Jump(1.0f, 22.0f);
+	Jump(-1.0f, 25.0f);
 }
 
 

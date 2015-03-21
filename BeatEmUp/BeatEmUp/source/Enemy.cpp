@@ -304,8 +304,8 @@ void Enemy::OnChase()
 
 	if(GAME.player->GetState() != Player::PS_Jumping)
 	{
-		if(distY > MinDistY) yVel = -speed;
-		else if(distY < -MinDistY) yVel = speed;
+		if(distY > MinDistY) yVel = -(speed/2.0f);
+		else if(distY < -MinDistY) yVel = (speed/2.0f);
 	}
 	else { yVel = 0.0f; }
 
@@ -447,7 +447,7 @@ Axl::Axl(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/axl_hitright.png", renderer_, 85, 112, 5, 0), 
 		Sprite::FromFile("resources/axl_fallleft.png", renderer_, 150, 120, 1, 0, true), 
 		Sprite::FromFile("resources/axl_fallright.png", renderer_, 150, 120, 1, 0), 
-		"Axl", posX, posY, 30, 300, 2.0f, 400.0f, 0.0f, 250.0f, 30.0f, 0.0f)
+		"Axl", posX, posY, 20, 300, 2.0f, 400.0f, 0.0f, 250.0f, 30.0f, 0.0f)
 {
 	attackLeft->FramePlayed.attach(this, &Axl::OnPunchSprite);
 	attackRight->FramePlayed.attach(this, &Axl::OnPunchSprite);
