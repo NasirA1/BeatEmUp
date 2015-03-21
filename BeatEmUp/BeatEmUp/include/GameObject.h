@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <vector>
+#include <string>
 #include "Util.h"
 
 
@@ -22,6 +23,7 @@ public:
 	{
 		GT_Background,
 		GT_Sprite,
+		GT_Object,
 		GT_Player,
 		GT_Enemy
 	};
@@ -36,7 +38,7 @@ protected:
 		, yVel(0.0f)
 		, angle(0.0000)
 		, speedX(speed_)
-		, speedY(speed_/2.0f)
+		, speedY(speed_ / 2.0f)
 		, gc(false)
 	{}
 
@@ -120,6 +122,7 @@ class Ball : public GameObject
 
 public:
 	Ball(SDL_Point loc, size_t size, Uint8 _r, Uint8 _g, Uint8 _b)
+		: GameObject("", GT_Object)
 	{
 		r.x = loc.x;
 		r.y = loc.y;
@@ -178,5 +181,4 @@ public:
 
 #endif
 #pragma endregion
-
 

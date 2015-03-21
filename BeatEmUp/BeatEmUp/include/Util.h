@@ -99,7 +99,7 @@ namespace util
 
 		__forceinline bool TakeAChance() const
 		{
-			return (bool)Next(0, 2);
+			return Next(0, 2) > 0;
 		}
 	};
 

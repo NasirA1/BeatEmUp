@@ -49,15 +49,15 @@ bool Game::Init()
 		Sprite::FromFile("resources/knightwalk_right.png", renderer_, 128, 128, 4, 3), 
 		5000, 480, -5000, 5000, false);
 
-	enemies.push_back(new Andore(renderer_, 1200, 450));
-	enemies.push_back(new Andore(renderer_, 2400, 450));
-	enemies.push_back(new Joker(renderer_, 1000, 400));
+	//enemies.push_back(new Andore(renderer_, 1200, 450));
+	//enemies.push_back(new Andore(renderer_, 2400, 450));
+	//enemies.push_back(new Joker(renderer_, 1000, 400));
 	enemies.push_back(new Axl(renderer_, 800, 400));
 	enemies.push_back(new Andore(renderer_, 700, 380));	
-	enemies.push_back(new Joker(renderer_, -100, 400));
-	enemies.push_back(new Axl(renderer_, -200, 500));
-	enemies.push_back(new Joker(renderer_, 1100, 400));
-	enemies.push_back(new Axl(renderer_, 500, 500));
+	//enemies.push_back(new Joker(renderer_, -100, 400));
+	//enemies.push_back(new Axl(renderer_, -200, 500));
+	//enemies.push_back(new Joker(renderer_, 1100, 400));
+	//enemies.push_back(new Axl(renderer_, 500, 500));
 
 	player = new Player(renderer_);
 

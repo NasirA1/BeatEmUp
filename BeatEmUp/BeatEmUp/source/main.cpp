@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 
-
 int main( int argc, char* args[] )
 {
 
@@ -14,19 +13,23 @@ int main( int argc, char* args[] )
 	}
 	
 #ifdef _DEBUG
-	getchar();
+	//getchar();
 #endif
 	return 0;
 }
 
 
+
 #pragma region Balls Demo
 #if 0
-class Game : public SDLApp
+#include "GameObject.h"
+#include "SDLApp.h"
+#include "util.h"
+class Demo : public SDLApp, public util::Singleton<Demo>
 {
 public:
-	Game();
-	virtual ~Game();
+	Demo();
+	virtual ~Demo();
 	virtual bool Init() override;
 	virtual void ProcessEvent(const SDL_Event& e) override;
 	virtual void Update() override;
@@ -37,21 +40,19 @@ private:
 };
 
 
-Game::Game() 
-	: SDLApp(SCREEN_WIDTH
-	, SCREEN_HEIGHT
-	, "Balls Demo")
+Demo::Demo() 
+	: SDLApp(800, 600, "Balls Demo")
 {
 }
 
 
-Game::~Game()
+Demo::~Demo()
 {
-	logPrintf("Game object destroyed");
+	logPrintf("Demo object destroyed");
 }
 
 
-bool Game::Init()
+bool Demo::Init()
 {
 	if(!SDLApp::Init())
 		return false;
@@ -62,7 +63,7 @@ bool Game::Init()
 }
 
 
-void Game::ProcessEvent(const SDL_Event& e)
+void Demo::ProcessEvent(const SDL_Event& e)
 {
 	switch(e.key.keysym.sym)
 	{
@@ -73,13 +74,13 @@ void Game::ProcessEvent(const SDL_Event& e)
 }
 
 
-void Game::Update()
+void Demo::Update()
 {
 	gameObjects.Update();
 }
 
 
-void Game::Render()
+void Demo::Render()
 {
 	//Clear screen
 	SDL_RenderClear( renderer_ );
