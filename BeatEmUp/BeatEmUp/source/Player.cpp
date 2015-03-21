@@ -10,7 +10,7 @@ const int Player::JumpHeight(50);
 
 
 Player::Player(SDL_Renderer* const renderer)
-	: GameObject("Bad Dude", GT_Player, 10, Right)	
+	: GameObject("Bad Dude", GT_Player, 100, Right)	
 	, idleRight(Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0))
 	, idleLeft(Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0))
 	, walkRight(Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7))
@@ -117,6 +117,7 @@ void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 void Player::KnockedDown()
 {
 	hitCount = 0;
+	yVel = xVel = 0.0f;
 	current = GetDirection() == Left? fallLeft: fallRight;
 	current->SetCurrentFrame(0);
 	pState = PS_KnockedDown;
@@ -243,10 +244,11 @@ void Player::HandleJump()
 	if(jumpState == JS_Jumped)
 	{
 		yVel += Gravity/(float)JumpHeight;
-		if(position.y > jumpLocation.y - JumpHeight) 
+		if((int)position.y > (int)jumpLocation.y - JumpHeight) 
 			Translate(false);
 		else 
 			jumpState = JS_Landing;
+		logPrintf("yVel[%f] position.y [%f] jumpLocation.y [%f]  JumpHeight [%d]", yVel, position.y, jumpLocation.y, JumpHeight);
 	}
 	//Landing (in the air)..
 	else if(jumpState == JS_Landing)
@@ -346,7 +348,7 @@ void Player::Jump()
 	
 	current = GetDirection() == Right? idleRight: idleLeft;
 	pState = PS_Jumping;
-	Jump(1, 20);
+	Jump(1.0f, 20.0f);
 }
 
 
