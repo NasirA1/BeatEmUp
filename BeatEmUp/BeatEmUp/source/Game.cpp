@@ -33,6 +33,11 @@ bool Game::Init()
 	if(!SDLApp::Init())
 		return false;
 
+	//Reserve some memory in advance
+	//optimisation
+	gameObjects.reserve(20);
+	enemies.reserve(20);
+
 	bg = new Background(clientWidth_, clientHeight_, renderer_);
 	
 	Roamer* skaterboy = new Roamer(renderer_, 
