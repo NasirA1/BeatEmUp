@@ -51,7 +51,7 @@ bool Game::Init()
 
 	enemies.push_back(new Andore(renderer_, 1200, 450));
 	enemies.push_back(new Andore(renderer_, 2400, 450));
-	enemies.push_back(new Joker(renderer_, 300, 400));
+	enemies.push_back(new Joker(renderer_, 1000, 400));
 	enemies.push_back(new Axl(renderer_, 800, 400));
 
 	player = new Player(renderer_);

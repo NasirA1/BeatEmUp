@@ -445,9 +445,9 @@ Axl::Axl(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/axl_kickright.png", renderer_, 110, 112, 10, 1), 
 		Sprite::FromFile("resources/axl_hitleft.png", renderer_, 85, 112, 5, 0), 
 		Sprite::FromFile("resources/axl_hitright.png", renderer_, 85, 112, 5, 0), 
-		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
-		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		"Axl", posX, posY, 30, 300, 2.0f, 200.0f, 0.0f, 250.0f, 30.0f, 0.0f)
+		Sprite::FromFile("resources/axl_fallleft.png", renderer_, 150, 120, 1, 0, true), 
+		Sprite::FromFile("resources/axl_fallright.png", renderer_, 150, 120, 1, 0), 
+		"Axl", posX, posY, 30, 300, 2.0f, 400.0f, 0.0f, 250.0f, 30.0f, 0.0f)
 {
 	attackLeft->FramePlayed.attach(this, &Axl::OnPunchSprite);
 	attackRight->FramePlayed.attach(this, &Axl::OnPunchSprite);
