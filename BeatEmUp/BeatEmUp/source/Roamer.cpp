@@ -14,7 +14,7 @@ Roamer::Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* wal
 {
 	position.x = posX, position.y = posY, position.w = (float)walkLeft->Position().w;
 	position.h = (float)walkLeft->Position().h;
-	speed = 2.0f;
+	SetSpeed(2.0f, 1.0f);
 
 	if(backgroundObject)
 		position.z = -9;
@@ -28,12 +28,12 @@ void Roamer::Update()
 	if(position.x <= roamMinX)
 	{
 		SetDirection(Right);
-		xVel = speed;
+		xVel = speedX;
 	}
 	else if(position.x >= roamMaxX)
 	{
 		SetDirection(Left);
-		xVel = -speed;
+		xVel = -speedX;
 	}
 
 	Translate(true);

@@ -35,7 +35,8 @@ protected:
 		, xVel(0.0f)
 		, yVel(0.0f)
 		, angle(0.0000)
-		, speed(speed_)
+		, speedX(speed_)
+		, speedY(speed_/2.0f)
 		, gc(false)
 	{}
 
@@ -53,7 +54,8 @@ public:
 	__forceinline double GetAngle() const { return angle; }
 	__forceinline float XVel() const { return xVel; }
 	__forceinline float YVel() const { return yVel; }
-	__forceinline float GetSpeed() const { return speed; }
+	__forceinline float GetSpeedX() const { return speedX; }
+	__forceinline float GetSpeedY() const { return speedY; }
 	__forceinline int GetHealth() const { return health; }
 	__forceinline Type GetType() const { return type; }
 	__forceinline string GetName() const { return name; }
@@ -62,7 +64,7 @@ public:
 	
 	//Mutators
 	__forceinline void SetHealth(int value) { health = value; }
-	__forceinline void SetSpeed(float sp) { speed = sp; }
+	__forceinline void SetSpeed(float spx, float spy) { speedX = spx; speedY = spy; }
 
 
 	//Rectangle-based collision detection
@@ -78,7 +80,7 @@ public:
 protected:
 	RectF position;
 	float xVel, yVel;
-	float speed;
+	float speedX, speedY;
 
 private:
 	string name;

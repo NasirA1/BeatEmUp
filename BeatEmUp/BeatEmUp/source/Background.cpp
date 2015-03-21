@@ -6,13 +6,13 @@ using namespace util;
 
 
 Background::Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer)
-	: GameObject("", GT_Background, 1, Left)
+	: GameObject("", GT_Background, 1, Left, 3.0f)
 	, scroll(false)
 	, bg1(new BackgroundLayer("resources/bg1.gif", renderer, clientWidth, clientHeight, 0.25f))
 	, bg2(new BackgroundLayer("resources/bg2.gif", renderer, clientWidth, clientHeight, 2.0f))
 	, bg3(new BackgroundLayer("resources/bg3.gif", renderer, clientWidth, clientHeight, 3.0f))
 {
-	speed = 3.0f; //speed of the outermost layer
+	//speedX = 3.0f; //speed of the outermost layer
 	position.z = -99999; //bg z-order
 	layers.push_back(bg1);
 	layers.push_back(bg2);

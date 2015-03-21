@@ -440,7 +440,7 @@ void Player::GoUp()
 	current = GetDirection() == Right? walkRight: walkLeft;
 
 	if (position.y >= GAME.MoveBounds.y)
-		yVel = -(speed/2.0f);
+		yVel = -speedY;
 	else 
 		yVel = 0;
 	
@@ -456,7 +456,7 @@ void Player::GoDown()
 	current = GetDirection() == Right? walkRight: walkLeft;
 	
 	if (position.y <= GAME.MoveBounds.bottom()) 
-		yVel = (speed/2.0f);
+		yVel = speedY;
 	else 
 		yVel = 0;
 	
@@ -472,7 +472,7 @@ void Player::GoRight()
 	current = GetDirection() == Right? walkRight: walkLeft;
 
 	if (position.x <= GAME.MoveBounds.right() - position.w) 
-		xVel = speed;
+		xVel = speedX;
 	else 
 		xVel = 0;
 
@@ -489,7 +489,7 @@ void Player::GoLeft()
 	current = GetDirection() == Right? walkRight: walkLeft;
 
 	if (position.x >= GAME.MoveBounds.x) 
-		xVel = -speed;
+		xVel = -speedX;
 	else 
 		xVel = 0;
 

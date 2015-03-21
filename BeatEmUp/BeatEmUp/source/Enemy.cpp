@@ -138,7 +138,7 @@ void Enemy::Translate()
 	if(GAME.bg->IsScrolling())
 	{
 		position.x += GAME.bg->GetDirection() == Left?
-			-GAME.bg->GetSpeed(): GAME.bg->GetSpeed();
+			-GAME.bg->GetSpeedX(): GAME.bg->GetSpeedX();
 	}
 
 	//Translate
@@ -291,8 +291,8 @@ void Enemy::OnPatrol()
 	//logPrintf("dist %f", patrolVecX)
 	if(patrolVecX >= patrolRange) Walk(Left), patrolVecX = 0;
 	else if(patrolVecX < -patrolRange) Walk(Right), patrolVecX = 0;
-	if(GetDirection() == Left) xVel = -speed;
-	else xVel = speed;
+	if(GetDirection() == Left) xVel = -speedX;
+	else xVel = speedX;
 	patrolVecX += xVel;
 }
 
@@ -304,20 +304,20 @@ void Enemy::OnChase()
 
 	if(GAME.player->GetState() != Player::PS_Jumping)
 	{
-		if(distY > MinDistY) yVel = -(speed/2.0f);
-		else if(distY < -MinDistY) yVel = (speed/2.0f);
+		if(distY > MinDistY) yVel = -speedY;
+		else if(distY < -MinDistY) yVel = speedY;
 	}
 	else { yVel = 0.0f; }
 
 	if(distX > MinDistX)
 	{
 		Walk(Left);
-		xVel = -speed;
+		xVel = -speedX;
 	}
 	else if(distX < -MinDistX)
 	{
 		Walk(Right);
-		xVel = speed;
+		xVel = speedX;
 	}
 
 	//When close enough, attack
@@ -548,13 +548,12 @@ const float Rock::Range(10.0f * (float)GAME.ClientWidth());
 
 
 Rock::Rock(const string& file, SDL_Renderer* const renderer)
- : GameObject("Rock", GT_Enemy, 1, Left) 
+ : GameObject("Rock", GT_Enemy, 1, Left, 10.0f) 
  , texture(NULL)
 {
 	util::SDLSurfaceFromFile surf(file, true);
 	texture = SDL_CreateTextureFromSurface(renderer, surf.surface);
-	
-	speed = 10.0f;
+
 	position.x = Range;
 	position.w = (float)surf.surface->w;
 	position.h = (float)surf.surface->h;
@@ -567,13 +566,13 @@ void Rock::Update()
 {
 	if(GetDirection() == Left)
 	{
-		SetAngle(GetAngle() - speed);
-		xVel = -speed;
+		SetAngle(GetAngle() - speedX);
+		xVel = -speedX;
 	}
 	else
 	{
-		SetAngle(GetAngle() + speed);
-		xVel = speed;
+		SetAngle(GetAngle() + speedX);
+		xVel = speedX;
 	}
 
 	if(position.x >= Range)
