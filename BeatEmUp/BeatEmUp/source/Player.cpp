@@ -157,6 +157,7 @@ void Player::OnKnockDown()
 		yVel += Gravity/(float)JumpHeight;
 		if(position.y <= jumpLocation.y - JumpHeight) 
 			jumpState = JS_Landing;
+		if(position.y <= jumpLocation.y) jumpState = JS_Landing;
 
 		if( (position.right() + xVel >= GAME.MoveBounds.right() - position.w)
 			|| (position.left() + xVel <= GAME.MoveBounds.x))
@@ -244,11 +245,13 @@ void Player::HandleJump()
 	if(jumpState == JS_Jumped)
 	{
 		yVel += Gravity/(float)JumpHeight;
-		if((int)position.y > (int)jumpLocation.y - JumpHeight) 
+		if(position.y > (jumpLocation.y - JumpHeight)){
 			Translate(false);
-		else 
+			if(position.y <= jumpLocation.y) jumpState = JS_Landing;
+		}
+		else{ 
 			jumpState = JS_Landing;
-		logPrintf("yVel[%f] position.y [%f] jumpLocation.y [%f]  JumpHeight [%d]", yVel, position.y, jumpLocation.y, JumpHeight);
+		}
 	}
 	//Landing (in the air)..
 	else if(jumpState == JS_Landing)
@@ -348,7 +351,7 @@ void Player::Jump()
 	
 	current = GetDirection() == Right? idleRight: idleLeft;
 	pState = PS_Jumping;
-	Jump(1.0f, 20.0f);
+	Jump(1.0f, 22.0f);
 }
 
 
