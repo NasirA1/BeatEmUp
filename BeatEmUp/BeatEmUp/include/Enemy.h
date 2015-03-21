@@ -54,6 +54,7 @@ public:
 	
 	enum EState
 	{
+		ES_Entry,
 		ES_Idle,
 		ES_Patrolling,
 		ES_Chasing,
@@ -149,4 +150,15 @@ protected:
 
 private:
 	void OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+};
+
+
+class Axl : public Enemy
+{
+public:
+	Axl(SDL_Renderer* const renderer, float posX, float posY);
+	virtual ~Axl();
+
+private:
+	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
 };

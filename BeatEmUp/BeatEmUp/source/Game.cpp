@@ -33,8 +33,7 @@ bool Game::Init()
 	if(!SDLApp::Init())
 		return false;
 
-	//Reserve some memory in advance
-	//optimisation
+	//optimisation - set desired size
 	gameObjects.reserve(20);
 	enemies.reserve(20);
 
@@ -50,9 +49,10 @@ bool Game::Init()
 		Sprite::FromFile("resources/knightwalk_right.png", renderer_, 128, 128, 4, 3), 
 		5000, 480, -5000, 5000, false);
 
-	enemies.push_back(new Andore(renderer_, 1200, 450));
-	enemies.push_back(new Andore(renderer_, 2400, 450));
-	enemies.push_back(new Joker(renderer_, 300, 400));
+	//enemies.push_back(new Andore(renderer_, 1200, 450));
+	//enemies.push_back(new Andore(renderer_, 2400, 450));
+	//enemies.push_back(new Joker(renderer_, 300, 400));
+	enemies.push_back(new Axl(renderer_, 300, 400));
 
 	player = new Player(renderer_);
 
