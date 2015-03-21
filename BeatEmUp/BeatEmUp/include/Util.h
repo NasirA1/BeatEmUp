@@ -83,16 +83,23 @@ namespace util
 			srand((unsigned int)time(NULL));
 		}
 
+		//Note: max is EXCLUSIVE
 		__forceinline unsigned long Next(const int min, const int max) const
 		{
 			int r = rand();
 			return min + r % (max - min);
 		}
 
+		//Note: max is EXCLUSIVE
 		__forceinline float Next(const float min, const float max) const
 		{
 			float r = (float)rand() / (float)RAND_MAX;
 			return min + r * (max - min);
+		}
+
+		__forceinline bool TakeAChance() const
+		{
+			return (bool)Next(0, 2);
 		}
 	};
 

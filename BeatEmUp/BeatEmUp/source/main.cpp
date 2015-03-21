@@ -14,7 +14,7 @@ int main( int argc, char* args[] )
 	}
 	
 #ifdef _DEBUG
-	//getchar();
+	getchar();
 #endif
 	return 0;
 }
