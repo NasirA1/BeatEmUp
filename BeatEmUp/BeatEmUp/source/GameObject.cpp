@@ -27,7 +27,6 @@ void GameObject::AdjustZToGameDepth()
 }
 
 
-
 void GameObjectList::Update()
 {
 	//Garbage collect dead objects (except Player - special case)

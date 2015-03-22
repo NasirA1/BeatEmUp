@@ -286,8 +286,7 @@ void Enemy::OnPatrol()
 		if(distanceToPlayer <= vision) {
 			state = ES_Chasing;
 		}
-	}
-
+	}	
 	//logPrintf("dist %f", patrolVecX)
 	if(patrolVecX >= patrolRange) Walk(Left), patrolVecX = 0;
 	else if(patrolVecX < -patrolRange) Walk(Right), patrolVecX = 0;
@@ -302,20 +301,38 @@ void Enemy::OnChase()
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.bottom() - (GAME.player->Position().bottom() - 10);
 
-	if(GAME.player->GetState() != Player::PS_Jumping)
-	{
+	if(GAME.player->GetState() != Player::PS_Jumping) {
 		if(distY > MinDistY) yVel = -speedY;
 		else if(distY < -MinDistY) yVel = speedY;
 	}
-	else { yVel = 0.0f; }
+	else { 
+		yVel = 0.0f;
+	}
 
-	if(distX > MinDistX)
-	{
+	#pragma region Teleporting enemy
+	//teleport
+	//if(distX <= 3 * MinDistX)
+	//{
+	//	Enemy* neighbour = GetNearestNeighbour< Enemy >(GAME.enemies);
+	//	if(neighbour && neighbour->IsAttackable()) 
+	//	{
+	//		if(WHEEL_OF_FORTUNE.TakeAChance())
+	//		{
+	//			if(GAME.player->Position().x <= position.x)
+	//				position.x += -200;
+	//			else
+	//				position.x += 200;
+	//		}
+	//	}
+	//}
+#pragma endregion
+
+
+	if(distX > MinDistX) {
 		Walk(Left);
 		xVel = -speedX;
 	}
-	else if(distX < -MinDistX)
-	{
+	else if(distX < -MinDistX) {
 		Walk(Right);
 		xVel = speedX;
 	}
@@ -323,15 +340,14 @@ void Enemy::OnChase()
 	//When close enough, attack
 	if(SDL_abs((int)distX) <= (int)(position.left() 
 		< GAME.player->Position().left()? 2*MinDistX: MinDistX) 
-		&& SDL_abs((int)distY) <= (int)MinDistY)
+		&& SDL_abs((int)distY) <= (int)MinDistY) 
 	{
 		Stop();
 		Directions myOpposite = GetDirection()==Left? Right: Left;
 		if(!GAME.player->IsPunching(myOpposite) && !GAME.player->IsKicking(myOpposite))
 			Attack();
 		
-		if(GAME.player->IsDead())
-		{
+		if(GAME.player->IsDead()) {
 			state = ES_Patrolling;
 			current = GetDirection() == Right? walkRight: walkLeft;
 		}
@@ -396,7 +412,7 @@ Andore::Andore(SDL_Renderer* const renderer_, float posX, float posY)
 	: Enemy(renderer_, 
 		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 0),
 		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 0), 
-		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 84, 115, 10, 5),
+		Sprite::FromFile("resources/andore_walkleft.png", renderer_, 88, 117, 10, 0, true),
 		Sprite::FromFile("resources/andore_walkright.png", renderer_, 88, 117, 10, 5), 
 		Sprite::FromFile("resources/andore_punchleft.png", renderer_, 115, 112, 10, 1),
 		Sprite::FromFile("resources/andore_punchright.png", renderer_, 115, 112, 10, 1), 

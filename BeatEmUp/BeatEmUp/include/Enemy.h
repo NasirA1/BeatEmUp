@@ -112,6 +112,13 @@ protected:
 	const float MinDistX;
 	const float MinDistY;
 
+	//Chasing - alternate path info
+	struct Path
+	{
+		float destX, destY;
+
+	} alt_path;
+
 
 	//jumping
 	enum JumpState

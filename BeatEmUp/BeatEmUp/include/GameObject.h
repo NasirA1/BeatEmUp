@@ -74,6 +74,25 @@ public:
 		, const int penThresholdY = 25, const int penThresholdZ = 25) const;
 	void AdjustZToGameDepth();
 
+	
+	template<class T>
+	T* GetNearestNeighbour(const vector<T*>& gameObjects) const
+	{
+		for(unsigned int i = 0; i < gameObjects.size(); ++i)
+		{
+			if( gameObjects[i] != this &&
+				(position.right() >= gameObjects[i]->position.left()) &&
+				(position.left() <= gameObjects[i]->position.right())
+			)
+			{
+				//logPrintf("%s: %s in range", this->GetName().c_str(), gameObjects[i]->GetName().c_str());
+				return gameObjects[i];
+			}
+		}
+
+		return nullptr;
+	}
+
 
 	//Functor for sorting Game objects by depth (z axis)
 	//Used for painting
