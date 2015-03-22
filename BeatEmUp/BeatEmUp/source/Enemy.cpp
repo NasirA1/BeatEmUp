@@ -431,7 +431,7 @@ void Andore::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 {
 	if(e->FrameIndex == 1)
 	{
-		if(CollidedWith(GAME.player, 0, 0))
+		if(GAME.player->IsAttackable() && CollidedWith(GAME.player, 0, 0))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.player->OnHit();
@@ -476,7 +476,7 @@ void Axl::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEve
 {
 	if(e->FrameIndex == 1)
 	{
-		if(CollidedWith(GAME.player, 0, 0))
+		if(GAME.player->IsAttackable() && CollidedWith(GAME.player, 0, 0))
 		{
 			MIXER.Play(Mixer::SE_Kick);
 			GAME.player->OnHit();
@@ -529,7 +529,7 @@ void Joker::OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 {
 	if(e->FrameIndex == 2)
 	{
-		if(CollidedWith(GAME.player, -40, 0, 15))
+		if(GAME.player->IsAttackable() && CollidedWith(GAME.player, -40, 0, 15))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.player->OnHit();
