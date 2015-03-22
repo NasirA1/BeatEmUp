@@ -15,8 +15,8 @@ Player::Player(SDL_Renderer* const renderer)
 	, idleLeft(Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0))
 	, walkRight(Sprite::FromFile("resources/baddude_walkright.png", renderer, 60, 116, 5, 7))
 	, walkLeft(Sprite::FromFile("resources/baddude_walkleft.png", renderer, 60, 116, 5, 7))
-	, punchRight(Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 130, 6, 0, false, 0xFF, 0xFF, 0xFF))
-	, punchLeft(Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 130, 6, 0, false, 0xFF, 0xFF, 0xFF))
+	, punchRight(Sprite::FromFile("resources/baddude_punchright.png", renderer, 94, 121, 6, 0, false, 0xFF, 0xFF, 0xFF))
+	, punchLeft(Sprite::FromFile("resources/baddude_punchleft.png", renderer, 94, 122, 6, 0, false, 0xFF, 0xFF, 0xFF))
 	,	kickLeft(Sprite::FromFile("resources/baddude_kickleft.png", renderer, 95, 120, 10, 0))
 	,	kickRight(Sprite::FromFile("resources/baddude_kickright.png", renderer, 95, 120, 10, 0))
 	,	hitLeft(Sprite::FromFile("resources/baddude_hitleft.png", renderer, 70, 108, 5, 0)) 
@@ -317,8 +317,16 @@ void Player::Update()
 	HandleJump();
 
 	//Propagate to the underlying currently active sprite
-	current->Position().x = position.x;
-	current->Position().y = position.y;
+	//TODO: Sprite-specific positioning hack
+	//refactor to separate Propagate() function
+	if(pState == PS_Punching || pState == PS_Kicking){
+		current->Position().x = position.x - 10;
+		current->Position().y = position.y - 10;
+	}
+	else {
+		current->Position().x = position.x;
+		current->Position().y = position.y;
+	}
 	current->Update();
 }
 
