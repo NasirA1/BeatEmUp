@@ -339,7 +339,7 @@ void Enemy::OnChase()
 
 	//When close enough, attack
 	if(SDL_abs((int)distX) <= (int)(position.left() 
-		< GAME.player->Position().left()? 2*MinDistX: MinDistX) 
+		< GAME.player->Position().left()? MinDistX+10.0f: MinDistX) 
 		&& SDL_abs((int)distY) <= (int)MinDistY) 
 	{
 		Stop();
@@ -420,7 +420,7 @@ Andore::Andore(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/andore_hitright.png", renderer_, 70, 124, 5, 0), 
 		Sprite::FromFile("resources/andore_fallleft.png", renderer_, 150, 120, 1, 0), 
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
-		"Andore", posX, posY, 30, 300, 1.0f, 200.0f, 0.0f, 350.0f, 40.0f, 0.0f)
+		"Andore", posX, posY, 30, 300, 1.5f, 200.0f, 0.0f, 350.0f, 40.0f, 0.0f)
 {
 	attackLeft->FramePlayed.attach(this, &Andore::OnPunchSprite);
 	attackRight->FramePlayed.attach(this, &Andore::OnPunchSprite);
