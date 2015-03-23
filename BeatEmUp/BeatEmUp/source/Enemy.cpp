@@ -353,8 +353,8 @@ void Enemy::OnPatrol()
 				//TODO: hardcoded
 				const bool PlayerOnTheLeft = GAME.player->Position().x < position.x;
 				logPrintf("PlayerOnTheLeft? %d", PlayerOnTheLeft);
-				SDL_Point p1 = {(int)GAME.player->Position().x + PlayerOnTheLeft? -100: 100, (int)position.y + 100};
-				SDL_Point p2 = {(int)p1.x + PlayerOnTheLeft? -55: 55, (int)GAME.player->Position().y};
+				SDL_Point p1 = {(int)GAME.player->Position().x + (PlayerOnTheLeft? -100: 100), (int)position.y + 50};
+				SDL_Point p2 = {(int)p1.x + (PlayerOnTheLeft? -50: 50), (int)GAME.player->Position().y};
 				visitPath.push(p1);
 				visitPath.push(p2);
 				Visit();
