@@ -344,14 +344,22 @@ void Enemy::OnPatrol()
 		float distanceToPlayer = util::GetDistance(GAME.player->Position(), position);
 		//logPrintf("vision %f dist %f", vision, distanceToPlayer);
 		if(distanceToPlayer <= vision) {
-			//state = ES_Chasing;
-			//TODO: dirty test code hardcoded
-			SDL_Point p1 = {(int)GAME.player->Position().x - 100, (int)position.y + 100};
-			SDL_Point p2 = {(int)p1.x - 55, (int)GAME.player->Position().y};
-			visitPath.push(p1);
-			visitPath.push(p2);
-			Visit();
-			return;
+			if(WHEEL_OF_FORTUNE.TakeAChance())
+			{
+				state = ES_Chasing;
+			}
+			else
+			{
+				//TODO: hardcoded
+				const bool PlayerOnTheLeft = GAME.player->Position().x < position.x;
+				logPrintf("PlayerOnTheLeft? %d", PlayerOnTheLeft);
+				SDL_Point p1 = {(int)GAME.player->Position().x + PlayerOnTheLeft? -100: 100, (int)position.y + 100};
+				SDL_Point p2 = {(int)p1.x + PlayerOnTheLeft? -55: 55, (int)GAME.player->Position().y};
+				visitPath.push(p1);
+				visitPath.push(p2);
+				Visit();
+				return;
+			}
 		}
 	}
 
@@ -456,13 +464,15 @@ void Enemy::OnIdle()
 	if(!idleTimer)
 	{
 		Stop();
-		idleTimer = SDL_GetTicks() + WHEEL_OF_FORTUNE.Next(1000, 3000);
+		//idleTimer = SDL_GetTicks() + WHEEL_OF_FORTUNE.Next(1000, 3000);
+		idleTimer = SDL_GetTicks() + WHEEL_OF_FORTUNE.Next(100, 1000);
 	}
 	else
 	{
 		if(SDL_GetTicks() >= idleTimer)
 		{
-			state = ES_Chasing;
+			//state = ES_Chasing;
+			state = ES_Patrolling;
 			idleTimer = 0;
 		}
 		else
