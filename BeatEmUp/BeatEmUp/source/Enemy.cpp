@@ -139,12 +139,13 @@ void Enemy::Visit()
 }
 
 
+//destState = State of the object once it has visited destination node
 void Enemy::OnVisit(EState destState)
 {
 	int distX = (int)position.x - visitPath.front().x;
 	int distY = (int)position.y - visitPath.front().y;
-	//logPrintf("(int)position.x %d visitPath.front().x %d distX %d distY %d", (int)position.x, visitPath.front().x, distX, distY);
-
+	//logPrintf("(int)position.x %d visitPath.front().x %d distX %d distY %d", 
+	//	(int)position.x, visitPath.front().x, distX, distY);
 	if(distX > 0) {
 		Walk(Left);
 		xVel = -speedX;
@@ -157,8 +158,7 @@ void Enemy::OnVisit(EState destState)
 		//zero-out rounding error(s)
 		if(distX == -1) xVel = 0;
 	}
-	else
-	{
+	else {
 		xVel = 0.0f;
 	}
 
@@ -173,12 +173,10 @@ void Enemy::OnVisit(EState destState)
 		yVel = 0.0f;
 	}
 
-	if(xVel == 0.0f && yVel == 0.0f)
-	{
+	if(xVel == 0.0f && yVel == 0.0f) {
 		visitPath.pop();
-
-		if(visitPath.empty())
-		{
+		//all nodes visited
+		if(visitPath.empty()) {
 			state = destState;
 		}
 	}
@@ -337,6 +335,18 @@ void Enemy::OnKnockDown()
 }
 
 
+void Enemy::VisitAltPlayer()
+{
+	const bool PlayerOnTheLeft = GAME.player->Position().x < position.x;
+//	logPrintf("PlayerOnTheLeft? %d", PlayerOnTheLeft);
+	SDL_Point p1 = {(int)GAME.player->Position().x + (PlayerOnTheLeft? -100: 100), (int)position.y + 50};
+	SDL_Point p2 = {(int)p1.x + (PlayerOnTheLeft? -50: 50), (int)GAME.player->Position().y};
+	visitPath.push(p1);
+	visitPath.push(p2);
+	Visit();
+}
+
+
 void Enemy::OnPatrol()
 {
 	if(!GAME.player->IsDead())
@@ -344,20 +354,13 @@ void Enemy::OnPatrol()
 		float distanceToPlayer = util::GetDistance(GAME.player->Position(), position);
 		//logPrintf("vision %f dist %f", vision, distanceToPlayer);
 		if(distanceToPlayer <= vision) {
-			if(WHEEL_OF_FORTUNE.TakeAChance())
-			{
-				state = ES_Chasing;
+			if(WHEEL_OF_FORTUNE.TakeAChance()) /*50-50 chance*/ {
+				//direct (straight-line path to player)
+				state = ES_Chasing; 
 			}
-			else
-			{
-				//TODO: hardcoded
-				const bool PlayerOnTheLeft = GAME.player->Position().x < position.x;
-				logPrintf("PlayerOnTheLeft? %d", PlayerOnTheLeft);
-				SDL_Point p1 = {(int)GAME.player->Position().x + (PlayerOnTheLeft? -100: 100), (int)position.y + 50};
-				SDL_Point p2 = {(int)p1.x + (PlayerOnTheLeft? -50: 50), (int)GAME.player->Position().y};
-				visitPath.push(p1);
-				visitPath.push(p2);
-				Visit();
+			else{
+				//Alternative (u-turn) path to player
+				VisitAltPlayer();
 				return;
 			}
 		}
@@ -471,8 +474,10 @@ void Enemy::OnIdle()
 	{
 		if(SDL_GetTicks() >= idleTimer)
 		{
-			//state = ES_Chasing;
-			state = ES_Patrolling;
+			//if(WHEEL_OF_FORTUNE.TakeAChance())
+				state = ES_Chasing;
+			//else
+			//	VisitAltPlayer();
 			idleTimer = 0;
 		}
 		else

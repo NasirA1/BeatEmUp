@@ -86,6 +86,7 @@ private:
 	void OnAttack();
 	void OnIdle();
 	void OnVisit(EState destState);
+	void VisitAltPlayer();
 
 protected:
 	Sprite* idleRight;
