@@ -65,7 +65,6 @@ namespace util
 	};
 
 
-
 	static inline float GetDistance(const RectF& a, const RectF& b)
 	{
 		double dx = a.x - b.x;

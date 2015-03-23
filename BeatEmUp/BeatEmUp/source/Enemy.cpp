@@ -91,6 +91,10 @@ void Enemy::Update()
 		OnPatrol();
 		break;
 
+	case ES_Visiting:
+		OnVisit(ES_Chasing);
+		break;
+
 	case ES_Chasing:
 		OnChase();
 		break;
@@ -122,6 +126,57 @@ void Enemy::Walk(Directions dir)
 	GameObject::SetDirection(dir);
 	if (GetDirection() == Right) current = walkRight;
 	else if(GetDirection() == Left) current = walkLeft;
+}
+
+
+void Enemy::Visit()
+{
+	if(visitPath.empty()) return;
+
+	if(visitPath.front().x < (int)position.x) Walk(Left);
+	else Walk(Right);
+	state = ES_Visiting;
+}
+
+
+void Enemy::OnVisit(EState destState)
+{
+	int distX = (int)position.x - visitPath.front().x;
+	int distY = (int)position.y - visitPath.front().y;
+
+	if(distX > 0) {
+		Walk(Left);
+		xVel = -speedX;
+	}
+	else if(distX < 0) {
+		Walk(Right);
+		xVel = speedX;
+	}
+	else
+	{
+		xVel = 0.0f;
+	}
+
+	if(distY > 0) {
+		yVel = -speedY;
+	}
+	else if(distY < 0) {
+		yVel = speedX;
+	}
+	else
+	{
+		yVel = 0.0f;
+	}
+
+	if(xVel == 0.0f && yVel == 0.0f)
+	{
+		visitPath.pop();
+
+		if(visitPath.empty())
+		{
+			state = destState;
+		}
+	}
 }
 
 
@@ -284,9 +339,17 @@ void Enemy::OnPatrol()
 		float distanceToPlayer = util::GetDistance(GAME.player->Position(), position);
 		//logPrintf("vision %f dist %f", vision, distanceToPlayer);
 		if(distanceToPlayer <= vision) {
-			state = ES_Chasing;
+			//state = ES_Chasing;
+			//TODO: dirty test code hardcoded
+			SDL_Point p1 = {GAME.player->Position().x - 100, position.y + 100};
+			SDL_Point p2 = {p1.x - 51, GAME.player->Position().y};
+			visitPath.push(p1);
+			visitPath.push(p2);
+			Visit();
+			return;
 		}
-	}	
+	}
+
 	//logPrintf("dist %f", patrolVecX)
 	if(patrolVecX >= patrolRange) Walk(Left), patrolVecX = 0;
 	else if(patrolVecX < -patrolRange) Walk(Right), patrolVecX = 0;

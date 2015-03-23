@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Sprite.h"
-
+#include <queue>
 
 
 
@@ -57,6 +57,7 @@ public:
 		ES_Entry,
 		ES_Idle,
 		ES_Patrolling,
+		ES_Visiting,
 		ES_Chasing,
 		ES_Attacking,
 		ES_Hit,
@@ -64,6 +65,8 @@ public:
 		ES_Dead
 	};
 
+	//Chasing - alternate path info
+	queue<SDL_Point> visitPath;
 
 protected:
 	virtual void Propagate();
@@ -72,6 +75,7 @@ private:
 	void Translate();
 	void Translate(bool anim);
 	void Walk(Directions dir);
+	void Visit();
 	void Stop();
 	void Attack();
 	void Jump(float xAccel, float yAccel);
@@ -81,7 +85,7 @@ private:
 	void OnChase();
 	void OnAttack();
 	void OnIdle();
-
+	void OnVisit(EState destState);
 
 protected:
 	Sprite* idleRight;
@@ -111,14 +115,6 @@ protected:
 
 	const float MinDistX;
 	const float MinDistY;
-
-	//Chasing - alternate path info
-	struct Path
-	{
-		float destX, destY;
-
-	} alt_path;
-
 
 	//jumping
 	enum JumpState
