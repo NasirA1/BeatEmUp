@@ -76,6 +76,7 @@ private:
 	void Translate(bool anim);
 	void Walk(Directions dir);
 	void Visit();
+	void VisitAltPlayer();
 	void Stop();
 	void Attack();
 	void Jump(float xAccel, float yAccel);
@@ -86,7 +87,6 @@ private:
 	void OnAttack();
 	void OnIdle();
 	void OnVisit(EState destState);
-	void VisitAltPlayer();
 
 protected:
 	Sprite* idleRight;
