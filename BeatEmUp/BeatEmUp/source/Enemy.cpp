@@ -474,10 +474,12 @@ void Enemy::OnIdle()
 	{
 		if(SDL_GetTicks() >= idleTimer)
 		{
-			//if(WHEEL_OF_FORTUNE.TakeAChance())
-				state = ES_Chasing;
-			//else
-			//	VisitAltPlayer();
+			state = ES_Chasing;
+			Enemy* neighbour = GameObject::GetNearestNeighbour(GAME.enemies); 
+			if(neighbour && neighbour->state == ES_Chasing)
+			{
+				VisitAltPlayer();
+			}
 			idleTimer = 0;
 		}
 		else

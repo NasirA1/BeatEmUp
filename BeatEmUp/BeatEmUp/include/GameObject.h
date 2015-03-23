@@ -85,7 +85,7 @@ public:
 				(position.left() <= gameObjects[i]->position.right())
 			)
 			{
-				//logPrintf("%s: %s in range", this->GetName().c_str(), gameObjects[i]->GetName().c_str());
+				logPrintf("%s: %s in range", this->GetName().c_str(), gameObjects[i]->GetName().c_str());
 				return gameObjects[i];
 			}
 		}
