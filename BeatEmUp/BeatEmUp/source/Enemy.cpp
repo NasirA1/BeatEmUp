@@ -143,14 +143,19 @@ void Enemy::OnVisit(EState destState)
 {
 	int distX = (int)position.x - visitPath.front().x;
 	int distY = (int)position.y - visitPath.front().y;
+	//logPrintf("(int)position.x %d visitPath.front().x %d distX %d distY %d", (int)position.x, visitPath.front().x, distX, distY);
 
 	if(distX > 0) {
 		Walk(Left);
 		xVel = -speedX;
+		//zero-out rounding error(s)
+		if(distX == 1) xVel = 0;
 	}
 	else if(distX < 0) {
 		Walk(Right);
 		xVel = speedX;
+		//zero-out rounding error(s)
+		if(distX == -1) xVel = 0;
 	}
 	else
 	{
@@ -341,8 +346,8 @@ void Enemy::OnPatrol()
 		if(distanceToPlayer <= vision) {
 			//state = ES_Chasing;
 			//TODO: dirty test code hardcoded
-			SDL_Point p1 = {GAME.player->Position().x - 100, position.y + 100};
-			SDL_Point p2 = {p1.x - 51, GAME.player->Position().y};
+			SDL_Point p1 = {(int)GAME.player->Position().x - 100, (int)position.y + 100};
+			SDL_Point p2 = {(int)p1.x - 55, (int)GAME.player->Position().y};
 			visitPath.push(p1);
 			visitPath.push(p2);
 			Visit();
