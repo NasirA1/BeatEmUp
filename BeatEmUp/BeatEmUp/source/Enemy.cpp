@@ -339,7 +339,13 @@ void Enemy::VisitAltPlayer()
 {
 	const bool PlayerOnTheLeft = GAME.player->Position().x < position.x;
 //	logPrintf("PlayerOnTheLeft? %d", PlayerOnTheLeft);
-	SDL_Point p1 = {(int)GAME.player->Position().x + (PlayerOnTheLeft? -100: 100), (int)position.y + 50};
+	int y = 0;
+	if(WHEEL_OF_FORTUNE.TakeAChance())
+		y = ((int)position.bottom() + 50 <= (int)GAME.MoveBounds.bottom()? (int)position.y + 50: (int)GAME.MoveBounds.bottom());
+	else
+		y = ((int)position.top() - 50 >= (int)GAME.MoveBounds.top()? (int)position.y - 50: (int)GAME.MoveBounds.top());
+
+	SDL_Point p1 = {(int)GAME.player->Position().x + (PlayerOnTheLeft? -100: 100), y };
 	SDL_Point p2 = {(int)p1.x + (PlayerOnTheLeft? -50: 50), (int)GAME.player->Position().y};
 	visitPath.push(p1);
 	visitPath.push(p2);
