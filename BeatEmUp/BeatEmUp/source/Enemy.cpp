@@ -620,13 +620,18 @@ void Joker::OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedE
 {
 	if(e->FrameIndex == 2)
 	{
-		if(GAME.player->IsAttackable() && CollidedWith(GAME.player, -40, 0, 15))
+		if(GAME.player->IsAttackable()) 
 		{
-			MIXER.Play(Mixer::SE_PunchHit);
-			GAME.player->OnHit();
+			bool collision = CollidedWith(GAME.player, -60, 0, 15);
+			if(collision) {
+				MIXER.Play(Mixer::SE_PunchHit);
+				GAME.player->OnHit();
+			}
+			else {
+				MIXER.Play(Mixer::SE_Punch);
+			}
 		}
-		else
-		{
+		else {
 			MIXER.Play(Mixer::SE_Punch);
 		}
 	}
@@ -637,8 +642,10 @@ void Joker::Propagate()
 {
 	if(state == ES_Attacking) 
 	{
-		if(GetDirection()==Left)
-			current->Position().x = position.x - (current->Position().w - idleLeft->Position().w);
+		if(GAME.player->Position().x < position.x)
+			current->Position().x = position.x - 60;
+		else
+			current->Position().x = position.x - 0;		
 		current->Position().y = position.y - (current->Position().h - idleLeft->Position().h);
 	}
 	else
