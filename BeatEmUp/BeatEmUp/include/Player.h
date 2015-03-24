@@ -57,7 +57,7 @@ public:
 private:
 	void OnKnockDown();
 	bool CantMove() const;
-	bool CantAttack() const;
+	bool IsDown() const;
 
 private:
 	Sprite* walkRight;

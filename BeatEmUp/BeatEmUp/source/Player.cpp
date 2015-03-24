@@ -354,6 +354,9 @@ void Player::SetAngle(double theta)
 
 void Player::Jump()
 {
+	//Cant jump when down (knocked out/dead)
+	if(IsDown()) return;
+
 	//Can only jump whilst on the ground
 	if(jumpState != JS_Ground) return;
 	
@@ -375,7 +378,7 @@ void Player::Jump(float xAccel, float yAccel)
 
 void Player::Punch()
 {
-	if(CantAttack()) return;
+	if(IsDown()) return;
 
 	if(pState == PS_Punching)
 	{
@@ -394,7 +397,7 @@ void Player::Punch()
 
 void Player::Kick()
 {
-	if(CantAttack()) return;
+	if(IsDown()) return;
 
 	current = GetDirection()==Right? kickRight: kickLeft;
 	current->SetAnimation(true);
@@ -419,7 +422,7 @@ void Player::Stop()
 }
 
 
-bool Player::CantAttack() const
+bool Player::IsDown() const
 {
 	return ( 
 		pState == PS_Dead ||
