@@ -438,8 +438,7 @@ bool Player::CantMove() const
 		pState == PS_Kicking ||
 		pState == PS_Hit ||
 		pState == PS_Jumping ||
-		pState == PS_Dead ||
-		pState == PS_KnockedDown
+		IsDown()
 	);
 }
 

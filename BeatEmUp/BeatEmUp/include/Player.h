@@ -40,7 +40,6 @@ public:
 	__forceinline bool isMoving() const { return !(xVel == 0.0f && yVel == 0.0f); }
 	__forceinline bool IsDead() const { return pState == PS_Dead; }
 	__forceinline PState GetState() const { return pState; }
-	__forceinline bool IsAttackable() {return pState !=	PS_KnockedDown && pState != PS_Dead; }
 	__forceinline bool IsPunching(Directions dir) { return pState == PS_Punching && GetDirection() == dir;}
 	__forceinline bool IsKicking(Directions dir) { return pState == PS_Kicking && GetDirection() == dir;}
 
@@ -53,11 +52,11 @@ private:
 
 public:
 	void KnockedDown();
+	bool CantMove() const;
+	bool IsDown() const;
 
 private:
 	void OnKnockDown();
-	bool CantMove() const;
-	bool IsDown() const;
 
 private:
 	Sprite* walkRight;
