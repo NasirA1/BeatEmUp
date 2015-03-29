@@ -338,7 +338,7 @@ void Enemy::OnKnockDown()
 void Enemy::VisitAltPlayer()
 {
 	const bool PlayerOnTheLeft = GAME.player->Position().x < position.x;
-	const static int MinDistY = 50;
+	const int MinDistY = WHEEL_OF_FORTUNE.Next(10, 50);
 	const static int MinDistX = 100;
 //logPrintf("PlayerOnTheLeft? %d", PlayerOnTheLeft);
 	int y = 0;
