@@ -70,8 +70,8 @@ bool Game::Init()
 	gameObjects.push_back(tbPlayerPos);
 	gameObjects.push_back(tbEnemyPos);
 	gameObjects.push_back(player);
-	//gameObjects.push_back(skaterboy);
-	//gameObjects.push_back(knight1);
+	gameObjects.push_back(skaterboy);
+	gameObjects.push_back(knight1);
 	for(unsigned int i = 0; i < enemies.size(); ++i)
 		gameObjects.push_back(enemies[i]);
 	gameObjects.push_back(new Rock("resources/rock.png", renderer_));
