@@ -36,7 +36,8 @@ void GameObject::AdjustZToGameDepth()
 
 void GameObjectList::Update()
 {
-	//Garbage collect dead objects (except Player - special case)
+	//Garbage collect dead objects
+	//otherwise, update
 	for (vector<GameObject*>::iterator it = begin(); it != end(); )
 	{
 		if((*it)->IsMarkedForGC())

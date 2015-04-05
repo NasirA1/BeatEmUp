@@ -409,7 +409,6 @@ void Player::Kick()
 void Player::Stop()
 {
 	if(pState == PS_Dead){
-		logPrintf("Player dead");
 		return;
 	}
 

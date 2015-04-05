@@ -325,6 +325,9 @@ void Enemy::OnKnockDown()
 		{
 			state = ES_Dead;
 			MIXER.Play(Mixer::SE_DragonRoar);
+			vector< Enemy* >::iterator it = find(GAME.enemies.begin(), GAME.enemies.end(), this);
+			logPrintf("%s[%x] is dead", GetName().c_str(), *it);
+			GAME.enemies.erase(it);
 		}
 	}
 
@@ -586,7 +589,7 @@ Axl::~Axl()
 {
 	attackLeft->FramePlayed.detach(this, &Axl::OnPunchSprite);
 	attackRight->FramePlayed.detach(this, &Axl::OnPunchSprite);
-	logPrintf("Andore released");
+	logPrintf("Axl released");
 }
 
 

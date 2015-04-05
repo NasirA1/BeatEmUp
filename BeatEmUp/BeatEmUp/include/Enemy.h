@@ -48,6 +48,7 @@ public:
 
 	void OnHit();
 
+	__forceinline bool IsDead() const { return state == ES_Dead; }
 	__forceinline bool IsAttackable() const{
 		return state !=	ES_KnockedDown && state != ES_Dead;
 	}
@@ -98,9 +99,9 @@ protected:
 	Sprite* hitRight;
 	Sprite* fallLeft;
 	Sprite* fallRight;
-
 	Sprite* attackRight;
 	Sprite* attackLeft;
+
 	EState state;
 	Uint32 attackTimer;
 	Uint32 idleTimer;

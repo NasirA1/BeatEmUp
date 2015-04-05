@@ -16,16 +16,16 @@ Game::Game()
 	, rightDown(false)
 	, upDown(false)
 	, downDown(false)
+	, currentLevel(0LU)
+	, MaxLevel(10LU)
 {
 }
-
 
 
 Game::~Game()
 {
 	logPrintf("Game object released");
 }
-
 
 
 bool Game::Init()
@@ -36,45 +36,14 @@ bool Game::Init()
 	//optimisation - set desired size
 	gameObjects.reserve(20);
 	enemies.reserve(20);
-
-	bg = new Background(clientWidth_, clientHeight_, renderer_);
 	
-	Roamer* skaterboy = new Roamer(renderer_, 
-		Sprite::FromFile("resources/skater_left.png", renderer_, 71, 90, 11, 0),
-		Sprite::FromFile("resources/skater_right.png", renderer_, 71, 90, 11, 0), 
-		-200, 390, -200, 1000, true);
-
-	Roamer* knight1 = new Roamer(renderer_, 
-		Sprite::FromFile("resources/knightwalk_left.png", renderer_, 128, 128, 4, 15),
-		Sprite::FromFile("resources/knightwalk_right.png", renderer_, 128, 128, 4, 3), 
-		5000, 480, -5000, 5000, false);
-
-	enemies.push_back(new Andore(renderer_, 1200, 450));
-	enemies.push_back(new Andore(renderer_, 2400, 450));
-	enemies.push_back(new Joker(renderer_, 1000, 400));
-	enemies.push_back(new Axl(renderer_, 800, 400));
-	enemies.push_back(new Andore(renderer_, 700, 380));
-	//enemies.push_back(new Joker(renderer_, -100, 400));
-	enemies.push_back(new Axl(renderer_, -200, 400));
-	enemies.push_back(new Joker(renderer_, 1100, 400));
-	enemies.push_back(new Axl(renderer_, 500, 400));
-
+	//Create and add player
+	//currently only one character (baddude) supported
 	player = new Player(renderer_);
-
-	tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer_);	
-	tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer_);
-	tbEnemyPos = new TextBlock("Enemy Pos {}", 16, 0.0f, tbPlayerPos->Position().bottom() + 1, renderer_);
-
-	gameObjects.push_back(bg);
-	gameObjects.push_back(tbFps);
-	gameObjects.push_back(tbPlayerPos);
-	gameObjects.push_back(tbEnemyPos);
 	gameObjects.push_back(player);
-	gameObjects.push_back(skaterboy);
-	gameObjects.push_back(knight1);
-	for(unsigned int i = 0; i < enemies.size(); ++i)
-		gameObjects.push_back(enemies[i]);
-	gameObjects.push_back(new Rock("resources/rock.png", renderer_));
+
+	//Load level1
+	LoadNextLevel();
 
 	MIXER.Instance();
 	//MIXER.Play(Mixer::ST_Track1);
@@ -82,9 +51,18 @@ bool Game::Init()
 }
 
 
-
 void Game::ProcessEvent(const SDL_Event& e)
 {
+	//Temporary
+	//For now we just disable player keys
+	//TODO Add proper keyboard control (e.g. properly handling ESC/F1/other keys
+	//when player is dead)
+	if(player->IsDead())
+	{
+		leftDown = rightDown = upDown = downDown = false;
+		return;
+	}
+
 	if(e.key.state == SDL_PRESSED && !e.key.repeat)
 	{
 		switch(e.key.keysym.sym)
@@ -148,9 +126,140 @@ void Game::ProcessEvent(const SDL_Event& e)
 }
 
 
+void Game::CleanupLevel()
+{
+	/* Player object never gets deleted */
+	if(gameObjects.size() <= 1)
+		return;
+
+	//mark for gc
+	for(vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); ++it) {
+		if((*it)->GetType() != GameObject::GT_Player)
+			(*it)->MarkForGC();
+	}
+
+	//Garbage-collect
+	gameObjects.Update();
+	enemies.clear();
+	logPrintf("Level{%lu} Cleaned up.  gameObjects<%d>", currentLevel, gameObjects.size());
+}
+
+
+bool Game::LevelComplete() const
+{
+	//all enemies destroyed!
+	return enemies.size() <= 0;
+}
+
+
+bool Game::LoadNextLevel()
+{
+	if(currentLevel < MaxLevel) currentLevel++;
+	else return false;
+	logPrintf("Loading Level{%lu}", currentLevel);
+
+	switch(currentLevel)
+	{
+	//currently ALL 10 levels the same (for testing purposes)
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+	case 10:
+		{
+			bg = new Background(clientWidth_, clientHeight_, renderer_);
+
+			Roamer* skaterboy = new Roamer(renderer_, 
+				Sprite::FromFile("resources/skater_left.png", renderer_, 71, 90, 11, 0),
+				Sprite::FromFile("resources/skater_right.png", renderer_, 71, 90, 11, 0), 
+				-200, 390, -200, 1000, true);
+			Roamer* knight1 = new Roamer(renderer_, 
+				Sprite::FromFile("resources/knightwalk_left.png", renderer_, 128, 128, 4, 15),
+				Sprite::FromFile("resources/knightwalk_right.png", renderer_, 128, 128, 4, 3), 
+				5000, 480, -5000, 5000, false);
+
+			enemies.push_back(new Andore(renderer_, 1200, 450));
+			enemies.push_back(new Andore(renderer_, 2400, 450));
+			enemies.push_back(new Joker(renderer_, 1000, 400));
+			enemies.push_back(new Axl(renderer_, 800, 400));
+			enemies.push_back(new Andore(renderer_, 700, 380));
+			enemies.push_back(new Axl(renderer_, -200, 400));
+			enemies.push_back(new Joker(renderer_, 1100, 400));
+			enemies.push_back(new Axl(renderer_, 500, 400));
+
+			tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer_);	
+			tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer_);
+			tbEnemyPos = new TextBlock("Enemy Pos {}", 16, 0.0f, tbPlayerPos->Position().bottom() + 1, renderer_);
+
+			gameObjects.push_back(bg);
+			gameObjects.push_back(tbFps);
+			gameObjects.push_back(tbPlayerPos);
+			gameObjects.push_back(tbEnemyPos);
+			gameObjects.push_back(skaterboy);
+			gameObjects.push_back(knight1);
+
+			for(unsigned int i = 0; i < enemies.size(); ++i)
+				gameObjects.push_back(enemies[i]);
+
+			gameObjects.push_back(new Rock("resources/rock.png", renderer_));
+		}
+		break;
+
+	//other levels
+	//{
+	//}
+	//break;
+
+	default:
+		logPrintf("*** MUST NEVER GET HERE ***");
+		return false;
+	}
+
+	logPrintf("Level{%lu} Loaded.  gameObjects<%d>", currentLevel, gameObjects.size());
+	return true;
+}
+
 
 void Game::Update()
 {
+	//Level management
+	if(player->IsDead())
+	{
+		//TODO
+		CleanupLevel();
+		logPrintf("GAME OVER!");
+		//end the game
+		//try again? yes/no
+		//Resurrect player
+		return;
+	}
+	else if(LevelComplete())
+	{
+		logPrintf("Level{%lu} Completed", currentLevel);
+
+		if(currentLevel == MaxLevel)
+		{
+			//TODO
+			//CleanupLevel();
+			//game complete
+			//end the game
+			//Play end credits
+			logPrintf("*** GAME COMPLETED ***");
+			return;
+		}
+		else
+		{
+			CleanupLevel();
+			LoadNextLevel();
+		}
+	}
+
+	//Gameplay
 	//Update movement vectors
 	if (upDown) player->GoUp();
 	if (downDown) player->GoDown();
@@ -184,7 +293,6 @@ void Game::Update()
 }
 
 
-
 void Game::Render()
 {
 	//SDL_RenderClear( renderer_ );
@@ -195,10 +303,11 @@ void Game::Render()
 }
 
 
-
 void Game::Stop()
 {
-	player->Stop();
-	bg->Stop();
+	if(!player->IsDead())
+	{
+		player->Stop();
+		bg->Stop();
+	}
 }
-
