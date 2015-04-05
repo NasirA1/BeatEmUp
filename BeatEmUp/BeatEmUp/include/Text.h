@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include <SDL_ttf.h>
-
+#include <memory>
 
 
 class TextBlock : public GameObject
