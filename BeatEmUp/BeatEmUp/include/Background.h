@@ -28,7 +28,8 @@ class Background : public GameObject
 {	
 
 public:
-	Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer);
+	Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer
+		, const std::string& fileLayer1, const std::string& fileLayer2, const std::string& fileLayer3);
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Background();

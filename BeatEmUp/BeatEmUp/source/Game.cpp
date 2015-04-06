@@ -172,7 +172,8 @@ bool Game::LoadNextLevel()
 	case 9:
 	case 10:
 		{
-			bg = new Background(clientWidth_, clientHeight_, renderer_);
+			bg = new Background(clientWidth_, clientHeight_, renderer_, 
+				"resources/bg1.gif", "resources/bg2.gif", "resources/bg3.gif");
 
 			Roamer* skaterboy = new Roamer(renderer_, 
 				Sprite::FromFile("resources/skater_left.png", renderer_, 71, 90, 11, 0),
