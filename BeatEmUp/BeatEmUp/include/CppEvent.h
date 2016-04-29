@@ -1,7 +1,6 @@
 #pragma once
 #include <vector>
 #include <memory>
-#include <iostream>
 
 
 namespace events
@@ -25,7 +24,7 @@ namespace events
 		// .ctor..
 		EventHandler(TListener* object, MemberFuncPtr member) : object_(object), memberfunc_(member) {}
 
-		virtual ~EventHandler() { std::cout << "member eventhandler destroyed." << std::endl; }
+		virtual ~EventHandler() { }
 
 		// Notifies listeners
 		virtual void notify(TSender sender, TEventArgs e) const {
@@ -54,7 +53,7 @@ namespace events
 		// .ctor
 		NonMemberEventHandler(FuncPtr func) : func_(func) {}
 
-		virtual ~NonMemberEventHandler() { std::cout << "nonmember eventhandler destroyed." << std::endl; }
+		virtual ~NonMemberEventHandler() { }
 
 		// Notifies listeners
 		virtual void notify(TSender sender, TEventArgs e) const {
