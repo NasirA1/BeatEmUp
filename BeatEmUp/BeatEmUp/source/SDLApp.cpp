@@ -106,7 +106,7 @@ bool SDLApp::Init()
 	if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
 	{
 		logPrintf( "SDL_mixer could not initialize! SDL_mixer Error: %s", Mix_GetError() );
-		return false;
+		//return false;
 	}
 
 	

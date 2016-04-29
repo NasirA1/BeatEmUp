@@ -27,12 +27,12 @@ void Roamer::Update()
 {
 	if(position.x <= roamMinX)
 	{
-		SetDirection(Right);
+		SetDirection(Direction::Right);
 		xVel = speedX;
 	}
 	else if(position.x >= roamMaxX)
 	{
-		SetDirection(Left);
+		SetDirection(Direction::Left);
 		xVel = -speedX;
 	}
 
@@ -60,11 +60,11 @@ Roamer::~Roamer()
 }
 
 
-void Roamer::SetDirection(Directions dir)
+void Roamer::SetDirection(Direction dir)
 {
 	GameObject::SetDirection(dir);
-	if (GetDirection() == Right) current = walkRight;
-	else if(GetDirection() == Left) current = walkLeft;
+	if (GetDirection() == Direction::Right) current = walkRight;
+	else if(GetDirection() == Direction::Left) current = walkLeft;
 }
 
 

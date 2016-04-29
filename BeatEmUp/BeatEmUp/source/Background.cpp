@@ -7,7 +7,7 @@ using namespace util;
 
 Background::Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer 
 	, const std::string& fileLayer1, const std::string& fileLayer2, const std::string& fileLayer3)
-	: GameObject("", GT_Background, 1, Left, 3.0f)
+	: GameObject("", GT_Background, 1, Direction::Left, 3.0f)
 	, scroll(false)
 	, bg1(new BackgroundLayer(fileLayer1, renderer, clientWidth, clientHeight, 0.25f))
 	, bg2(new BackgroundLayer(fileLayer2, renderer, clientWidth, clientHeight, 2.0f))
@@ -55,7 +55,7 @@ Background::~Background()
 
 BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer* const renderer,
 	int _screenWidth, int _screenHeight, float xVel)
-	: GameObject("", GT_Background, 1, Left)
+	: GameObject("", GT_Background, 1, Direction::Left)
 {
 	SDLSurfaceFromFile fileSurface(filename);
 	texture = SDL_CreateTextureFromSurface(renderer, fileSurface.surface);
@@ -91,15 +91,15 @@ BackgroundLayer::~BackgroundLayer()
 
 void BackgroundLayer::Update()
 {
-	if (GetDirection() == Left) pos1.x -= xVel, pos2.x -= xVel;
-	else if (GetDirection() == Right) pos1.x += xVel, pos2.x += xVel;
+	if (GetDirection() == Direction::Left) pos1.x -= xVel, pos2.x -= xVel;
+	else if (GetDirection() == Direction::Right) pos1.x += xVel, pos2.x += xVel;
 
 	//std::stringstream ss;
 	//ss << "pos1 {"<< pos1.x << ","<< pos1.y << ","<< pos1.w << "," << pos1.h << "}" << "  " 
 	//	 << "pos2 {"<< pos2.x << ","<< pos2.y << ","<< pos2.w << "," << pos2.h << "}" << "  ";
 	//logPrintf("%s", ss.str().c_str());
 
-	if(GetDirection() == Left)
+	if(GetDirection() == Direction::Left)
 	{
 		if(pos1.x <= -pos1.w)
 		{
@@ -111,7 +111,7 @@ void BackgroundLayer::Update()
 			pos2.x = pos1.x + pos1.w;
 		}
 	}
-	else if(GetDirection() == Right)
+	else if(GetDirection() == Direction::Right)
 	{
 		if(pos1.x >= pos1.w)
 		{

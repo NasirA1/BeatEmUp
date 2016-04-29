@@ -8,7 +8,7 @@
 using namespace std;
 using namespace util;
 
-enum Directions
+enum class Direction
 {
 	Left, Right, Up, Down
 };
@@ -29,7 +29,7 @@ public:
 	};
 
 protected:
-	GameObject(const string& name_, Type type_, int health_ = 1, Directions initialDirection = Right, float speed_ = 1.0f)
+	GameObject(const string& name_, Type type_, int health_ = 1, Direction initialDirection = Direction::Right, float speed_ = 1.0f)
 		: name(name_) 
 		, type(type_)
 		, health(health_)
@@ -47,12 +47,12 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw(SDL_Renderer* const renderer) const = 0;
 	virtual void SetAngle(double theta) { angle = theta; }
-	__forceinline virtual void SetDirection(Directions dir) { direction = dir; }
+	__forceinline virtual void SetDirection(Direction dir) { direction = dir; }
 
 	
 	//Accessors
 	__forceinline RectF& Position() { return position; }
-	__forceinline Directions GetDirection() const { return direction; }
+	__forceinline Direction GetDirection() const { return direction; }
 	__forceinline double GetAngle() const { return angle; }
 	__forceinline float XVel() const { return xVel; }
 	__forceinline float YVel() const { return yVel; }
@@ -107,7 +107,7 @@ protected:
 
 private:
 	string name;
-	Directions direction;
+	Direction direction;
 	double angle; //rotation angle
 	int health;
 	Type type;

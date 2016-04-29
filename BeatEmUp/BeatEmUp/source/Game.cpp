@@ -76,19 +76,19 @@ void Game::ProcessEvent(const SDL_Event& e)
 			/* Player Keys */
 		case SDLK_LEFT:
 			leftDown = true;
-			bg->SetScroll(Right);
+			bg->SetScroll(Direction::Right);
 			break;
 		case SDLK_RIGHT:
 			rightDown = true;
-			bg->SetScroll(Left);
+			bg->SetScroll(Direction::Left);
 			break;
 		case SDLK_UP:
 			upDown = true;
-			bg->SetScroll(player->GetDirection() == Right? Left : Right);
+			bg->SetScroll(player->GetDirection() == Direction::Right? Direction::Left : Direction::Right);
 			break;
 		case SDLK_DOWN:
 			downDown = true;
-			bg->SetScroll(player->GetDirection() == Right? Left : Right);
+			bg->SetScroll(player->GetDirection() == Direction::Right? Direction::Left : Direction::Right);
 			break;
 		case SDLK_SPACE:
 			player->Jump();

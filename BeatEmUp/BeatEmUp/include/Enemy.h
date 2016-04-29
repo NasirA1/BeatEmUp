@@ -75,7 +75,7 @@ protected:
 private:
 	void Translate();
 	void Translate(bool anim);
-	void Walk(Directions dir);
+	void Walk(Direction dir);
 	void Visit();
 	void VisitAltPlayer();
 	void Stop();

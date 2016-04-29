@@ -37,7 +37,7 @@ public:
 	//Getters/Setters
 	__forceinline bool IsScrolling() const { return scroll; }
 	__forceinline void Stop() { scroll = false; }
-	__forceinline void SetScroll(Directions dir) { SetDirection(dir); scroll = true; }
+	__forceinline void SetScroll(Direction dir) { SetDirection(dir); scroll = true; }
 	__forceinline void SetScroll(bool enabled) { scroll = enabled; }
 
 	__forceinline const BackgroundLayer& Bg1() const { return *bg1; }

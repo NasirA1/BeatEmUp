@@ -9,7 +9,7 @@ public:
 	virtual ~Player();
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
-	virtual void SetDirection(Directions dir) override;
+	virtual void SetDirection(Direction dir) override;
 	virtual void SetAngle(double theta) override;
 
 
@@ -40,8 +40,8 @@ public:
 	__forceinline bool isMoving() const { return !(xVel == 0.0f && yVel == 0.0f); }
 	__forceinline bool IsDead() const { return pState == PS_Dead; }
 	__forceinline PState GetState() const { return pState; }
-	__forceinline bool IsPunching(Directions dir) { return pState == PS_Punching && GetDirection() == dir;}
-	__forceinline bool IsKicking(Directions dir) { return pState == PS_Kicking && GetDirection() == dir;}
+	__forceinline bool IsPunching(Direction dir) { return pState == PS_Punching && GetDirection() == dir;}
+	__forceinline bool IsKicking(Direction dir) { return pState == PS_Kicking && GetDirection() == dir;}
 
 
 private:

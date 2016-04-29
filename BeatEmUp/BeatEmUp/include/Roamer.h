@@ -11,7 +11,7 @@ public:
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer* const renderer) const override;
 	virtual ~Roamer();
-	virtual void SetDirection(Directions dir) override;
+	virtual void SetDirection(Direction dir) override;
 	void Stop();
 
 

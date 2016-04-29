@@ -24,7 +24,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 	, float minDistX
 	, float minDistY
 )
-	: GameObject(name_, GT_Enemy, health, Left, speed_)
+	: GameObject(name_, GT_Enemy, health, Direction::Left, speed_)
 	, idleLeft(idleLeftSprite)
 	, idleRight(idleRightSprite)
 	, walkLeft(walkLeftSprite)
@@ -121,11 +121,11 @@ void Enemy::Draw(SDL_Renderer* const renderer) const
 }
 
 
-void Enemy::Walk(Directions dir)
+void Enemy::Walk(Direction dir)
 {
 	GameObject::SetDirection(dir);
-	if (GetDirection() == Right) current = walkRight;
-	else if(GetDirection() == Left) current = walkLeft;
+	if (GetDirection() == Direction::Right) current = walkRight;
+	else if(GetDirection() == Direction::Left) current = walkLeft;
 }
 
 
@@ -133,8 +133,8 @@ void Enemy::Visit()
 {
 	if(visitPath.empty()) return;
 
-	if(visitPath.front().x < (int)position.x) Walk(Left);
-	else Walk(Right);
+	if(visitPath.front().x < (int)position.x) Walk(Direction::Left);
+	else Walk(Direction::Right);
 	state = ES_Visiting;
 }
 
@@ -147,13 +147,13 @@ void Enemy::OnVisit(EState destState)
 	//logPrintf("(int)position.x %d visitPath.front().x %d distX %d distY %d", 
 	//	(int)position.x, visitPath.front().x, distX, distY);
 	if(distX > 0) {
-		Walk(Left);
+		Walk(Direction::Left);
 		xVel = -speedX;
 		//zero-out rounding error(s)
 		if(distX == 1) xVel = 0;
 	}
 	else if(distX < 0) {
-		Walk(Right);
+		Walk(Direction::Right);
 		xVel = speedX;
 		//zero-out rounding error(s)
 		if(distX == -1) xVel = 0;
@@ -186,7 +186,7 @@ void Enemy::OnVisit(EState destState)
 void Enemy::Stop()
 {
 	xVel = yVel = 0;
-	current = GetDirection() == Left? idleLeft: idleRight;
+	current = GetDirection() == Direction::Left? idleLeft: idleRight;
 }
 
 
@@ -195,7 +195,7 @@ void Enemy::Translate()
 	//Handle BG scrolling
 	if(GAME.bg->IsScrolling())
 	{
-		position.x += GAME.bg->GetDirection() == Left?
+		position.x += GAME.bg->GetDirection() == Direction::Left?
 			-GAME.bg->GetSpeedX(): GAME.bg->GetSpeedX();
 	}
 
@@ -233,7 +233,7 @@ void Enemy::OnHit()
 	if(state != ES_Attacking && state != ES_KnockedDown)
 	{
 		Stop();
-		current = GetDirection() == Left? hitLeft: hitRight;
+		current = GetDirection() == Direction::Left? hitLeft: hitRight;
 		state = ES_Hit;
 		hitCount++;
 		SetHealth(GetHealth() - 1);
@@ -244,7 +244,7 @@ void Enemy::OnHit()
 		else
 		{
 			hitCount = 0;
-			current = GetDirection() == Left? fallLeft: fallRight;
+			current = GetDirection() == Direction::Left? fallLeft: fallRight;
 			current->SetCurrentFrame(0);
 			state = ES_KnockedDown;
 			recoveryTimer = 0;
@@ -258,7 +258,7 @@ void Enemy::Jump(float xAccel, float yAccel)
 {
 	jumpLocation.x = position.x;
 	jumpLocation.y = position.y;
-	xVel = GetDirection() == Right? -xAccel: xAccel;
+	xVel = GetDirection() == Direction::Right? -xAccel: xAccel;
 	yVel = -yAccel;
 	jumpState = JS_Jumped;
 }
@@ -281,7 +281,7 @@ void Enemy::OnKnockDown()
 		if(position.y < jumpLocation.y)
 		{
 			yVel += Gravity;
-			xVel += GetDirection() == Right? 0.15f: -0.15f;
+			xVel += GetDirection() == Direction::Right? 0.15f: -0.15f;
 		}
 		//Landed. On the ground now...
 		else 
@@ -326,7 +326,7 @@ void Enemy::OnKnockDown()
 			state = ES_Dead;
 			MIXER.Play(Mixer::SE_DragonRoar);
 			vector< Enemy* >::iterator it = find(GAME.enemies.begin(), GAME.enemies.end(), this);
-			logPrintf("%s[%x] is dead", GetName().c_str(), *it);
+			logPrintf("%s[%x] is dead", GetName().c_str(), (unsigned int)*it);
 			GAME.enemies.erase(it);
 		}
 	}
@@ -378,9 +378,9 @@ void Enemy::OnPatrol()
 	}
 
 	//logPrintf("dist %f", patrolVecX)
-	if(patrolVecX >= patrolRange) Walk(Left), patrolVecX = 0;
-	else if(patrolVecX < -patrolRange) Walk(Right), patrolVecX = 0;
-	if(GetDirection() == Left) xVel = -speedX;
+	if(patrolVecX >= patrolRange) Walk(Direction::Left), patrolVecX = 0;
+	else if(patrolVecX < -patrolRange) Walk(Direction::Right), patrolVecX = 0;
+	if(GetDirection() == Direction::Left) xVel = -speedX;
 	else xVel = speedX;
 	patrolVecX += xVel;
 }
@@ -419,11 +419,11 @@ void Enemy::OnChase()
 
 
 	if(distX > MinDistX) {
-		Walk(Left);
+		Walk(Direction::Left);
 		xVel = -speedX;
 	}
 	else if(distX < -MinDistX) {
-		Walk(Right);
+		Walk(Direction::Right);
 		xVel = speedX;
 	}
 
@@ -433,13 +433,13 @@ void Enemy::OnChase()
 		&& SDL_abs((int)distY) <= (int)MinDistY) 
 	{
 		Stop();
-		Directions myOpposite = GetDirection()==Left? Right: Left;
+		Direction myOpposite = GetDirection()==Direction::Left? Direction::Right: Direction::Left;
 		if(!GAME.player->IsPunching(myOpposite) && !GAME.player->IsKicking(myOpposite))
 			Attack();
 		
 		if(GAME.player->IsDead()) {
 			state = ES_Patrolling;
-			current = GetDirection() == Right? walkRight: walkLeft;
+			current = GetDirection() == Direction::Right? walkRight: walkLeft;
 		}
 	}
 }
@@ -468,7 +468,7 @@ void Enemy::Attack()
 {
 	state = ES_Attacking;
 	attackTimer = SDL_GetTicks();
-	current = GetDirection() == Left? attackLeft: attackRight;
+	current = GetDirection() == Direction::Left? attackLeft: attackRight;
 	current->Rewind();
 }
 
@@ -496,7 +496,7 @@ void Enemy::OnIdle()
 		else
 		{
 			//Face player all the time when on idle
-			SetDirection(position.x > GAME.player->Position().x? Left: Right);
+			SetDirection(position.x > GAME.player->Position().x? Direction::Left: Direction::Right);
 			Stop();
 		}
 	}
@@ -667,7 +667,7 @@ const float Rock::Range(10.0f * (float)GAME.ClientWidth());
 
 
 Rock::Rock(const string& file, SDL_Renderer* const renderer)
- : GameObject("Rock", GT_Enemy, 1, Left, 10.0f) 
+ : GameObject("Rock", GT_Enemy, 1, Direction::Left, 10.0f) 
  , texture(NULL)
 {
 	util::SDLSurfaceFromFile surf(file, true);
@@ -683,7 +683,7 @@ Rock::Rock(const string& file, SDL_Renderer* const renderer)
 
 void Rock::Update()
 {
-	if(GetDirection() == Left)
+	if(GetDirection() == Direction::Left)
 	{
 		SetAngle(GetAngle() - speedX);
 		xVel = -speedX;
@@ -697,12 +697,12 @@ void Rock::Update()
 	if(position.x >= Range)
 	{
 		position.y = (float)GAME.RandomYWithinMoveBounds((int)position.h);
-		SetDirection(Left);
+		SetDirection(Direction::Left);
 	}
 	else if(position.x < -Range)
 	{
 		position.y = (float)GAME.RandomYWithinMoveBounds((int)position.h);
-		SetDirection(Right);
+		SetDirection(Direction::Right);
 	}
 
 	position.x += xVel;
