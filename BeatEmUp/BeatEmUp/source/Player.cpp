@@ -39,10 +39,10 @@ Player::Player(SDL_Renderer* const renderer)
 	//walkRight = Sprite::FromFile("resources/walkright.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	//walkLeft = Sprite::FromFile("resources/walkleft.png", renderer, 76, 120, 5, 1, 0xFF, 0x40, 0x40);
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////
-	punchRight->FramePlayed.attach(this, &Player::OnPunchSprite);
-	punchLeft->FramePlayed.attach(this, &Player::OnPunchSprite);
-	kickRight->FramePlayed.attach(this, &Player::OnKickSprite);
-	kickLeft->FramePlayed.attach(this, &Player::OnKickSprite);
+	punchRight->FramePlayed.attach(*this, &Player::OnPunchSprite);
+	punchLeft->FramePlayed.attach(*this, &Player::OnPunchSprite);
+	kickRight->FramePlayed.attach(*this, &Player::OnKickSprite);
+	kickLeft->FramePlayed.attach(*this, &Player::OnKickSprite);
 	SetDirection(Direction::Right);
 	Stop();
 }
@@ -50,10 +50,10 @@ Player::Player(SDL_Renderer* const renderer)
 
 Player::~Player()
 {
-	punchLeft->FramePlayed.detach(this, &Player::OnPunchSprite);
-	punchRight->FramePlayed.detach(this, &Player::OnPunchSprite);
-	kickRight->FramePlayed.detach(this, &Player::OnKickSprite);
-	kickLeft->FramePlayed.detach(this, &Player::OnKickSprite);
+	punchLeft->FramePlayed.detach(*this, &Player::OnPunchSprite);
+	punchRight->FramePlayed.detach(*this, &Player::OnPunchSprite);
+	kickRight->FramePlayed.detach(*this, &Player::OnKickSprite);
+	kickLeft->FramePlayed.detach(*this, &Player::OnKickSprite);
 
 	current = NULL;
 	util::Delete(walkRight);
@@ -72,9 +72,9 @@ Player::~Player()
 }
 
 
-void Player::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+void Player::OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e)
 {
-	if(e->FrameIndex == 1 || e->FrameIndex == 4 || e->FrameIndex == 8)
+	if(e.FrameIndex == 1 || e.FrameIndex == 4 || e.FrameIndex == 8)
 	{
 		bool hit = false;
 		for(unsigned int i = 0; i < GAME.enemies.size(); ++i)
@@ -93,9 +93,9 @@ void Player::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 }
 
 
-void Player::OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+void Player::OnKickSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e)
 {
-	if(e->FrameIndex == 1)
+	if(e.FrameIndex == 1)
 	{
 		bool hit = false;
 		for(unsigned int i = 0; i < GAME.enemies.size(); ++i)

@@ -140,7 +140,7 @@ public:
 	virtual ~Andore();
 
 private:
-	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+	void OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e);
 };
 
 
@@ -154,7 +154,7 @@ protected:
 	virtual void Propagate() override;
 
 private:
-	void OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+	void OnStickSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e);
 };
 
 
@@ -165,5 +165,5 @@ public:
 	virtual ~Axl();
 
 private:
-	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+	void OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e);
 };

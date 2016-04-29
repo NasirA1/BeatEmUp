@@ -47,8 +47,8 @@ public:
 private:
 	void Translate(bool anim);
 	void HandleJump();
-	void OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
-	void OnKickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e);
+	void OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e);
+	void OnKickSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e);
 
 public:
 	void KnockedDown();

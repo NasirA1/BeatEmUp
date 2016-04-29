@@ -31,13 +31,13 @@ public:
 	void PlayFrames(int fromFrame, int toFrame, bool loop_);
 
 	//Event dispatch
-	struct FramePlayedEventArgs : public EventArgs
+	struct FramePlayedEventArgs
 	{
 		FramePlayedEventArgs(const int frameIndex) 
 			: FrameIndex(frameIndex){}
 		const int FrameIndex;
 	};
-	CppEvent<const Sprite* const, const FramePlayedEventArgs* const> FramePlayed;
+	events::Event<const Sprite&, const FramePlayedEventArgs&> FramePlayed;
 
 
 	static inline Sprite* FromFile(string filename, SDL_Renderer* const renderer, 

@@ -518,14 +518,14 @@ Andore::Andore(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/andore_fallright.png", renderer_, 150, 120, 1, 0), 
 		"Andore", posX, posY, 30, 300, 1.5f, 200.0f, 0.0f, 350.0f, 40.0f, 0.0f)
 {
-	attackLeft->FramePlayed.attach(this, &Andore::OnPunchSprite);
-	attackRight->FramePlayed.attach(this, &Andore::OnPunchSprite);
+	attackLeft->FramePlayed.attach(*this, &Andore::OnPunchSprite);
+	attackRight->FramePlayed.attach(*this, &Andore::OnPunchSprite);
 }
 
 
-void Andore::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+void Andore::OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e)
 {
-	if(e->FrameIndex == 1)
+	if(e.FrameIndex == 1)
 	{
 		if(!GAME.player->IsDown() && CollidedWith(GAME.player, 0, 0))
 		{
@@ -542,8 +542,8 @@ void Andore::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayed
 
 Andore::~Andore()
 {
-	attackLeft->FramePlayed.detach(this, &Andore::OnPunchSprite);
-	attackRight->FramePlayed.detach(this, &Andore::OnPunchSprite);
+	attackLeft->FramePlayed.detach(*this, &Andore::OnPunchSprite);
+	attackRight->FramePlayed.detach(*this, &Andore::OnPunchSprite);
 	logPrintf("Andore released");
 }
 
@@ -563,14 +563,14 @@ Axl::Axl(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/axl_fallright.png", renderer_, 150, 120, 1, 0), 
 		"Axl", posX, posY, 20, 300, 2.0f, 400.0f, 0.0f, 250.0f, 30.0f, 0.0f)
 {
-	attackLeft->FramePlayed.attach(this, &Axl::OnPunchSprite);
-	attackRight->FramePlayed.attach(this, &Axl::OnPunchSprite);
+	attackLeft->FramePlayed.attach(*this, &Axl::OnPunchSprite);
+	attackRight->FramePlayed.attach(*this, &Axl::OnPunchSprite);
 }
 
 
-void Axl::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+void Axl::OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e)
 {
-	if(e->FrameIndex == 1)
+	if(e.FrameIndex == 1)
 	{
 		if(!GAME.player->IsDown() && CollidedWith(GAME.player, 0, 0))
 		{
@@ -587,8 +587,8 @@ void Axl::OnPunchSprite(const Sprite* const sender, const Sprite::FramePlayedEve
 
 Axl::~Axl()
 {
-	attackLeft->FramePlayed.detach(this, &Axl::OnPunchSprite);
-	attackRight->FramePlayed.detach(this, &Axl::OnPunchSprite);
+	attackLeft->FramePlayed.detach(*this, &Axl::OnPunchSprite);
+	attackRight->FramePlayed.detach(*this, &Axl::OnPunchSprite);
 	logPrintf("Axl released");
 }
 
@@ -608,22 +608,22 @@ Joker::Joker(SDL_Renderer* const renderer_, float posX, float posY)
 		Sprite::FromFile("resources/joker_fallright.png", renderer_, 90, 90, 1, 0), 
 		"Joker", posX, posY, 10, 550, 1.0f, 200.0f, 0.0f, 250.0f, 90.0f, 0.0f)
 {
-	attackLeft->FramePlayed.attach(this, &Joker::OnStickSprite);
-	attackRight->FramePlayed.attach(this, &Joker::OnStickSprite);
+	attackLeft->FramePlayed.attach(*this, &Joker::OnStickSprite);
+	attackRight->FramePlayed.attach(*this, &Joker::OnStickSprite);
 }
 
 
 Joker::~Joker()
 {
-	attackLeft->FramePlayed.detach(this, &Joker::OnStickSprite);
-	attackRight->FramePlayed.detach(this, &Joker::OnStickSprite);
+	attackLeft->FramePlayed.detach(*this, &Joker::OnStickSprite);
+	attackRight->FramePlayed.detach(*this, &Joker::OnStickSprite);
 	logPrintf("Joker released");
 }
 
 
-void Joker::OnStickSprite(const Sprite* const sender, const Sprite::FramePlayedEventArgs* const e)
+void Joker::OnStickSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs& e)
 {
-	if(e->FrameIndex == 2)
+	if(e.FrameIndex == 2)
 	{
 		if(!GAME.player->IsDown()) 
 		{

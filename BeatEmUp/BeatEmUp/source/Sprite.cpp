@@ -64,7 +64,7 @@ void Sprite::Update()
 		}
 
 		//notify listeners (if any)
-		FramePlayed.notify(this, &FramePlayedEventArgs(currentFrame));
+		FramePlayed.notify(*this, FramePlayedEventArgs(currentFrame));
 	}
 	// update the counter
 	counter = (counter + 1) % frameSpeed;
