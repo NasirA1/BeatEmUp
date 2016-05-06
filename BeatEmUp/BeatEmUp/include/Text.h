@@ -7,10 +7,10 @@
 class TextBlock : public GameObject
 {
 public:
-	TextBlock(const string& text_, size_t size, float x, float y, SDL_Renderer* const renderer);
+	TextBlock(const string& text_, size_t size, float x, float y, SDL_Renderer& renderer);
 	virtual ~TextBlock(void);
 	virtual void Update() override;
-	virtual void Draw(SDL_Renderer* const renderer) const override;
+	virtual void Draw(SDL_Renderer& renderer) const override;
 
 	__forceinline string GetText() const { return text; }
 	__forceinline void SetText(const string& txt) { text = txt; }

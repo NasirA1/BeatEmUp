@@ -29,7 +29,7 @@ public:
 	{
 		const int min = (int)((int)clientHeight_ - (int)MoveBounds.h - myHeight);
 		const int max = (int)clientHeight_ - myHeight;
-		return WHEEL_OF_FORTUNE.Next(min, max);
+		return __WHEEL.Next(min, max);
 	}
 
 	//Overrides

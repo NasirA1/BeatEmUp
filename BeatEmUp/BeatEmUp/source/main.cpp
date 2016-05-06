@@ -86,7 +86,7 @@ void Demo::Render()
 	SDL_RenderClear( renderer_ );
 
 	//Render texture to screen
-	//SDL_RenderCopy( renderer_, gTexture, NULL, NULL );
+	//SDL_RenderCopy( renderer_, gTexture, nullptr, nullptr );
 	gameObjects.Draw( renderer_ );
 
 	//Update screen

@@ -7,7 +7,7 @@ const float Enemy::Gravity(2.0f);
 const int Enemy::JumpHeight(50);
 
 
-Enemy::Enemy(SDL_Renderer* const renderer
+Enemy::Enemy(SDL_Renderer& renderer
 	, Sprite* idleLeftSprite, Sprite* idleRightSprite
 	, Sprite* walkLeftSprite, Sprite* walkRightSprite
 	, Sprite* attackLeftSprite, Sprite* attackRightSprite
@@ -58,7 +58,7 @@ Enemy::Enemy(SDL_Renderer* const renderer
 
 Enemy::~Enemy()
 {
-	current = NULL;
+	current = nullptr;
 	util::Delete(idleLeft);
 	util::Delete(idleRight);
 	util::Delete(walkLeft);
@@ -115,7 +115,7 @@ void Enemy::Update()
 }
 
 
-void Enemy::Draw(SDL_Renderer* const renderer) const
+void Enemy::Draw(SDL_Renderer& renderer) const
 {
 	current->Draw(renderer);
 }
@@ -341,11 +341,11 @@ void Enemy::OnKnockDown()
 void Enemy::VisitAltPlayer()
 {
 	const bool PlayerOnTheLeft = GAME.player->Position().x < position.x;
-	const int MinDistY = WHEEL_OF_FORTUNE.Next(10, 50);
+	const int MinDistY = __WHEEL.Next(10, 50);
 	const static int MinDistX = 100;
 //logPrintf("PlayerOnTheLeft? %d", PlayerOnTheLeft);
 	int y = 0;
-	if(WHEEL_OF_FORTUNE.TakeAChance())
+	if(__WHEEL.TakeAChance())
 		y = ((int)position.bottom() + MinDistY <= (int)GAME.MoveBounds.bottom()? (int)position.y + MinDistY: (int)GAME.MoveBounds.bottom());
 	else
 		y = ((int)position.top() - MinDistY >= (int)GAME.MoveBounds.top()? (int)position.y - MinDistY: (int)GAME.MoveBounds.top());
@@ -365,7 +365,7 @@ void Enemy::OnPatrol()
 		float distanceToPlayer = util::GetDistance(GAME.player->Position(), position);
 		//logPrintf("vision %f dist %f", vision, distanceToPlayer);
 		if(distanceToPlayer <= vision) {
-			if(WHEEL_OF_FORTUNE.TakeAChance()) /*50-50 chance*/ {
+			if(__WHEEL.TakeAChance()) /*50-50 chance*/ {
 				//direct (straight-line path to player)
 				state = ES_Chasing; 
 			}
@@ -406,7 +406,7 @@ void Enemy::OnChase()
 	//	Enemy* neighbour = GetNearestNeighbour< Enemy >(GAME.enemies);
 	//	if(neighbour && neighbour->IsAttackable()) 
 	//	{
-	//		if(WHEEL_OF_FORTUNE.TakeAChance())
+	//		if(__WHEEL.TakeAChance())
 	//		{
 	//			if(GAME.player->Position().x <= position.x)
 	//				position.x += -200;
@@ -478,8 +478,8 @@ void Enemy::OnIdle()
 	if(!idleTimer)
 	{
 		Stop();
-		//idleTimer = SDL_GetTicks() + WHEEL_OF_FORTUNE.Next(1000, 3000);
-		idleTimer = SDL_GetTicks() + WHEEL_OF_FORTUNE.Next(100, 1000);
+		//idleTimer = SDL_GetTicks() + __WHEEL.Next(1000, 3000);
+		idleTimer = SDL_GetTicks() + __WHEEL.Next(100, 1000);
 	}
 	else
 	{
@@ -504,7 +504,7 @@ void Enemy::OnIdle()
 
 
 
-Andore::Andore(SDL_Renderer* const renderer_, float posX, float posY)
+Andore::Andore(SDL_Renderer& renderer_, float posX, float posY)
 	: Enemy(renderer_, 
 		Sprite::FromFile("resources/andore_idleleft.png", renderer_, 84, 115, 10, 0),
 		Sprite::FromFile("resources/andore_idleright.png", renderer_, 88, 117, 10, 0), 
@@ -549,7 +549,7 @@ Andore::~Andore()
 
 
 
-Axl::Axl(SDL_Renderer* const renderer_, float posX, float posY)
+Axl::Axl(SDL_Renderer& renderer_, float posX, float posY)
 	: Enemy(renderer_, 
 		Sprite::FromFile("resources/axl_idleleft.png", renderer_, 85, 112, 10, 0),
 		Sprite::FromFile("resources/axl_idleright.png", renderer_, 85, 112, 10, 0), 
@@ -594,7 +594,7 @@ Axl::~Axl()
 
 
 
-Joker::Joker(SDL_Renderer* const renderer_, float posX, float posY)
+Joker::Joker(SDL_Renderer& renderer_, float posX, float posY)
 	: Enemy(renderer_, 
 		Sprite::FromFile("resources/joker_idleleft.png", renderer_, 60, 97, 10, 0),
 		Sprite::FromFile("resources/joker_idleright.png", renderer_, 60, 97, 10, 0), 
@@ -666,12 +666,12 @@ void Joker::Propagate()
 const float Rock::Range(10.0f * (float)GAME.ClientWidth());
 
 
-Rock::Rock(const string& file, SDL_Renderer* const renderer)
+Rock::Rock(const string& file, SDL_Renderer& renderer)
  : GameObject("Rock", GT_Enemy, 1, Direction::Left, 10.0f) 
- , texture(NULL)
+ , texture(nullptr)
 {
 	util::SDLSurfaceFromFile surf(file, true);
-	texture = SDL_CreateTextureFromSurface(renderer, surf.surface);
+	texture = SDL_CreateTextureFromSurface(&renderer, surf.surface);
 
 	position.x = Range;
 	position.w = (float)surf.surface->w;
@@ -720,11 +720,11 @@ void Rock::Update()
 }
 
 
-void Rock::Draw(SDL_Renderer* const renderer) const
+void Rock::Draw(SDL_Renderer& renderer) const
 {
 	SDL_Rect nPos;
 	util::Convert(position, nPos);
-	SDL_RenderCopyEx(renderer, texture, NULL, &nPos, GetAngle(), NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(&renderer, texture, nullptr, &nPos, GetAngle(), nullptr, SDL_FLIP_NONE);
 }
 
 
@@ -733,7 +733,7 @@ Rock::~Rock()
 	if(texture)
 	{
 		SDL_DestroyTexture(texture);
-		texture = NULL;
+		texture = nullptr;
 	}
 
 	logPrintf("Rock object released");

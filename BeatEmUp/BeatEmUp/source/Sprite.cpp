@@ -3,10 +3,10 @@
 
 
 
-Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer, 
+Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer& renderer, 
 	int frameWidth, int frameHeight, int frameSpeed_, int stillFrame_, bool playReverse)
 	: GameObject("", GT_Sprite)
-	, sheet(NULL)
+	, sheet(nullptr)
 	, frameSpeed(frameSpeed_)
 	, stillFrame(stillFrame_)
 	, fromIndex(0)
@@ -16,14 +16,14 @@ Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer,
 	, loop(true)
 	, reverse(playReverse)
 {
-	if(!spriteSheet || !renderer) return;
+	if(!spriteSheet) return;
 
 	position.x = 100, position.y = 400;
 	position.w = (float)frameWidth, position.h = (float)frameHeight;
 	framesPerRow = (int)SDL_floor((double)spriteSheet->w / frameWidth);
 	rowCount = (int)SDL_floor((double)spriteSheet->h / frameHeight);
 	frameCount = framesPerRow * rowCount;
-	sheet = SDL_CreateTextureFromSurface(renderer, spriteSheet);
+	sheet = SDL_CreateTextureFromSurface(&renderer, spriteSheet);
 
 	fromIndex = 0;
 	toIndex = frameCount - 1;
@@ -71,7 +71,7 @@ void Sprite::Update()
 }
 
 
-void Sprite::Draw(SDL_Renderer* const renderer) const
+void Sprite::Draw(SDL_Renderer& renderer) const
 {
 	int row = currentFrame / framesPerRow;
 	int col = currentFrame % framesPerRow;
@@ -80,7 +80,7 @@ void Sprite::Draw(SDL_Renderer* const renderer) const
 
 	SDL_Rect nPos;
 	util::Convert(position, nPos);
-	SDL_RenderCopyEx(renderer, sheet, &src, &nPos, GetAngle(), NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(&renderer, sheet, &src, &nPos, GetAngle(), nullptr, SDL_FLIP_NONE);
 
 	if(!loop && IsAnimationRunning())
 	{
@@ -95,7 +95,7 @@ Sprite::~Sprite()
 	if(sheet)
 	{
 		SDL_DestroyTexture(sheet);
-		sheet = NULL;
+		sheet = nullptr;
 	}
 
 	logPrintf("Sprite object released");

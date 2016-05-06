@@ -45,7 +45,7 @@ protected:
 public:
 	virtual ~GameObject(){}
 	virtual void Update() = 0;
-	virtual void Draw(SDL_Renderer* const renderer) const = 0;
+	virtual void Draw(SDL_Renderer& renderer) const = 0;
 	virtual void SetAngle(double theta) { angle = theta; }
 	__forceinline virtual void SetDirection(Direction dir) { direction = dir; }
 
@@ -119,7 +119,7 @@ class GameObjectList : public vector<GameObject*>
 {
 public:
 	void Update();
-	void Draw(SDL_Renderer* const renderer) const;
+	void Draw(SDL_Renderer& renderer) const;
 	~GameObjectList();
 };
 
@@ -176,7 +176,7 @@ public:
 		SDL_Delay(1);
 	}
 
-	void Draw(SDL_Renderer* const renderer) const override
+	void Draw(SDL_Renderer& renderer) const override
 	{
 		SDL_SetRenderDrawColor( renderer, c.r, c.g, c.b, c.a );
 		SDL_RenderFillRect( renderer, &r );

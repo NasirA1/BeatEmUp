@@ -33,7 +33,7 @@ namespace util
 		if(surface)
 		{
 			SDL_FreeSurface(surface);
-			surface = NULL;
+			surface = nullptr;
 			//logPrintf("%s surface released", file.c_str());
 		}
 	}

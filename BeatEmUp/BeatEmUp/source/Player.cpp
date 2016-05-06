@@ -9,7 +9,7 @@ const int Player::JumpHeight(50);
 
 
 
-Player::Player(SDL_Renderer* const renderer)
+Player::Player(SDL_Renderer& renderer)
 	: GameObject("Bad Dude", GT_Player, 20, Direction::Right)	
 	, idleRight(Sprite::FromFile("resources/baddude_stanceright.png", renderer, 67, 108, 10, 0))
 	, idleLeft(Sprite::FromFile("resources/baddude_stanceleft.png", renderer, 67, 108, 10, 0))
@@ -23,7 +23,7 @@ Player::Player(SDL_Renderer* const renderer)
 	,	hitRight(Sprite::FromFile("resources/baddude_hitright.png", renderer, 70, 108, 5, 0))
 	,	fallLeft(Sprite::FromFile("resources/baddude_fallleft.png", renderer, 133, 121, 1, 0))
 	,	fallRight(Sprite::FromFile("resources/baddude_fallright.png", renderer, 133, 121, 1, 0))
-	, current(NULL)
+	, current(nullptr)
 	, jumpState(JS_Ground)
 	, pState(PS_Idle)
 	, punchTimeout(0)
@@ -55,7 +55,7 @@ Player::~Player()
 	kickRight->FramePlayed.detach(*this, &Player::OnKickSprite);
 	kickLeft->FramePlayed.detach(*this, &Player::OnKickSprite);
 
-	current = NULL;
+	current = nullptr;
 	util::Delete(walkRight);
 	util::Delete(walkLeft);
 	util::Delete(idleRight);
@@ -331,7 +331,7 @@ void Player::Update()
 }
 
 
-void Player::Draw(SDL_Renderer* const renderer) const
+void Player::Draw(SDL_Renderer& renderer) const
 {
 	current->Draw(renderer);
 }

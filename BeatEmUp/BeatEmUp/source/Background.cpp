@@ -5,7 +5,7 @@
 using namespace util;
 
 
-Background::Background(int clientWidth, int clientHeight, SDL_Renderer* const renderer 
+Background::Background(int clientWidth, int clientHeight, SDL_Renderer& renderer 
 	, const std::string& fileLayer1, const std::string& fileLayer2, const std::string& fileLayer3)
 	: GameObject("", GT_Background, 1, Direction::Left, 3.0f)
 	, scroll(false)
@@ -37,7 +37,7 @@ void Background::Update()
 }
 
 
-void Background::Draw(SDL_Renderer* const renderer) const
+void Background::Draw(SDL_Renderer& renderer) const
 {
 	for(GameObjectList::const_iterator it = layers.begin(); it != layers.end(); ++it)
 	{
@@ -53,12 +53,12 @@ Background::~Background()
 }
 
 
-BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer* const renderer,
+BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer& renderer,
 	int _screenWidth, int _screenHeight, float xVel)
 	: GameObject("", GT_Background, 1, Direction::Left)
 {
 	SDLSurfaceFromFile fileSurface(filename);
-	texture = SDL_CreateTextureFromSurface(renderer, fileSurface.surface);
+	texture = SDL_CreateTextureFromSurface(&renderer, fileSurface.surface);
 
 	if( !texture )
 	{
@@ -82,7 +82,7 @@ BackgroundLayer::~BackgroundLayer()
 	if(texture)
 	{
 		SDL_DestroyTexture(texture);
-		texture = NULL;
+		texture = nullptr;
 	}
 
 	logPrintf("BackgroundLayer released");
@@ -126,12 +126,12 @@ void BackgroundLayer::Update()
 }
 
 
-void BackgroundLayer::Draw(SDL_Renderer* const renderer) const
+void BackgroundLayer::Draw(SDL_Renderer& renderer) const
 {
 	SDL_Rect nPos1, nPos2;
 	util::Convert(pos1, nPos1);
 	util::Convert(pos2, nPos2);
 	
-	SDL_RenderCopy( renderer, texture, NULL, &nPos1 );
-	SDL_RenderCopy( renderer, texture, NULL, &nPos2 );
+	SDL_RenderCopy( &renderer, texture, nullptr, &nPos1 );
+	SDL_RenderCopy( &renderer, texture, nullptr, &nPos2 );
 }

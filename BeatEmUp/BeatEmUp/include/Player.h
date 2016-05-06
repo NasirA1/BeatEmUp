@@ -5,10 +5,10 @@
 class Player : public GameObject
 {
 public:
-	Player(SDL_Renderer* const renderer);
+	Player(SDL_Renderer& renderer);
 	virtual ~Player();
 	virtual void Update() override;
-	virtual void Draw(SDL_Renderer* const renderer) const override;
+	virtual void Draw(SDL_Renderer& renderer) const override;
 	virtual void SetDirection(Direction dir) override;
 	virtual void SetAngle(double theta) override;
 

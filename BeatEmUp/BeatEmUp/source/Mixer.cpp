@@ -34,7 +34,7 @@ void LoadMusic(Mixer& mixer, Mixer::SoundTrack track, const string& file)
 
 
 Mixer::Mixer()
-	: currentTrack(NULL)
+	: currentTrack(nullptr)
 {
 	//Load sound effects
 	LoadChunk(*this, SE_Kick, "resources/kick.wav");
@@ -55,7 +55,7 @@ Mixer::~Mixer(void)
 		it != effects.end(); ++it)
 	{
 		Mix_FreeChunk( it->second );
-		it->second = NULL;
+		it->second = nullptr;
 	}
 }
 
@@ -75,7 +75,7 @@ void Mixer::Play(Mixer::SoundTrack track)
 	if(currentTrack)
 	{
 		Mix_FreeMusic(currentTrack);
-		currentTrack = NULL;
+		currentTrack = nullptr;
 	}
 
 	map< Mixer::SoundTrack, string >::iterator it = tracks.find(track);

@@ -3,7 +3,7 @@
 
 
 
-TextBlock::TextBlock(const string& text_, size_t size, float x, float y, SDL_Renderer* const renderer_)
+TextBlock::TextBlock(const string& text_, size_t size, float x, float y, SDL_Renderer& renderer_)
 	: GameObject("", GT_Background)
 	, text(text_)
 	, font(new TTFont("resources/calibri.ttf", size))
@@ -32,7 +32,7 @@ void TextBlock::Update()
 
 
 
-void TextBlock::Draw(SDL_Renderer* const renderer) const
+void TextBlock::Draw(SDL_Renderer& renderer) const
 {
 	if(!font) return;
 
@@ -40,5 +40,5 @@ void TextBlock::Draw(SDL_Renderer* const renderer) const
 
 	SDL_Rect nPos;
 	util::Convert(position, nPos);
-	SDL_RenderCopyEx(renderer, texture.texture, NULL, &nPos, GetAngle(), NULL, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(&renderer, texture.texture, nullptr, &nPos, GetAngle(), nullptr, SDL_FLIP_NONE);
 }

@@ -8,10 +8,10 @@
 class Rock : public GameObject
 {
 public:
-	Rock(const string& file, SDL_Renderer* const renderer);
+	Rock(const string& file, SDL_Renderer& renderer);
 	virtual ~Rock(void);
 	virtual void Update() override;
-	virtual void Draw(SDL_Renderer* const renderer) const override;
+	virtual void Draw(SDL_Renderer& renderer) const override;
 
 public:
 	static const float Range;
@@ -25,7 +25,7 @@ private:
 class Enemy : public GameObject
 {
 public:
-	Enemy(SDL_Renderer* const renderer
+	Enemy(SDL_Renderer& renderer
 	, Sprite* idleLeftSprite, Sprite* idleRightSprite
 	, Sprite* walkLeftSprite, Sprite* walkRightSprite
 	, Sprite* punchLeftSprite, Sprite* punchRightSprite
@@ -43,7 +43,7 @@ public:
 );
 
 	virtual void Update() override;
-	virtual void Draw(SDL_Renderer* const renderer) const override;
+	virtual void Draw(SDL_Renderer& renderer) const override;
 	virtual ~Enemy();
 
 	void OnHit();
@@ -136,7 +136,7 @@ protected:
 class Andore : public Enemy
 {
 public:
-	Andore(SDL_Renderer* const renderer, float posX, float posY);
+	Andore(SDL_Renderer& renderer, float posX, float posY);
 	virtual ~Andore();
 
 private:
@@ -147,7 +147,7 @@ private:
 class Joker : public Enemy
 {
 public:
-	Joker(SDL_Renderer* const renderer, float posX, float posY);
+	Joker(SDL_Renderer& renderer, float posX, float posY);
 	virtual ~Joker();
 
 protected:
@@ -161,7 +161,7 @@ private:
 class Axl : public Enemy
 {
 public:
-	Axl(SDL_Renderer* const renderer, float posX, float posY);
+	Axl(SDL_Renderer& renderer, float posX, float posY);
 	virtual ~Axl();
 
 private:

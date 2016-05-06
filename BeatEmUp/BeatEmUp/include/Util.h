@@ -12,7 +12,7 @@
 #define logPrintf()
 #endif
 
-#define WHEEL_OF_FORTUNE	util::Random::Instance()
+#define __WHEEL	util::Random::Instance()
 
 
 
@@ -79,7 +79,7 @@ namespace util
 	{
 		Random()
 		{
-			srand((unsigned int)time(NULL));
+			srand((unsigned int)time(nullptr));
 		}
 
 		//Note: max is EXCLUSIVE
@@ -164,7 +164,7 @@ namespace util
 		TTF_Font* font;
 
 		TTFont(const std::string& fileName, size_t size)
-			: font(NULL)
+			: font(nullptr)
 		{
 			font = TTF_OpenFont(fileName.c_str(), size);
 			if(!font)
@@ -179,7 +179,7 @@ namespace util
 			if(font)
 			{
 				TTF_CloseFont(font);
-				font = NULL;
+				font = nullptr;
 				logPrintf("TTFont object released");
 			}
 		}
@@ -191,9 +191,9 @@ namespace util
 		SDL_Surface* const surface; 
 		SDL_Texture* const texture;
 
-		TextTexture(SDL_Renderer* const renderer, const TTFont& font, const std::string& text, const SDL_Colour& colour)
+		TextTexture(SDL_Renderer& renderer, const TTFont& font, const std::string& text, const SDL_Colour& colour)
 			: surface(TTF_RenderText_Solid(font.font, text.c_str(), colour))
-			, texture(SDL_CreateTextureFromSurface(renderer, surface))
+			, texture(SDL_CreateTextureFromSurface(&renderer, surface))
 		{
 			if(!surface)
 			{
@@ -211,12 +211,12 @@ namespace util
 			if(texture)
 			{
 				SDL_DestroyTexture(texture);
-				const_cast<SDL_Texture*>(texture) = NULL;
+				const_cast<SDL_Texture*>(texture) = nullptr;
 			}
 			if(surface)
 			{
 				SDL_FreeSurface(surface);
-				const_cast<SDL_Surface*>(surface) = NULL;
+				const_cast<SDL_Surface*>(surface) = nullptr;
 			}
 		}
 	};
@@ -255,21 +255,23 @@ namespace util
 	};
 
 
-	template <class T> void Release(T t)
+	template <class T> 
+	void Release(T t)
 	{
 		if(t)
 		{
 			t->Release();
-			t = NULL;
+			t = nullptr;
 		}
 	}
 
-	template <class T> void Delete(T t)
+	template <class T> 
+	void Delete(T t)
 	{
 		if(t)
 		{
 			delete t;
-			t = NULL;
+			t = nullptr;
 		}
 	}
 

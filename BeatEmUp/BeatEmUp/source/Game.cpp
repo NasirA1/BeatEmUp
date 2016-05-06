@@ -9,9 +9,9 @@ Game::Game()
 	, SCREEN_HEIGHT
 	, "Nasir's Beat 'em Up Game")
 	, MoveBounds(0.0f, 370.0f, (float)SCREEN_WIDTH, 120.0f)
-	, bg(NULL)
-	, tbFps(NULL), tbPlayerPos(NULL), tbEnemyPos(NULL)
-	, player(NULL)
+	, bg(nullptr)
+	, tbFps(nullptr), tbPlayerPos(nullptr), tbEnemyPos(nullptr)
+	, player(nullptr)
 	, leftDown(false)
 	, rightDown(false)
 	, upDown(false)
@@ -39,7 +39,7 @@ bool Game::Init()
 	
 	//Create and add player
 	//currently only one character (baddude) supported
-	player = new Player(renderer_);
+	player = new Player(renderer());
 	gameObjects.push_back(player);
 
 	//Load level1
@@ -172,30 +172,30 @@ bool Game::LoadNextLevel()
 	case 9:
 	case 10:
 		{
-			bg = new Background(clientWidth_, clientHeight_, renderer_, 
+			bg = new Background(clientWidth_, clientHeight_, renderer(), 
 				"resources/bg1.gif", "resources/bg2.gif", "resources/bg3.gif");
 
-			Roamer* skaterboy = new Roamer(renderer_, 
-				Sprite::FromFile("resources/skater_left.png", renderer_, 71, 90, 11, 0),
-				Sprite::FromFile("resources/skater_right.png", renderer_, 71, 90, 11, 0), 
+			Roamer* skaterboy = new Roamer(renderer(), 
+				Sprite::FromFile("resources/skater_left.png", renderer(), 71, 90, 11, 0),
+				Sprite::FromFile("resources/skater_right.png", renderer(), 71, 90, 11, 0), 
 				-200, 390, -200, 1000, true);
-			Roamer* knight1 = new Roamer(renderer_, 
-				Sprite::FromFile("resources/knightwalk_left.png", renderer_, 128, 128, 4, 15),
-				Sprite::FromFile("resources/knightwalk_right.png", renderer_, 128, 128, 4, 3), 
+			Roamer* knight1 = new Roamer(renderer(), 
+				Sprite::FromFile("resources/knightwalk_left.png", renderer(), 128, 128, 4, 15),
+				Sprite::FromFile("resources/knightwalk_right.png", renderer(), 128, 128, 4, 3), 
 				5000, 480, -5000, 5000, false);
 
-			enemies.push_back(new Andore(renderer_, 1200, 450));
-			enemies.push_back(new Andore(renderer_, 2400, 450));
-			enemies.push_back(new Joker(renderer_, 1000, 400));
-			enemies.push_back(new Axl(renderer_, 800, 400));
-			enemies.push_back(new Andore(renderer_, 700, 380));
-			enemies.push_back(new Axl(renderer_, -200, 400));
-			enemies.push_back(new Joker(renderer_, 1100, 400));
-			enemies.push_back(new Axl(renderer_, 500, 400));
+			enemies.push_back(new Andore(renderer(), 1200, 450));
+			enemies.push_back(new Andore(renderer(), 2400, 450));
+			enemies.push_back(new Joker(renderer(), 1000, 400));
+			enemies.push_back(new Axl(renderer(), 800, 400));
+			enemies.push_back(new Andore(renderer(), 700, 380));
+			enemies.push_back(new Axl(renderer(), -200, 400));
+			enemies.push_back(new Joker(renderer(), 1100, 400));
+			enemies.push_back(new Axl(renderer(), 500, 400));
 
-			tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer_);	
-			tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer_);
-			tbEnemyPos = new TextBlock("Enemy Pos {}", 16, 0.0f, tbPlayerPos->Position().bottom() + 1, renderer_);
+			tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer());	
+			tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer());
+			tbEnemyPos = new TextBlock("Enemy Pos {}", 16, 0.0f, tbPlayerPos->Position().bottom() + 1, renderer());
 
 			gameObjects.push_back(bg);
 			gameObjects.push_back(tbFps);
@@ -207,7 +207,7 @@ bool Game::LoadNextLevel()
 			for(unsigned int i = 0; i < enemies.size(); ++i)
 				gameObjects.push_back(enemies[i]);
 
-			gameObjects.push_back(new Rock("resources/rock.png", renderer_));
+			gameObjects.push_back(new Rock("resources/rock.png", renderer()));
 		}
 		break;
 
@@ -299,8 +299,8 @@ void Game::Render()
 	//SDL_RenderClear( renderer_ );
 	//Sort by depth, then draw
 	std::sort(gameObjects.begin(), gameObjects.end(), GameObjectSortByDepth());
-	gameObjects.Draw( renderer_ );
-	SDL_RenderPresent( renderer_ );
+	gameObjects.Draw( renderer());
+	SDL_RenderPresent( &renderer() );
 }
 
 

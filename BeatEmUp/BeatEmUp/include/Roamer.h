@@ -6,10 +6,10 @@
 class Roamer : public GameObject
 {
 public:
-	Roamer(SDL_Renderer* const renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
+	Roamer(SDL_Renderer& renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
 		, float posX, float posY, float roamMinX_, float roamMaxX_, bool backgroundObj);
 	virtual void Update() override;
-	virtual void Draw(SDL_Renderer* const renderer) const override;
+	virtual void Draw(SDL_Renderer& renderer) const override;
 	virtual ~Roamer();
 	virtual void SetDirection(Direction dir) override;
 	void Stop();

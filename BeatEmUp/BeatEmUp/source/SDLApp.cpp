@@ -22,8 +22,8 @@ SDLApp::SDLApp(const int clientWidth, const int clientHeight, const std::string&
 	: clientWidth_(clientWidth)
 	, clientHeight_(clientHeight)
 	, appTitle_(appTitle)
-	, renderer_(NULL) 
-	, window_(NULL)
+	, renderer_(nullptr) 
+	, window_(nullptr)
 	, fps_(0.0f)
 	, quit_(false)
 	, fullScreen_(false)
@@ -37,13 +37,13 @@ SDLApp::~SDLApp()
 	if(renderer_)
 	{
 		SDL_DestroyRenderer(renderer_);
-		renderer_ = NULL;
+		renderer_ = nullptr;
 	}
 
 	if(window_)
 	{
 		SDL_DestroyWindow( window_ );
-		window_ = NULL;
+		window_ = nullptr;
 	}
 
 	//Quit SDL subsystems

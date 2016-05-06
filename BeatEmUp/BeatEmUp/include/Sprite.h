@@ -8,10 +8,10 @@ class Sprite : public GameObject
 {
 
 public:
-	Sprite(SDL_Surface* const spriteSheet, SDL_Renderer* const renderer, 
+	Sprite(SDL_Surface* const spriteSheet, SDL_Renderer& renderer, 
 		int frameWidth, int frameHeight, int frameSpeed_, int stillFrame_, bool playReverse = false);
 	virtual void Update() override;
-	virtual void Draw(SDL_Renderer* const renderer) const override;
+	virtual void Draw(SDL_Renderer& renderer) const override;
 	virtual ~Sprite();
 
 	//Getters
@@ -40,7 +40,7 @@ public:
 	events::Event<const Sprite&, const FramePlayedEventArgs&> FramePlayed;
 
 
-	static inline Sprite* FromFile(string filename, SDL_Renderer* const renderer, 
+	static inline Sprite* FromFile(string filename, SDL_Renderer& renderer, 
 		int frameWidth, int frameHeight, int frameSpeed, int stillFrame, bool playReverse = false
 		, Uint8 colKeyR = 0x00, Uint8 colKeyG = 0x00, Uint8 colKeyB = 0x00)
 	{

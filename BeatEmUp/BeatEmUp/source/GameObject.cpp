@@ -54,7 +54,7 @@ void GameObjectList::Update()
 }
 
 
-void GameObjectList::Draw(SDL_Renderer* const renderer) const
+void GameObjectList::Draw(SDL_Renderer& renderer) const
 {
 	for (vector<GameObject*>::const_iterator it = begin(); it != end(); ++it)
 		(*it)->Draw(renderer);
