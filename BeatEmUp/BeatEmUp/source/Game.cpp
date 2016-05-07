@@ -129,8 +129,7 @@ void Game::ProcessEvent(const SDL_Event& e)
 bool Game::LevelComplete() const
 {
 	//all enemies destroyed!
-	//return enemies.size() <= 0;
-	return std::count_if(begin(enemies), end(enemies), [](const auto e) { return !e->IsDead(); }) <= 0;
+	return enemies.size() <= 0;
 }
 
 
@@ -220,7 +219,6 @@ void Game::Update()
 		//end the game
 		//try again? yes/no
 		//Resurrect player
-		return;
 	}
 	else if(LevelComplete())
 	{
