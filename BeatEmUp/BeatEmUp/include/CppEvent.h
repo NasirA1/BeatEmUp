@@ -76,18 +76,18 @@ namespace events
 	class Event
 	{
 	private:
-		std::vector<std::shared_ptr<EventHandlerBase<TSender, TEventArgs>>> handlers_;
+		std::vector<std::unique_ptr<EventHandlerBase<TSender, TEventArgs>>> handlers_;
 
 	public:
 		// Attaches the given object and method to the event so that it can listen for notifications.
 		template <typename TListener>
 		void attach(TListener& object, void (TListener::*member)(TSender, TEventArgs)) {
-			handlers_.push_back(std::make_shared<EventHandler<TListener, TSender, TEventArgs>>(&object, member));
+			handlers_.push_back(std::make_unique<EventHandler<TListener, TSender, TEventArgs>>(&object, member));
 		}
 
 		//Attaches a non-member event handler
 		void attach(void(*func)(TSender, TEventArgs)) {
-			handlers_.push_back(std::make_shared<NonMemberEventHandler<TSender, TEventArgs>>(func));
+			handlers_.push_back(std::make_unique<NonMemberEventHandler<TSender, TEventArgs>>(func));
 		}
 
 		//Detaches (or unsubscribes) the given object and method from this event.
