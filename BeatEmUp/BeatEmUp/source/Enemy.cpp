@@ -404,7 +404,7 @@ void Enemy::OnChase()
 	//		}
 	//	}
 	//}
-#pragma endregion
+	#pragma endregion
 
 
 	if(distX > MinDistX) {
@@ -660,7 +660,11 @@ Rock::Rock(const string& file, SDL_Renderer& renderer)
  , texture(nullptr)
 {
 	util::SDLSurfaceFromFile surf(file, true);
-	texture = SDL_CreateTextureFromSurface(&renderer, surf.surface);
+
+	texture = unique_ptr2<SDL_Texture>(
+		SDL_CreateTextureFromSurface(&renderer, surf.surface)
+		, [](auto p) { SDL_DestroyTexture(p); }
+	);
 
 	position.x = Range;
 	position.w = (float)surf.surface->w;
@@ -713,18 +717,12 @@ void Rock::Draw(SDL_Renderer& renderer) const
 {
 	SDL_Rect nPos;
 	util::Convert(position, nPos);
-	SDL_RenderCopyEx(&renderer, texture, nullptr, &nPos, GetAngle(), nullptr, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(&renderer, texture.get(), nullptr, &nPos, GetAngle(), nullptr, SDL_FLIP_NONE);
 }
 
 
 Rock::~Rock()
 {
-	if(texture)
-	{
-		SDL_DestroyTexture(texture);
-		texture = nullptr;
-	}
-
 	logPrintf("Rock object released");
 }
 

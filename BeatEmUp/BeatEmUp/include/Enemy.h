@@ -2,14 +2,19 @@
 #include "GameObject.h"
 #include "Sprite.h"
 #include <queue>
+#include "Util.h"
 
+
+
+//You can write :
+//deleted_unique_ptr<Foo> foo(new Foo(), [](Foo* f) { customdeleter(f); });
 
 
 class Rock : public GameObject
 {
 public:
 	Rock(const string& file, SDL_Renderer& renderer);
-	virtual ~Rock(void);
+	virtual ~Rock();
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer& renderer) const override;
 
@@ -17,7 +22,7 @@ public:
 	static const float Range;
 
 private:
-	SDL_Texture* texture;
+	unique_ptr2<SDL_Texture> texture;
 };
 
 

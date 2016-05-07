@@ -5,6 +5,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include <memory>
+#include <functional>
 
 
 #ifdef _DEBUG
@@ -19,6 +20,13 @@
 
 namespace util
 {
+
+	//Allows you to write:
+	//unique_ptr2<Foo> foo(customcreate(), [](Foo* f) { customdeleter(f); });
+	//unique_ptr2<FILE> file(fopen("file.txt", "r"), [](FILE* f) { fclose(f); });
+	template<typename T>
+	using unique_ptr2 = std::unique_ptr<T, std::function<void(T*)>>;
+
 
 	//General-purpose Singleton mixin
 	template <typename T>
@@ -254,27 +262,6 @@ namespace util
 		bool mPaused;
 		bool mStarted;
 	};
-
-
-	template <class T>
-	void Release(T t)
-	{
-		if(t)
-		{
-			t->Release();
-			t = nullptr;
-		}
-	}
-
-	template <class T> 
-	void Delete(T t)
-	{
-		if(t)
-		{
-			delete t;
-			t = nullptr;
-		}
-	}
 
 
 }//endnamespace

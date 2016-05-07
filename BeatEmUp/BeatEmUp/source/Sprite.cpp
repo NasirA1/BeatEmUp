@@ -23,7 +23,10 @@ Sprite::Sprite(SDL_Surface* const spriteSheet, SDL_Renderer& renderer,
 	framesPerRow = (int)SDL_floor((double)spriteSheet->w / frameWidth);
 	rowCount = (int)SDL_floor((double)spriteSheet->h / frameHeight);
 	frameCount = framesPerRow * rowCount;
-	sheet = SDL_CreateTextureFromSurface(&renderer, spriteSheet);
+	sheet = unique_ptr2<SDL_Texture>(
+		SDL_CreateTextureFromSurface(&renderer, spriteSheet), 
+		[](auto p) { SDL_DestroyTexture(p); }
+	);
 
 	fromIndex = 0;
 	toIndex = frameCount - 1;
@@ -80,7 +83,7 @@ void Sprite::Draw(SDL_Renderer& renderer) const
 
 	SDL_Rect nPos;
 	util::Convert(position, nPos);
-	SDL_RenderCopyEx(&renderer, sheet, &src, &nPos, GetAngle(), nullptr, SDL_FLIP_NONE);
+	SDL_RenderCopyEx(&renderer, sheet.get(), &src, &nPos, GetAngle(), nullptr, SDL_FLIP_NONE);
 
 	if(!loop && IsAnimationRunning())
 	{
@@ -92,11 +95,5 @@ void Sprite::Draw(SDL_Renderer& renderer) const
 
 Sprite::~Sprite()
 {
-	if(sheet)
-	{
-		SDL_DestroyTexture(sheet);
-		sheet = nullptr;
-	}
-
 	logPrintf("Sprite object released");
 }

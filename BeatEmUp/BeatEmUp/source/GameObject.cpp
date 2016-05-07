@@ -21,9 +21,6 @@ bool GameObject::CollidedWith(const RectF& other, const int penThresholdX
 bool GameObject::CollidedWith(const GameObject& other, const int penThresholdX
 		, const int penThresholdY, const int penThresholdZ) const
 {
-	////null case
-	//if(!other) return false;
-
 	return CollidedWith(other.position, penThresholdX, penThresholdY, penThresholdZ);
 }
 

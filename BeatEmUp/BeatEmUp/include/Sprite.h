@@ -3,6 +3,7 @@
 #include "Mixer.h"
 #include "CppEvent.h"
 #include <memory>
+#include "Util.h"
 
 
 class Sprite : public GameObject
@@ -37,8 +38,7 @@ public:
 	//Event dispatch
 	struct FramePlayedEventArgs
 	{
-		FramePlayedEventArgs(const int frameIndex) 
-			: FrameIndex(frameIndex){}
+		FramePlayedEventArgs(const int frameIndex) : FrameIndex(frameIndex){}
 		const int FrameIndex;
 	};
 
@@ -56,7 +56,7 @@ public:
 
 
 private:
-	SDL_Texture* sheet;
+	unique_ptr2<SDL_Texture> sheet;
 	int framesPerRow;
 	int rowCount;
 	int currentFrame;

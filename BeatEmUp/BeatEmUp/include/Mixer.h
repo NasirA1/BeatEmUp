@@ -26,8 +26,8 @@ public:
 		ST_Track1,
 	};
 
-	Mixer(void);
-	~Mixer(void);
+	Mixer();
+	~Mixer();
 	void Play(SoundEffect effect);
 	void Play(SoundTrack track);
 
