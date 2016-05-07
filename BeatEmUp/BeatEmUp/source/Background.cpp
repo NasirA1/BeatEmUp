@@ -47,7 +47,6 @@ void Background::Draw(SDL_Renderer& renderer) const
 
 Background::~Background()
 {
-	//Memory freed via GameObjectList .dtor call
 	logPrintf("Background object released");
 }
 

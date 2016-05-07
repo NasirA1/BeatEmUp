@@ -177,16 +177,16 @@ bool Game::LoadNextLevel()
 
 			//Add some enemies
 			enemies.push_back(world->AddGameObject<Andore>(renderer(), 1200.0f, 450.0f));
-			//enemies.push_back(new Andore(renderer(), 1200, 450));
-			//enemies.push_back(new Andore(renderer(), 2400, 450));
-			//enemies.push_back(new Joker(renderer(), 1000, 400));
-			//enemies.push_back(new Axl(renderer(), 800, 400));
-			//enemies.push_back(new Andore(renderer(), 700, 380));
-			//enemies.push_back(new Axl(renderer(), -200, 400));
-			//enemies.push_back(new Joker(renderer(), 1100, 400));
-			//enemies.push_back(new Axl(renderer(), 500, 400));
+			//enemies.push_back(world->AddGameObject<Andore>(renderer(), 1200.0f, 450.0f));
+			//enemies.push_back(world->AddGameObject<Andore>(renderer(), 2400.0f, 450.0f));
+			//enemies.push_back(world->AddGameObject<Joker>(renderer(), 1000.0f, 400.0f));
+			//enemies.push_back(world->AddGameObject<Axl>(renderer(), 800.0f, 400.0f));
+			//enemies.push_back(world->AddGameObject<Andore>(renderer(), 700.0f, 380.0f));
+			//enemies.push_back(world->AddGameObject<Axl>(renderer(), -200.0f, 400.0f));
+			//enemies.push_back(world->AddGameObject<Joker>(renderer(), 1100.0f, 400.0f));
+			//enemies.push_back(world->AddGameObject<Axl>(renderer(), 500.0f, 400.0f));
 
-			//Add non-owned objects
+			//Add non-owned objects so then can be drawn
 			world->AddGameObject(*tbFps);
 			world->AddGameObject(*tbPlayerPos);
 			world->AddGameObject(*tbEnemyPos);
@@ -227,7 +227,6 @@ void Game::Update()
 		if(currentLevel == MaxLevel)
 		{
 			//TODO
-			//CleanupLevel();
 			//game complete
 			//end the game
 			//Play end credits
