@@ -1,7 +1,8 @@
 #pragma once
 #include "GameObject.h"
 #include <string>
-
+#include <memory>
+#include <vector>
 
 
 class BackgroundLayer : public GameObject
@@ -47,8 +48,8 @@ public:
 
 private:
   bool scroll;
-  GameObjectList layers;
-	BackgroundLayer* bg1;
-	BackgroundLayer* bg2;
-	BackgroundLayer* bg3;
+  std::vector<BackgroundLayer*> layers;
+	std::unique_ptr<BackgroundLayer> bg1;
+	std::unique_ptr<BackgroundLayer> bg2;
+	std::unique_ptr<BackgroundLayer> bg3;
 };

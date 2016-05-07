@@ -52,7 +52,7 @@ public:
 	const RectF MoveBounds;
 
 	//Game objects
-	GameObjectList gameObjects;
+	vector<GameObject*> gameObjects;
 	Background* bg;
 	TextBlock *tbFps, *tbPlayerPos, *tbEnemyPos;
 	Player* player;

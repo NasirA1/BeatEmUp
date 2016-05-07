@@ -9,15 +9,15 @@ Background::Background(int clientWidth, int clientHeight, SDL_Renderer& renderer
 	, const std::string& fileLayer1, const std::string& fileLayer2, const std::string& fileLayer3)
 	: GameObject("", GT_Background, 1, Direction::Left, 3.0f)
 	, scroll(false)
-	, bg1(new BackgroundLayer(fileLayer1, renderer, clientWidth, clientHeight, 0.25f))
-	, bg2(new BackgroundLayer(fileLayer2, renderer, clientWidth, clientHeight, 2.0f))
-	, bg3(new BackgroundLayer(fileLayer3, renderer, clientWidth, clientHeight, 3.0f))
+	, bg1(std::make_unique<BackgroundLayer>(fileLayer1, renderer, clientWidth, clientHeight, 0.25f))
+	, bg2(std::make_unique<BackgroundLayer>(fileLayer2, renderer, clientWidth, clientHeight, 2.0f))
+	, bg3(std::make_unique<BackgroundLayer>(fileLayer3, renderer, clientWidth, clientHeight, 3.0f))
 {
 	//speedX = 3.0f; //speed of the outermost layer
 	position.z = -99999; //bg z-order
-	layers.push_back(bg1);
-	layers.push_back(bg2);
-	layers.push_back(bg3);
+	layers.push_back(bg1.get());
+	layers.push_back(bg2.get());
+	layers.push_back(bg3.get());
 }
 
 
@@ -28,20 +28,19 @@ void Background::Update()
 		return;
 	}
 
-	for(GameObjectList::iterator it = layers.begin(); it != layers.end(); ++it)
+	for(auto& layer : layers)
 	{
-		BackgroundLayer& layer = dynamic_cast<BackgroundLayer&>(**it); 
-		layer.SetDirection(GetDirection());
-		layer.Update();
+		layer->SetDirection(GetDirection());
+		layer->Update();
 	}
 }
 
 
 void Background::Draw(SDL_Renderer& renderer) const
 {
-	for(GameObjectList::const_iterator it = layers.begin(); it != layers.end(); ++it)
+	for(const auto& layer : layers)
 	{
-		(*it)->Draw(renderer);
+		layer->Draw(renderer);
 	}
 }
 

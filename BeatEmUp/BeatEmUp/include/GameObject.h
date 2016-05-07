@@ -115,13 +115,13 @@ private:
 };
 
 
-class GameObjectList : public vector<GameObject*>
-{
-public:
-	void Update();
-	void Draw(SDL_Renderer& renderer) const;
-	~GameObjectList();
-};
+//class GameObjectList : public vector<GameObject*>
+//{
+//public:
+//	void Update();
+//	void Draw(SDL_Renderer& renderer) const;
+//	~GameObjectList();
+//};
 
 
 //Functor for sorting Game objects by depth (z axis) 

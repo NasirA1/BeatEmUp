@@ -132,14 +132,20 @@ void Game::CleanupLevel()
 	if(gameObjects.size() <= 1)
 		return;
 
-	//mark for gc
-	for(vector<GameObject*>::iterator it = gameObjects.begin(); it != gameObjects.end(); ++it) {
-		if((*it)->GetType() != GameObject::GT_Player)
-			(*it)->MarkForGC();
+	//Garbage-collect
+	for (auto it = gameObjects.begin(); it != gameObjects.end(); )
+	{
+		if ((*it)->GetType() != GameObject::GT_Player)
+		{
+			util::Delete(*it);
+			it = gameObjects.erase(it);
+		}
+		else
+		{
+			++it;
+		}
 	}
 
-	//Garbage-collect
-	gameObjects.Update();
 	enemies.clear();
 	logPrintf("Level{%lu} Cleaned up.  gameObjects<%d>", currentLevel, gameObjects.size());
 }
@@ -290,7 +296,7 @@ void Game::Update()
 
 
 	//Other game logic
-	gameObjects.Update();
+	std::for_each(gameObjects.begin(), gameObjects.end(), [](auto& obj) { obj->Update(); });
 }
 
 
@@ -299,7 +305,7 @@ void Game::Render()
 	//SDL_RenderClear( renderer_ );
 	//Sort by depth, then draw
 	std::sort(gameObjects.begin(), gameObjects.end(), GameObjectSortByDepth());
-	gameObjects.Draw( renderer());
+	std::for_each(gameObjects.begin(), gameObjects.end(), [&](const auto& obj) { obj->Draw(renderer()); });
 	SDL_RenderPresent( &renderer() );
 }
 
