@@ -68,7 +68,7 @@ void Player::OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventA
 		for(unsigned int i = 0; i < GAME.enemies.size(); ++i)
 		{
 			Enemy* const enemy = GAME.enemies[i];
-			if(enemy->IsAttackable() && CollidedWith(enemy) && GetDirection() != enemy->GetDirection())
+			if(enemy->IsAttackable() && CollidedWith(*enemy) && GetDirection() != enemy->GetDirection())
 			{
 				enemy->OnHit();
 				hit = true;
@@ -89,7 +89,7 @@ void Player::OnKickSprite(const Sprite& sender, const Sprite::FramePlayedEventAr
 		for(unsigned int i = 0; i < GAME.enemies.size(); ++i)
 		{
 			Enemy* const enemy = GAME.enemies[i];
-			if(enemy->IsAttackable() && CollidedWith(enemy) && GetDirection() != enemy->GetDirection())
+			if(enemy->IsAttackable() && CollidedWith(*enemy) && GetDirection() != enemy->GetDirection())
 			{
 				enemy->OnHit();
 				hit = true;

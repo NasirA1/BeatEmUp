@@ -43,7 +43,6 @@ public:
 
 private:
 	void Stop();
-	void CleanupLevel();
 	bool LoadNextLevel();
 	bool LevelComplete() const;
 
@@ -51,12 +50,13 @@ public:
 	//area of the screen where objects can move/roam
 	const RectF MoveBounds;
 
-	//Game objects
-	vector<GameObject*> gameObjects;
-	Background* bg;
-	TextBlock *tbFps, *tbPlayerPos, *tbEnemyPos;
-	Player* player;
+	//Game objects - Owned
+	unique_ptr<Player> player;
+	unique_ptr<TextBlock> tbFps, tbPlayerPos, tbEnemyPos;
+	unique_ptr<World> world;
+	//non-owned
 	vector<Enemy*> enemies;
+	Background* bg;
 
 private:
 	bool leftDown;

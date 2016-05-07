@@ -310,12 +310,11 @@ void Enemy::OnKnockDown()
 			}
 		}
 		//Enemy is dead.. 
-		//TODO: Garbage collect
 		else
 		{
 			state = ES_Dead;
 			MIXER.Play(Mixer::SE_DragonRoar);
-			vector< Enemy* >::iterator it = find(GAME.enemies.begin(), GAME.enemies.end(), this);
+			auto it = find(GAME.enemies.begin(), GAME.enemies.end(), this);
 			logPrintf("%s[%x] is dead", GetName().c_str(), (unsigned int)*it);
 			GAME.enemies.erase(it);
 		}
@@ -517,7 +516,7 @@ void Andore::OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventA
 {
 	if(e.FrameIndex == 1)
 	{
-		if(!GAME.player->IsDown() && CollidedWith(GAME.player, 0, 0))
+		if(!GAME.player->IsDown() && CollidedWith(*GAME.player, 0, 0))
 		{
 			MIXER.Play(Mixer::SE_PunchHit);
 			GAME.player->OnHit();
@@ -562,7 +561,7 @@ void Axl::OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventArgs
 {
 	if(e.FrameIndex == 1)
 	{
-		if(!GAME.player->IsDown() && CollidedWith(GAME.player, 0, 0))
+		if(!GAME.player->IsDown() && CollidedWith(*GAME.player, 0, 0))
 		{
 			MIXER.Play(Mixer::SE_Kick);
 			GAME.player->OnHit();
@@ -617,7 +616,7 @@ void Joker::OnStickSprite(const Sprite& sender, const Sprite::FramePlayedEventAr
 	{
 		if(!GAME.player->IsDown()) 
 		{
-			bool collision = CollidedWith(GAME.player, -60, 0, 15);
+			bool collision = CollidedWith(*GAME.player, -60, 0, 15);
 			if(collision) {
 				MIXER.Play(Mixer::SE_PunchHit);
 				GAME.player->OnHit();
@@ -700,7 +699,7 @@ void Rock::Update()
 
 
 	//collision detection
-	if(!GAME.player->IsDown() && CollidedWith(GAME.player))
+	if(!GAME.player->IsDown() && CollidedWith(*GAME.player))
 	{
 		GAME.player->Stop();
 		GAME.player->OnHit();

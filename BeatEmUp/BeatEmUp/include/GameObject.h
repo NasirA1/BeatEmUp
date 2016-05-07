@@ -2,6 +2,8 @@
 #include <SDL.h>
 #include <vector>
 #include <string>
+#include <algorithm>
+#include <memory>
 #include "Util.h"
 
 
@@ -28,6 +30,10 @@ public:
 		GT_Enemy
 	};
 
+	typedef void(*Deleter) (GameObject*);
+	using ptr = std::unique_ptr<GameObject, Deleter>;
+
+
 protected:
 	GameObject(const string& name_, Type type_, int health_ = 1, Direction initialDirection = Direction::Right, float speed_ = 1.0f)
 		: name(name_) 
@@ -39,11 +45,10 @@ protected:
 		, angle(0.0000)
 		, speedX(speed_)
 		, speedY(speed_ / 2.0f)
-		, gc(false)
 	{}
 
 public:
-	virtual ~GameObject(){}
+	virtual ~GameObject() = default;
 	virtual void Update() = 0;
 	virtual void Draw(SDL_Renderer& renderer) const = 0;
 	virtual void SetAngle(double theta) { angle = theta; }
@@ -61,16 +66,15 @@ public:
 	__forceinline int GetHealth() const { return health; }
 	__forceinline Type GetType() const { return type; }
 	__forceinline string GetName() const { return name; }
-	__forceinline bool IsMarkedForGC() const { return gc; }
-	__forceinline void MarkForGC() { gc = true; }
-	
+
+
 	//Mutators
 	__forceinline void SetHealth(int value) { health = value; }
 	__forceinline void SetSpeed(float spx, float spy) { speedX = spx; speedY = spy; }
 
 
 	//Rectangle-based collision detection
-	bool CollidedWith(const GameObject* const other, const int penThresholdX = 25
+	bool CollidedWith(const GameObject& other, const int penThresholdX = 25
 		, const int penThresholdY = 25, const int penThresholdZ = 25) const;
 	bool CollidedWith(const RectF& other, const int penThresholdX = 25
 		, const int penThresholdY = 25, const int penThresholdZ = 25) const;
@@ -111,25 +115,108 @@ private:
 	double angle; //rotation angle
 	int health;
 	Type type;
-	bool gc;
 };
 
 
-//class GameObjectList : public vector<GameObject*>
-//{
-//public:
-//	void Update();
-//	void Draw(SDL_Renderer& renderer) const;
-//	~GameObjectList();
-//};
+//Custom deleter lambdas
+namespace GameObjectDeleters
+{
+	static auto Delete = [](GameObject* obj) { delete obj; };
+	static auto NoDelete = [](GameObject*) { };
+}
+
 
 
 //Functor for sorting Game objects by depth (z axis) 
 struct GameObjectSortByDepth {
-	__forceinline bool operator()(GameObject* const a, GameObject* const b) const {
+	__forceinline bool operator()(const GameObject::ptr& a, const GameObject::ptr& b) const {
 		return a->position.z < b->position.z;
 	}
 };
+
+
+
+//Container for all the drawable game objects
+//Owned objects memory is managed automatically
+//Non-owned objects can also be added
+struct World
+{
+	World(const size_t initialCapacity = 50)
+	{
+		gameObjects_.reserve(initialCapacity);
+	}
+
+
+	size_t Count() const { return gameObjects_.size(); }
+
+
+	//Non-owner - delete will not be called on the object being added
+	void AddGameObject(const GameObject& object)
+	{
+		gameObjects_.emplace_back(const_cast<GameObject*>(&object), GameObjectDeleters::NoDelete);
+	}
+
+
+
+	//Owner - delete will be called on the object being created/added
+	//if successful, a pointer to the created object will be returned
+	//otherwise, nullptr will be returned
+	template<class T>
+	T* AddGameObject()
+	{
+		try
+		{
+			GameObject::ptr object(new T, GameObjectDeleters::Delete);
+			GameObject* p = object.get();
+			if (p) gameObjects_.push_back(std::move(object));
+			return p;
+		}
+		catch (...)
+		{
+			return nullptr;
+		}
+	}
+
+
+	//Owner - delete will be called on the object being created/added
+	//if successful, a pointer to the created object will be returned
+	//otherwise, nullptr will be returned
+	template <class T, class... Args>
+	T* AddGameObject(Args&&... args)
+	{
+		try
+		{
+			GameObject::ptr object(new T(std::forward<Args>(args)...), GameObjectDeleters::Delete);
+			T* p = dynamic_cast<T*>(object.get());
+			if (p) gameObjects_.push_back(std::move(object));
+			return p;
+		}
+		catch (...)
+		{
+			return nullptr;
+		}
+	}
+
+
+	void Draw(SDL_Renderer& renderer)
+	{
+		//Sort by depth, then draw
+		std::sort(gameObjects_.begin(), gameObjects_.end(), GameObjectSortByDepth());
+		std::for_each(gameObjects_.begin(), gameObjects_.end(), [&](const auto& obj) { obj->Draw(renderer); });
+	}
+
+
+	void Update()
+	{
+		for (auto& object : gameObjects_)
+			object->Update();
+	}
+
+
+private:
+	vector<GameObject::ptr> gameObjects_;
+};
+
 
 
 

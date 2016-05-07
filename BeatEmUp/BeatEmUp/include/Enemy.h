@@ -49,7 +49,7 @@ public:
 	void OnHit();
 
 	__forceinline bool IsDead() const { return state == ES_Dead; }
-	__forceinline bool IsAttackable() const{
+	__forceinline bool IsAttackable() const {
 		return state !=	ES_KnockedDown && state != ES_Dead;
 	}
 	

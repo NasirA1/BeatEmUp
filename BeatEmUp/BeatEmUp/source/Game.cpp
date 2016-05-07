@@ -9,9 +9,10 @@ Game::Game()
 	, SCREEN_HEIGHT
 	, "Nasir's Beat 'em Up Game")
 	, MoveBounds(0.0f, 370.0f, (float)SCREEN_WIDTH, 120.0f)
-	, bg(nullptr)
-	, tbFps(nullptr), tbPlayerPos(nullptr), tbEnemyPos(nullptr)
 	, player(nullptr)
+	, tbFps(nullptr), tbPlayerPos(nullptr), tbEnemyPos(nullptr)
+	, bg(nullptr)
+	, world(nullptr)
 	, leftDown(false)
 	, rightDown(false)
 	, upDown(false)
@@ -33,14 +34,12 @@ bool Game::Init()
 	if(!SDLApp::Init())
 		return false;
 
-	//optimisation - set desired size
-	gameObjects.reserve(20);
-	enemies.reserve(20);
-	
 	//Create and add player
 	//currently only one character (baddude) supported
-	player = new Player(renderer());
-	gameObjects.push_back(player);
+	player = make_unique<Player>(renderer());
+	tbFps = make_unique<TextBlock>("FPS: 00.000000", 16, 0.0f, 0.0f, renderer());
+	tbPlayerPos = make_unique<TextBlock>("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer());
+	tbEnemyPos = make_unique<TextBlock>("Enemy Pos {}", 16, 0.0f, tbPlayerPos->Position().bottom() + 1, renderer());
 
 	//Load level1
 	LoadNextLevel();
@@ -126,42 +125,21 @@ void Game::ProcessEvent(const SDL_Event& e)
 }
 
 
-void Game::CleanupLevel()
-{
-	/* Player object never gets deleted */
-	if(gameObjects.size() <= 1)
-		return;
-
-	//Garbage-collect
-	for (auto it = gameObjects.begin(); it != gameObjects.end(); )
-	{
-		if ((*it)->GetType() != GameObject::GT_Player)
-		{
-			util::Delete(*it);
-			it = gameObjects.erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}
-
-	enemies.clear();
-	logPrintf("Level{%lu} Cleaned up.  gameObjects<%d>", currentLevel, gameObjects.size());
-}
-
 
 bool Game::LevelComplete() const
 {
 	//all enemies destroyed!
-	return enemies.size() <= 0;
+	//return enemies.size() <= 0;
+	return std::count_if(begin(enemies), end(enemies), [](const auto e) { return !e->IsDead(); }) <= 0;
 }
 
 
 bool Game::LoadNextLevel()
 {
-	if(currentLevel < MaxLevel) currentLevel++;
-	else return false;
+	if(currentLevel < MaxLevel) 
+		currentLevel++;
+	else 
+		return false;
 	logPrintf("Loading Level{%lu}", currentLevel);
 
 	switch(currentLevel)
@@ -178,42 +156,42 @@ bool Game::LoadNextLevel()
 	case 9:
 	case 10:
 		{
-			bg = new Background(clientWidth_, clientHeight_, renderer(), 
-				"resources/bg1.gif", "resources/bg2.gif", "resources/bg3.gif");
+			enemies.clear();
+			world.reset(new World);
 
-			Roamer* skaterboy = new Roamer(renderer(), 
+			//Add background
+			bg = world->AddGameObject<Background>(clientWidth_, clientHeight_, renderer(), "resources/bg1.gif", "resources/bg2.gif", "resources/bg3.gif");
+
+			//Add some 'roamers'
+			world->AddGameObject<Roamer>(renderer(), 
 				Sprite::FromFile("resources/skater_left.png", renderer(), 71, 90, 11, 0),
 				Sprite::FromFile("resources/skater_right.png", renderer(), 71, 90, 11, 0), 
-				-200, 390, -200, 1000, true);
-			Roamer* knight1 = new Roamer(renderer(), 
+				-200.0f, 390.0f, -200.0f, 1000.0f, true);
+
+			world->AddGameObject<Roamer>(renderer(), 
 				Sprite::FromFile("resources/knightwalk_left.png", renderer(), 128, 128, 4, 15),
 				Sprite::FromFile("resources/knightwalk_right.png", renderer(), 128, 128, 4, 3), 
-				5000, 480, -5000, 5000, false);
+				5000.0f, 480.0f, -5000.0f, 5000.0f, false);
 
-			enemies.push_back(new Andore(renderer(), 1200, 450));
-			enemies.push_back(new Andore(renderer(), 2400, 450));
-			enemies.push_back(new Joker(renderer(), 1000, 400));
-			enemies.push_back(new Axl(renderer(), 800, 400));
-			enemies.push_back(new Andore(renderer(), 700, 380));
-			enemies.push_back(new Axl(renderer(), -200, 400));
-			enemies.push_back(new Joker(renderer(), 1100, 400));
-			enemies.push_back(new Axl(renderer(), 500, 400));
+			//Add a rock
+			world->AddGameObject<Rock>("resources/rock.png", renderer());
 
-			tbFps = new TextBlock("FPS: 00.000000", 16, 0.0f, 0.0f, renderer());	
-			tbPlayerPos = new TextBlock("Pos {}", 16, 0.0f, tbFps->Position().bottom() + 1, renderer());
-			tbEnemyPos = new TextBlock("Enemy Pos {}", 16, 0.0f, tbPlayerPos->Position().bottom() + 1, renderer());
+			//Add some enemies
+			enemies.push_back(world->AddGameObject<Andore>(renderer(), 1200.0f, 450.0f));
+			//enemies.push_back(new Andore(renderer(), 1200, 450));
+			//enemies.push_back(new Andore(renderer(), 2400, 450));
+			//enemies.push_back(new Joker(renderer(), 1000, 400));
+			//enemies.push_back(new Axl(renderer(), 800, 400));
+			//enemies.push_back(new Andore(renderer(), 700, 380));
+			//enemies.push_back(new Axl(renderer(), -200, 400));
+			//enemies.push_back(new Joker(renderer(), 1100, 400));
+			//enemies.push_back(new Axl(renderer(), 500, 400));
 
-			gameObjects.push_back(bg);
-			gameObjects.push_back(tbFps);
-			gameObjects.push_back(tbPlayerPos);
-			gameObjects.push_back(tbEnemyPos);
-			gameObjects.push_back(skaterboy);
-			gameObjects.push_back(knight1);
-
-			for(unsigned int i = 0; i < enemies.size(); ++i)
-				gameObjects.push_back(enemies[i]);
-
-			gameObjects.push_back(new Rock("resources/rock.png", renderer()));
+			//Add non-owned objects
+			world->AddGameObject(*tbFps);
+			world->AddGameObject(*tbPlayerPos);
+			world->AddGameObject(*tbEnemyPos);
+			world->AddGameObject(*player);
 		}
 		break;
 
@@ -227,7 +205,7 @@ bool Game::LoadNextLevel()
 		return false;
 	}
 
-	logPrintf("Level{%lu} Loaded.  gameObjects<%d>", currentLevel, gameObjects.size());
+	logPrintf("Level{%lu} Loaded.  gameObjects<%d>", currentLevel, world->Count());
 	return true;
 }
 
@@ -238,7 +216,6 @@ void Game::Update()
 	if(player->IsDead())
 	{
 		//TODO
-		CleanupLevel();
 		logPrintf("GAME OVER!");
 		//end the game
 		//try again? yes/no
@@ -261,7 +238,6 @@ void Game::Update()
 		}
 		else
 		{
-			CleanupLevel();
 			LoadNextLevel();
 		}
 	}
@@ -296,16 +272,14 @@ void Game::Update()
 
 
 	//Other game logic
-	std::for_each(gameObjects.begin(), gameObjects.end(), [](auto& obj) { obj->Update(); });
+	world->Update();
 }
 
 
 void Game::Render()
 {
 	//SDL_RenderClear( renderer_ );
-	//Sort by depth, then draw
-	std::sort(gameObjects.begin(), gameObjects.end(), GameObjectSortByDepth());
-	std::for_each(gameObjects.begin(), gameObjects.end(), [&](const auto& obj) { obj->Draw(renderer()); });
+	world->Draw(renderer());
 	SDL_RenderPresent( &renderer() );
 }
 
