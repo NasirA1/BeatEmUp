@@ -59,19 +59,19 @@ private:
 	void OnKnockDown();
 
 private:
-	Sprite* walkRight;
-	Sprite* walkLeft;
-	Sprite* idleRight;
-	Sprite* idleLeft;
+	Sprite::ptr walkRight;
+	Sprite::ptr walkLeft;
+	Sprite::ptr idleRight;
+	Sprite::ptr idleLeft;
+	Sprite::ptr punchLeft;
+	Sprite::ptr punchRight;
+	Sprite::ptr hitLeft;
+	Sprite::ptr hitRight;
+	Sprite::ptr fallLeft;
+	Sprite::ptr fallRight;
+	Sprite::ptr kickLeft;
+	Sprite::ptr kickRight;
 	Sprite* current;
-	Sprite* punchLeft;
-	Sprite* punchRight;
-	Sprite* hitLeft;
-	Sprite* hitRight;
-	Sprite* fallLeft;
-	Sprite* fallRight;
-	Sprite* kickLeft;
-	Sprite* kickRight;
 
 	//player state
 	PState pState;

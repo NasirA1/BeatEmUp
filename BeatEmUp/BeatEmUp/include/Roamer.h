@@ -6,7 +6,7 @@
 class Roamer : public GameObject
 {
 public:
-	Roamer(SDL_Renderer& renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
+	Roamer(SDL_Renderer& renderer, Sprite::ptr walkLeftSprite, Sprite::ptr walkRightSprite
 		, float posX, float posY, float roamMinX_, float roamMaxX_, bool backgroundObj);
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer& renderer) const override;
@@ -20,8 +20,8 @@ private:
 
 
 private:
-	Sprite* walkRight;
-	Sprite* walkLeft;
+	Sprite::ptr walkRight;
+	Sprite::ptr walkLeft;
 	Sprite* current;
 	float roamMinX;
 	float roamMaxX;

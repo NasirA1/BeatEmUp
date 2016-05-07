@@ -38,7 +38,7 @@ void GameObjectList::Update()
 {
 	//Garbage collect dead objects
 	//otherwise, update
-	for (vector<GameObject*>::iterator it = begin(); it != end(); )
+	for (auto it = begin(); it != end(); )
 	{
 		if((*it)->IsMarkedForGC())
 		{
@@ -56,8 +56,8 @@ void GameObjectList::Update()
 
 void GameObjectList::Draw(SDL_Renderer& renderer) const
 {
-	for (vector<GameObject*>::const_iterator it = begin(); it != end(); ++it)
-		(*it)->Draw(renderer);
+	for (const auto& actor : *this)
+		actor->Draw(renderer);
 }
 
 

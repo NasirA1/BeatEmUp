@@ -56,18 +56,6 @@ Player::~Player()
 	kickLeft->FramePlayed.detach(*this, &Player::OnKickSprite);
 
 	current = nullptr;
-	util::Delete(walkRight);
-	util::Delete(walkLeft);
-	util::Delete(idleRight);
-	util::Delete(idleLeft);
-	util::Delete(punchRight);
-	util::Delete(punchLeft);
-	util::Delete(hitLeft);
-	util::Delete(hitRight);
-	util::Delete(fallLeft);
-	util::Delete(fallRight);
-	util::Delete(kickLeft);
-	util::Delete(kickRight);
 	logPrintf("Player object released");
 }
 
@@ -118,7 +106,7 @@ void Player::KnockedDown()
 {
 	hitCount = 0;
 	yVel = xVel = 0.0f;
-	current = GetDirection() == Direction::Left? fallLeft: fallRight;
+	current = GetDirection() == Direction::Left? fallLeft.get(): fallRight.get();
 	current->SetCurrentFrame(0);
 	pState = PS_KnockedDown;
 	recoveryTimer = 0;
@@ -131,7 +119,7 @@ void Player::OnHit(Uint8 damage)
 	if(pState != PS_KnockedDown && pState != PS_Dead)
 	{
 		Stop();
-		current = GetDirection() == Direction::Left? hitLeft: hitRight;
+		current = GetDirection() == Direction::Left? hitLeft.get(): hitRight.get();
 		pState = PS_Hit;
 		hitCount += damage;
 		SetHealth(GetHealth() - damage);
@@ -340,8 +328,8 @@ void Player::Draw(SDL_Renderer& renderer) const
 void Player::SetDirection(Direction dir)
 {
 	GameObject::SetDirection(dir);
-	if (GetDirection() == Direction::Right) current = walkRight;
-	else if(GetDirection() == Direction::Left) current = walkLeft;
+	if (GetDirection() == Direction::Right) current = walkRight.get();
+	else if(GetDirection() == Direction::Left) current = walkLeft.get();
 }
 
 
@@ -360,7 +348,7 @@ void Player::Jump()
 	//Can only jump whilst on the ground
 	if(jumpState != JS_Ground) return;
 	
-	current = GetDirection() == Direction::Right? idleRight: idleLeft;
+	current = GetDirection() == Direction::Right? idleRight.get(): idleLeft.get();
 	pState = PS_Jumping;
 	Jump(-1.0f, 25.0f);
 }
@@ -386,7 +374,7 @@ void Player::Punch()
 	}
 	else
 	{
-		current = GetDirection()==Direction::Right? punchRight: punchLeft;
+		current = GetDirection()==Direction::Right? punchRight.get(): punchLeft.get();
 		current->SetAnimation(true);
 		current->SetCurrentFrame(0);
 		punchTimeout = SDL_GetTicks() + 250;
@@ -399,7 +387,7 @@ void Player::Kick()
 {
 	if(IsDown()) return;
 
-	current = GetDirection()==Direction::Right? kickRight: kickLeft;
+	current = GetDirection() == Direction::Right? kickRight.get(): kickLeft.get();
 	current->SetAnimation(true);
 	kickTimeout = SDL_GetTicks() + 250;
 	pState = PS_Kicking;
@@ -415,7 +403,7 @@ void Player::Stop()
 	position.x -= xVel;
 	position.y -= yVel;
 	xVel = yVel = 0;
-	current = GetDirection() == Direction::Right? idleRight: idleLeft;
+	current = GetDirection() == Direction::Right? idleRight.get(): idleLeft.get();
 	current->SetAnimation(true);
 	pState = PS_Idle;
 }
@@ -446,7 +434,7 @@ void Player::GoUp()
 {
 	if(CantMove()) return;
 
-	current = GetDirection() == Direction::Right? walkRight: walkLeft;
+	current = GetDirection() == Direction::Right? walkRight.get(): walkLeft.get();
 
 	if (position.y >= GAME.MoveBounds.y)
 		yVel = -speedY;
@@ -462,7 +450,7 @@ void Player::GoDown()
 {
 	if(CantMove()) return;
 	
-	current = GetDirection() == Direction::Right? walkRight: walkLeft;
+	current = GetDirection() == Direction::Right? walkRight.get(): walkLeft.get();
 	
 	if (position.y <= GAME.MoveBounds.bottom()) 
 		yVel = speedY;
@@ -478,7 +466,7 @@ void Player::GoRight()
 {
 	if(CantMove()) return;
 
-	current = GetDirection() == Direction::Right? walkRight: walkLeft;
+	current = GetDirection() == Direction::Right? walkRight.get(): walkLeft.get();
 
 	if (position.x <= GAME.MoveBounds.right() - position.w) 
 		xVel = speedX;
@@ -495,7 +483,7 @@ void Player::GoLeft()
 {
 	if(CantMove()) return;
 	
-	current = GetDirection() == Direction::Right? walkRight: walkLeft;
+	current = GetDirection() == Direction::Right? walkRight.get(): walkLeft.get();
 
 	if (position.x >= GAME.MoveBounds.x) 
 		xVel = -speedX;

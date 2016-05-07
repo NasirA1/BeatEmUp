@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Mixer.h"
 #include "CppEvent.h"
+#include <memory>
 
 
 class Sprite : public GameObject
@@ -10,6 +11,7 @@ class Sprite : public GameObject
 public:
 	Sprite(SDL_Surface* const spriteSheet, SDL_Renderer& renderer, 
 		int frameWidth, int frameHeight, int frameSpeed_, int stillFrame_, bool playReverse = false);
+
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer& renderer) const override;
 	virtual ~Sprite();
@@ -28,6 +30,8 @@ public:
 	__forceinline void SetStill() { currentFrame = stillFrame; animationRunning = false; }
 	__forceinline void SetLoop(bool enabled) { loop = enabled; }
 	__forceinline void Rewind() { currentFrame = reverse? toIndex: fromIndex; }
+
+
 	void PlayFrames(int fromFrame, int toFrame, bool loop_);
 
 	//Event dispatch
@@ -37,15 +41,17 @@ public:
 			: FrameIndex(frameIndex){}
 		const int FrameIndex;
 	};
+
 	events::Event<const Sprite&, const FramePlayedEventArgs&> FramePlayed;
 
+	using ptr = unique_ptr<Sprite>;
 
-	static inline Sprite* FromFile(string filename, SDL_Renderer& renderer, 
+	static inline Sprite::ptr FromFile(string filename, SDL_Renderer& renderer, 
 		int frameWidth, int frameHeight, int frameSpeed, int stillFrame, bool playReverse = false
 		, Uint8 colKeyR = 0x00, Uint8 colKeyG = 0x00, Uint8 colKeyB = 0x00)
 	{
 		util::SDLSurfaceFromFile surface(filename, true, colKeyR, colKeyG, colKeyB);
-		return new Sprite(surface.surface, renderer, frameWidth, frameHeight, frameSpeed, stillFrame, playReverse);
+		return std::make_unique<Sprite>(surface.surface, renderer, frameWidth, frameHeight, frameSpeed, stillFrame, playReverse);
 	}
 
 

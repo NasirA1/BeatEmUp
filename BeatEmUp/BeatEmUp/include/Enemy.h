@@ -26,11 +26,11 @@ class Enemy : public GameObject
 {
 public:
 	Enemy(SDL_Renderer& renderer
-	, Sprite* idleLeftSprite, Sprite* idleRightSprite
-	, Sprite* walkLeftSprite, Sprite* walkRightSprite
-	, Sprite* punchLeftSprite, Sprite* punchRightSprite
-	, Sprite* hitLeftSprite, Sprite* hitRightSprite
-	, Sprite* fallLeftSprite, Sprite* fallRightSprite
+	, Sprite::ptr idleLeftSprite, Sprite::ptr idleRightSprite
+	, Sprite::ptr walkLeftSprite, Sprite::ptr walkRightSprite
+	, Sprite::ptr punchLeftSprite, Sprite::ptr punchRightSprite
+	, Sprite::ptr hitLeftSprite, Sprite::ptr hitRightSprite
+	, Sprite::ptr fallLeftSprite, Sprite::ptr fallRightSprite
 	, const string& name_
 	, float posX, float posY
 	, int health
@@ -90,17 +90,17 @@ private:
 	void OnVisit(EState destState);
 
 protected:
-	Sprite* idleRight;
-	Sprite* idleLeft;
-	Sprite* walkRight;
-	Sprite* walkLeft;
+	Sprite::ptr idleRight;
+	Sprite::ptr idleLeft;
+	Sprite::ptr walkRight;
+	Sprite::ptr walkLeft;
+	Sprite::ptr hitLeft;
+	Sprite::ptr hitRight;
+	Sprite::ptr fallLeft;
+	Sprite::ptr fallRight;
+	Sprite::ptr attackRight;
+	Sprite::ptr attackLeft;
 	Sprite* current;
-	Sprite* hitLeft;
-	Sprite* hitRight;
-	Sprite* fallLeft;
-	Sprite* fallRight;
-	Sprite* attackRight;
-	Sprite* attackLeft;
 
 	EState state;
 	Uint32 attackTimer;

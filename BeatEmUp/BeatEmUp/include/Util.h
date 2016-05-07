@@ -4,6 +4,7 @@
 #include <string>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <memory>
 
 
 #ifdef _DEBUG
@@ -255,7 +256,7 @@ namespace util
 	};
 
 
-	template <class T> 
+	template <class T>
 	void Release(T t)
 	{
 		if(t)

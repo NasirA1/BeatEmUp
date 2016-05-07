@@ -2,11 +2,11 @@
 
 
 
-Roamer::Roamer(SDL_Renderer& renderer, Sprite* walkLeftSprite, Sprite* walkRightSprite
+Roamer::Roamer(SDL_Renderer& renderer, Sprite::ptr walkLeftSprite, Sprite::ptr walkRightSprite
 	, float posX, float posY, float roamMinX_, float roamMaxX_,  bool backgroundObj)
 	: GameObject("", GT_Background)	
-	, walkRight(walkRightSprite)
-	, walkLeft(walkLeftSprite)
+	, walkRight(std::move(walkRightSprite))
+	, walkLeft(std::move(walkLeftSprite))
 	, current(nullptr)
 	, roamMinX(roamMinX_)
 	, roamMaxX(roamMaxX_)
@@ -53,9 +53,6 @@ void Roamer::Draw(SDL_Renderer& renderer) const
 
 Roamer::~Roamer()
 {
-	util::Delete(walkRight);
-	util::Delete(walkLeft);
-
 	logPrintf("Roamer object released");
 }
 
@@ -63,8 +60,8 @@ Roamer::~Roamer()
 void Roamer::SetDirection(Direction dir)
 {
 	GameObject::SetDirection(dir);
-	if (GetDirection() == Direction::Right) current = walkRight;
-	else if(GetDirection() == Direction::Left) current = walkLeft;
+	if (GetDirection() == Direction::Right) current = walkRight.get();
+	else if(GetDirection() == Direction::Left) current = walkLeft.get();
 }
 
 

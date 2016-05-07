@@ -8,11 +8,11 @@ const int Enemy::JumpHeight(50);
 
 
 Enemy::Enemy(SDL_Renderer& renderer
-	, Sprite* idleLeftSprite, Sprite* idleRightSprite
-	, Sprite* walkLeftSprite, Sprite* walkRightSprite
-	, Sprite* attackLeftSprite, Sprite* attackRightSprite
-	, Sprite* hitLeftSprite, Sprite* hitRightSprite
-	, Sprite* fallLeftSprite, Sprite* fallRightSprite
+	, Sprite::ptr idleLeftSprite, Sprite::ptr idleRightSprite
+	, Sprite::ptr walkLeftSprite, Sprite::ptr walkRightSprite
+	, Sprite::ptr attackLeftSprite, Sprite::ptr attackRightSprite
+	, Sprite::ptr hitLeftSprite, Sprite::ptr hitRightSprite
+	, Sprite::ptr fallLeftSprite, Sprite::ptr fallRightSprite
 	, const string& name_
 	, float posX, float posY
 	, int health
@@ -25,17 +25,17 @@ Enemy::Enemy(SDL_Renderer& renderer
 	, float minDistY
 )
 	: GameObject(name_, GT_Enemy, health, Direction::Left, speed_)
-	, idleLeft(idleLeftSprite)
-	, idleRight(idleRightSprite)
-	, walkLeft(walkLeftSprite)
-	, walkRight(walkRightSprite)
-	, attackLeft(attackLeftSprite)
-	, attackRight(attackRightSprite)
-	, hitLeft(hitLeftSprite)
-	, hitRight(hitRightSprite)
-	, fallLeft(fallLeftSprite)
-	, fallRight(fallRightSprite)
-	, current(walkLeft)
+	, idleLeft(std::move(idleLeftSprite))
+	, idleRight(std::move(idleRightSprite))
+	, walkLeft(std::move(walkLeftSprite))
+	, walkRight(std::move(walkRightSprite))
+	, attackLeft(std::move(attackLeftSprite))
+	, attackRight(std::move(attackRightSprite))
+	, hitLeft(std::move(hitLeftSprite))
+	, hitRight(std::move(hitRightSprite))
+	, fallLeft(std::move(fallLeftSprite))
+	, fallRight(std::move(fallRightSprite))
+	, current(walkLeft.get())
 	, state(ES_Patrolling)
 	, attackTimer(0)
 	, idleTimer(0)
@@ -59,16 +59,6 @@ Enemy::Enemy(SDL_Renderer& renderer
 Enemy::~Enemy()
 {
 	current = nullptr;
-	util::Delete(idleLeft);
-	util::Delete(idleRight);
-	util::Delete(walkLeft);
-	util::Delete(walkRight);
-	util::Delete(attackLeft);
-	util::Delete(attackRight);
-	util::Delete(hitLeft);
-	util::Delete(hitRight);
-	util::Delete(fallLeft);
-	util::Delete(fallRight);
 	logPrintf("Enemy object released");
 }
 
@@ -124,8 +114,8 @@ void Enemy::Draw(SDL_Renderer& renderer) const
 void Enemy::Walk(Direction dir)
 {
 	GameObject::SetDirection(dir);
-	if (GetDirection() == Direction::Right) current = walkRight;
-	else if(GetDirection() == Direction::Left) current = walkLeft;
+	if (GetDirection() == Direction::Right) current = walkRight.get();
+	else if(GetDirection() == Direction::Left) current = walkLeft.get();
 }
 
 
@@ -186,7 +176,7 @@ void Enemy::OnVisit(EState destState)
 void Enemy::Stop()
 {
 	xVel = yVel = 0;
-	current = GetDirection() == Direction::Left? idleLeft: idleRight;
+	current = GetDirection() == Direction::Left? idleLeft.get(): idleRight.get();
 }
 
 
@@ -233,7 +223,7 @@ void Enemy::OnHit()
 	if(state != ES_Attacking && state != ES_KnockedDown)
 	{
 		Stop();
-		current = GetDirection() == Direction::Left? hitLeft: hitRight;
+		current = GetDirection() == Direction::Left? hitLeft.get(): hitRight.get();
 		state = ES_Hit;
 		hitCount++;
 		SetHealth(GetHealth() - 1);
@@ -244,7 +234,7 @@ void Enemy::OnHit()
 		else
 		{
 			hitCount = 0;
-			current = GetDirection() == Direction::Left? fallLeft: fallRight;
+			current = GetDirection() == Direction::Left? fallLeft.get(): fallRight.get();
 			current->SetCurrentFrame(0);
 			state = ES_KnockedDown;
 			recoveryTimer = 0;
@@ -439,7 +429,7 @@ void Enemy::OnChase()
 		
 		if(GAME.player->IsDead()) {
 			state = ES_Patrolling;
-			current = GetDirection() == Direction::Right? walkRight: walkLeft;
+			current = GetDirection() == Direction::Right? walkRight.get(): walkLeft.get();
 		}
 	}
 }
@@ -468,7 +458,7 @@ void Enemy::Attack()
 {
 	state = ES_Attacking;
 	attackTimer = SDL_GetTicks();
-	current = GetDirection() == Direction::Left? attackLeft: attackRight;
+	current = GetDirection() == Direction::Left? attackLeft.get(): attackRight.get();
 	current->Rewind();
 }
 
