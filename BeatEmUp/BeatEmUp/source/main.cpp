@@ -15,7 +15,7 @@ int main( int argc, char* args[] )
 #ifdef _DEBUG
 	//getchar();
 #endif
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 

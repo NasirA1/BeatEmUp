@@ -8,7 +8,7 @@ class TextBlock : public GameObject
 {
 public:
 	TextBlock(const string& text_, size_t size, float x, float y, SDL_Renderer& renderer);
-	virtual ~TextBlock(void);
+	virtual ~TextBlock();
 	virtual void Update() override;
 	virtual void Draw(SDL_Renderer& renderer) const override;
 

@@ -6,7 +6,7 @@
 TextBlock::TextBlock(const string& text_, size_t size, float x, float y, SDL_Renderer& renderer_)
 	: GameObject("", GT_Background)
 	, text(text_)
-	, font(new TTFont("resources/calibri.ttf", size))
+	, font(make_unique<TTFont>("resources/calibri.ttf", size))
 {
 	position.x = x, position.y = y;
 	int w = 0, h = 0;
@@ -17,8 +17,9 @@ TextBlock::TextBlock(const string& text_, size_t size, float x, float y, SDL_Ren
 
 
 
-TextBlock::~TextBlock(void)
+TextBlock::~TextBlock()
 {
+	logPrintf("TextBlock released");
 }
 
 
