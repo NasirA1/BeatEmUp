@@ -36,12 +36,12 @@ Enemy::Enemy(SDL_Renderer& renderer
 	, fallLeft(std::move(fallLeftSprite))
 	, fallRight(std::move(fallRightSprite))
 	, current(walkLeft.get())
-	, state(ES_Patrolling)
+	, state(EnemyState::Patrolling)
 	, attackTimer(0)
 	, idleTimer(0)
 	, recoveryTimer(0)
 	, hitCount(0)
-	, jumpState(JS_Ground)
+	, jumpState(JumpState::Ground)
 	, KnockDownHitCount(3)
 	, patrolRange(patrolRange_)
 	, patrolVecX(patrolVecX_)
@@ -67,39 +67,39 @@ void Enemy::Update()
 {
 	switch(state)
 	{
-	case ES_KnockedDown:
+	case EnemyState::KnockedDown:
 		OnKnockDown();
 		return;
 
 	//Recovery (when hit)
-	case ES_Hit:
+	case EnemyState::Hit:
 		if(SDL_GetTicks() > recoveryTimer)
 			OnRecovery();
 		break;
 
-	case ES_Patrolling:
+	case EnemyState::Patrolling:
 		OnPatrol();
 		break;
 
-	case ES_Visiting:
-		OnVisit(ES_Chasing);
+	case EnemyState::Visiting:
+		OnVisit(EnemyState::Chasing);
 		break;
 
-	case ES_Chasing:
+	case EnemyState::Chasing:
 		OnChase();
 		break;
 
-	case ES_Attacking:
+	case EnemyState::Attacking:
 		OnAttack();
 		break;
 
-	case ES_Idle:
+	case EnemyState::Idle:
 		OnIdle();
 		break;
 	}
 
 	//Translate/animate
-	Translate(xVel != 0 || yVel != 0 || state == ES_Attacking);
+	Translate(xVel != 0 || yVel != 0 || state == EnemyState::Attacking);
 	Propagate();
 	current->Update();
 }
@@ -125,12 +125,12 @@ void Enemy::Visit()
 
 	if(visitPath.front().x < (int)position.x) Walk(Direction::Left);
 	else Walk(Direction::Right);
-	state = ES_Visiting;
+	state = EnemyState::Visiting;
 }
 
 
 //destState = State of the object once it has visited destination node
-void Enemy::OnVisit(EState destState)
+void Enemy::OnVisit(EnemyState destState)
 {
 	int distX = (int)position.x - visitPath.front().x;
 	int distY = (int)position.y - visitPath.front().y;
@@ -194,7 +194,7 @@ void Enemy::Translate()
 	position.y += yVel;
 
 	//Z rules dont apply to jumping
-	if(jumpState == JS_Ground)
+	if(jumpState == JumpState::Ground)
 	{
 		position.y = position.y < GAME.MoveBounds.top()? GAME.MoveBounds.top(): position.y;
 		AdjustZToGameDepth();
@@ -220,11 +220,11 @@ void Enemy::Translate(bool anim)
 
 void Enemy::OnHit()
 {
-	if(state != ES_Attacking && state != ES_KnockedDown)
+	if(state != EnemyState::Attacking && state != EnemyState::KnockedDown)
 	{
 		Stop();
 		current = GetDirection() == Direction::Left? hitLeft.get(): hitRight.get();
-		state = ES_Hit;
+		state = EnemyState::Hit;
 		hitCount++;
 		SetHealth(GetHealth() - 1);
 	
@@ -236,7 +236,7 @@ void Enemy::OnHit()
 			hitCount = 0;
 			current = GetDirection() == Direction::Left? fallLeft.get(): fallRight.get();
 			current->SetCurrentFrame(0);
-			state = ES_KnockedDown;
+			state = EnemyState::KnockedDown;
 			recoveryTimer = 0;
 			Jump(8.0f, 10.0f);
 		}
@@ -250,7 +250,7 @@ void Enemy::Jump(float xAccel, float yAccel)
 	jumpLocation.y = position.y;
 	xVel = GetDirection() == Direction::Right? -xAccel: xAccel;
 	yVel = -yAccel;
-	jumpState = JS_Jumped;
+	jumpState = JumpState::Jumped;
 }
 
 
@@ -258,14 +258,14 @@ void Enemy::OnKnockDown()
 {
 	//Jump start..
 	//Shoot up (yVel acceleration)...
-	if(jumpState == JS_Jumped)
+	if(jumpState == JumpState::Jumped)
 	{
 		yVel += Gravity/(float)JumpHeight;
 		if(position.y <= jumpLocation.y - JumpHeight) 
-			jumpState = JS_Landing;
+			jumpState = JumpState::Landing;
 	}
 	//Landing (in the air)..
-	else if(jumpState == JS_Landing)
+	else if(jumpState == JumpState::Landing)
 	{
 		//Not landed yet..
 		if(position.y < jumpLocation.y)
@@ -276,7 +276,7 @@ void Enemy::OnKnockDown()
 		//Landed. On the ground now...
 		else 
 		{
-			jumpState = JS_Ground;
+			jumpState = JumpState::Ground;
 			xVel = 0, yVel = 0;
 			position.y = jumpLocation.y;
 			current->SetCurrentFrame(1);
@@ -284,7 +284,7 @@ void Enemy::OnKnockDown()
 		}
 	}
 	//On-the-ground logic...
-	else if(jumpState == JS_Ground)
+	else if(jumpState == JumpState::Ground)
 	{
 		//Getting up...
 		if(GetHealth() > 0)
@@ -304,7 +304,7 @@ void Enemy::OnKnockDown()
 				//full up.. go to idle..
 				if(SDL_GetTicks() > recoveryTimer) {
 					Stop();
-					state = ES_Idle;
+					state = EnemyState::Idle;
 					recoveryTimer = 0;
 				}
 			}
@@ -312,7 +312,7 @@ void Enemy::OnKnockDown()
 		//Enemy is dead.. 
 		else
 		{
-			state = ES_Dead;
+			state = EnemyState::Dead;
 			MIXER.Play(Mixer::SE_DragonRoar);
 			auto it = find(GAME.enemies.begin(), GAME.enemies.end(), this);
 			logPrintf("%s[%x] is dead", GetName().c_str(), (unsigned int)*it);
@@ -356,7 +356,7 @@ void Enemy::OnPatrol()
 		if(distanceToPlayer <= vision) {
 			if(__WHEEL.TakeAChance()) /*50-50 chance*/ {
 				//direct (straight-line path to player)
-				state = ES_Chasing; 
+				state = EnemyState::Chasing; 
 			}
 			else{
 				//Alternative (u-turn) path to player
@@ -380,7 +380,7 @@ void Enemy::OnChase()
 	float distX = position.x - GAME.player->Position().x;
 	float distY = position.bottom() - (GAME.player->Position().bottom() - 10);
 
-	if(GAME.player->GetState() != Player::PS_Jumping) {
+	if(GAME.player->GetState() != PlayerState::Jumping) {
 		if(distY > MinDistY) yVel = -speedY;
 		else if(distY < -MinDistY) yVel = speedY;
 	}
@@ -427,7 +427,7 @@ void Enemy::OnChase()
 			Attack();
 		
 		if(GAME.player->IsDead()) {
-			state = ES_Patrolling;
+			state = EnemyState::Patrolling;
 			current = GetDirection() == Direction::Right? walkRight.get(): walkLeft.get();
 		}
 	}
@@ -437,7 +437,7 @@ void Enemy::OnChase()
 void Enemy::OnRecovery()
 {
 	Stop();
-	state = ES_Idle;
+	state = EnemyState::Idle;
 	recoveryTimer = 0;
 	hitCount = 0;
 }
@@ -447,7 +447,7 @@ void Enemy::OnAttack()
 {
 	if(SDL_GetTicks() - attackTimer > AttackTimeOut)
 	{
-		state = ES_Idle;
+		state = EnemyState::Idle;
 		attackTimer = 0;
 	}
 }
@@ -455,7 +455,7 @@ void Enemy::OnAttack()
 
 void Enemy::Attack()
 {
-	state = ES_Attacking;
+	state = EnemyState::Attacking;
 	attackTimer = SDL_GetTicks();
 	current = GetDirection() == Direction::Left? attackLeft.get(): attackRight.get();
 	current->Rewind();
@@ -474,9 +474,9 @@ void Enemy::OnIdle()
 	{
 		if(SDL_GetTicks() >= idleTimer)
 		{
-			state = ES_Chasing;
+			state = EnemyState::Chasing;
 			Enemy* neighbour = GameObject::GetNearestNeighbour(GAME.enemies); 
-			if(neighbour && neighbour->state == ES_Chasing)
+			if(neighbour && neighbour->state == EnemyState::Chasing)
 			{
 				VisitAltPlayer();
 			}
@@ -634,7 +634,7 @@ void Joker::OnStickSprite(const Sprite& sender, const Sprite::FramePlayedEventAr
 
 void Joker::Propagate()
 {
-	if(state == ES_Attacking) 
+	if(state == EnemyState::Attacking) 
 	{
 		if(GAME.player->Position().x < position.x)
 			current->Position().x = position.x - 60;

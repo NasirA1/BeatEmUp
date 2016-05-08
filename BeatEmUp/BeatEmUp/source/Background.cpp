@@ -54,9 +54,14 @@ Background::~Background()
 BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer& renderer,
 	int _screenWidth, int _screenHeight, float xVel)
 	: GameObject("", GT_Background, 1, Direction::Left)
+	, texture(nullptr)
 {
 	SDLSurfaceFromFile fileSurface(filename);
-	texture = SDL_CreateTextureFromSurface(&renderer, fileSurface.surface);
+
+	texture = unique_ptr2<SDL_Texture>(
+		SDL_CreateTextureFromSurface(&renderer, fileSurface.surface),
+		[](auto p) { SDL_DestroyTexture(p); }
+		);
 
 	if( !texture )
 	{
@@ -77,12 +82,6 @@ BackgroundLayer::BackgroundLayer(const std::string& filename, SDL_Renderer& rend
 
 BackgroundLayer::~BackgroundLayer()
 {
-	if(texture)
-	{
-		SDL_DestroyTexture(texture);
-		texture = nullptr;
-	}
-
 	logPrintf("BackgroundLayer released");
 }
 
@@ -130,6 +129,6 @@ void BackgroundLayer::Draw(SDL_Renderer& renderer) const
 	util::Convert(pos1, nPos1);
 	util::Convert(pos2, nPos2);
 	
-	SDL_RenderCopy( &renderer, texture, nullptr, &nPos1 );
-	SDL_RenderCopy( &renderer, texture, nullptr, &nPos2 );
+	SDL_RenderCopy( &renderer, texture.get(), nullptr, &nPos1 );
+	SDL_RenderCopy( &renderer, texture.get(), nullptr, &nPos2 );
 }

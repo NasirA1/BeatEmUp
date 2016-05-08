@@ -245,8 +245,8 @@ void Game::Update()
 	if (downDown) player->GoDown();
 	if (rightDown) player->GoRight();
 	if (leftDown) player->GoLeft();
-	bg->SetScroll(player->GetState() == Player::PS_Walking
-		|| player->GetState() == Player::PS_Jumping);
+	bg->SetScroll(player->GetState() == PlayerState::Walking
+		|| player->GetState() == PlayerState::Jumping);
 
 	//text
 	std::stringstream ss;

@@ -3,6 +3,7 @@
 #include <string>
 #include <memory>
 #include <vector>
+#include "Util.h"
 
 
 class BackgroundLayer : public GameObject
@@ -16,7 +17,7 @@ public:
 
 
 private:
-	SDL_Texture* texture;
+	unique_ptr2<SDL_Texture> texture;
 	RectF pos1;
 	RectF pos2;
 	int screenWidth;

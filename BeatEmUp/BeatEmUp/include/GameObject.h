@@ -10,10 +10,21 @@
 using namespace std;
 using namespace util;
 
+
+
 enum class Direction
 {
 	Left, Right, Up, Down
 };
+
+
+enum class JumpState
+{
+	Ground,
+	Jumped,
+	Landing
+};
+
 
 
 class Game;
@@ -74,25 +85,23 @@ public:
 
 
 	//Rectangle-based collision detection
-	bool CollidedWith(const GameObject& other, const int penThresholdX = 25
-		, const int penThresholdY = 25, const int penThresholdZ = 25) const;
-	bool CollidedWith(const RectF& other, const int penThresholdX = 25
-		, const int penThresholdY = 25, const int penThresholdZ = 25) const;
+	bool CollidedWith(const GameObject& other, const int penThresholdX = 25, const int penThresholdY = 25, const int penThresholdZ = 25) const;
+	bool CollidedWith(const RectF& other, const int penThresholdX = 25, const int penThresholdY = 25, const int penThresholdZ = 25) const;
 	void AdjustZToGameDepth();
 
 	
-	template<class T>
-	T* GetNearestNeighbour(const vector<T*>& gameObjects) const
+	template<class GameObjectType>
+	GameObjectType* GetNearestNeighbour(const vector<GameObjectType*>& neighbours) const
 	{
-		for(unsigned int i = 0; i < gameObjects.size(); ++i)
+		for(const auto neighbour : neighbours)
 		{
-			if( gameObjects[i] != this &&
-				(position.right() >= gameObjects[i]->position.left()) &&
-				(position.left() <= gameObjects[i]->position.right())
+			if( neighbour != this &&
+				(position.right() >= neighbour->position.left()) &&
+				(position.left() <= neighbour->position.right())
 			)
 			{
-				logPrintf("%s: %s in range", this->GetName().c_str(), gameObjects[i]->GetName().c_str());
-				return gameObjects[i];
+				logPrintf("%s: %s in range", this->GetName().c_str(), neighbour->GetName().c_str());
+				return neighbour;
 			}
 		}
 

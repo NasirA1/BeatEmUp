@@ -24,8 +24,8 @@ Player::Player(SDL_Renderer& renderer)
 	,	fallLeft(Sprite::FromFile("resources/baddude_fallleft.png", renderer, 133, 121, 1, 0))
 	,	fallRight(Sprite::FromFile("resources/baddude_fallright.png", renderer, 133, 121, 1, 0))
 	, current(nullptr)
-	, jumpState(JS_Ground)
-	, pState(PS_Idle)
+	, jumpState(JumpState::Ground)
+	, pState(PlayerState::Idle)
 	, punchTimeout(0)
 	, kickTimeout(0)
 	, hitCount(0)
@@ -63,9 +63,8 @@ void Player::OnPunchSprite(const Sprite& sender, const Sprite::FramePlayedEventA
 	if(e.FrameIndex == 1 || e.FrameIndex == 4 || e.FrameIndex == 8)
 	{
 		bool hit = false;
-		for(unsigned int i = 0; i < GAME.enemies.size(); ++i)
+		for(const auto enemy : GAME.enemies)
 		{
-			Enemy* const enemy = GAME.enemies[i];
 			if(enemy->IsAttackable() && CollidedWith(*enemy) && GetDirection() != enemy->GetDirection())
 			{
 				enemy->OnHit();
@@ -84,9 +83,8 @@ void Player::OnKickSprite(const Sprite& sender, const Sprite::FramePlayedEventAr
 	if(e.FrameIndex == 1)
 	{
 		bool hit = false;
-		for(unsigned int i = 0; i < GAME.enemies.size(); ++i)
+		for(const auto enemy : GAME.enemies)
 		{
-			Enemy* const enemy = GAME.enemies[i];
 			if(enemy->IsAttackable() && CollidedWith(*enemy) && GetDirection() != enemy->GetDirection())
 			{
 				enemy->OnHit();
@@ -106,7 +104,7 @@ void Player::KnockedDown()
 	yVel = xVel = 0.0f;
 	current = GetDirection() == Direction::Left? fallLeft.get(): fallRight.get();
 	current->SetCurrentFrame(0);
-	pState = PS_KnockedDown;
+	pState = PlayerState::KnockedDown;
 	recoveryTimer = 0;
 	Jump(8.0f, 10.0f);
 }
@@ -114,11 +112,11 @@ void Player::KnockedDown()
 
 void Player::OnHit(Uint8 damage)
 {
-	if(pState != PS_KnockedDown && pState != PS_Dead)
+	if(pState != PlayerState::KnockedDown && pState != PlayerState::Dead)
 	{
 		Stop();
 		current = GetDirection() == Direction::Left? hitLeft.get(): hitRight.get();
-		pState = PS_Hit;
+		pState = PlayerState::Hit;
 		hitCount += damage;
 		SetHealth(GetHealth() - damage);
 
@@ -138,19 +136,19 @@ void Player::OnKnockDown()
 {
 	//Jump start..
 	//Shoot up (yVel acceleration)...
-	if(jumpState == JS_Jumped)
+	if(jumpState == JumpState::Jumped)
 	{
 		yVel += Gravity/(float)JumpHeight;
 		if(position.y <= jumpLocation.y - JumpHeight) 
-			jumpState = JS_Landing;
-		if(position.y <= jumpLocation.y) jumpState = JS_Landing;
+			jumpState = JumpState::Landing;
+		if(position.y <= jumpLocation.y) jumpState = JumpState::Landing;
 
 		if( (position.right() + xVel >= GAME.MoveBounds.right() - position.w)
 			|| (position.left() + xVel <= GAME.MoveBounds.x))
 				xVel = 0;
 	}
 	//Landing (in the air)..
-	else if(jumpState == JS_Landing)
+	else if(jumpState == JumpState::Landing)
 	{
 		//Not landed yet..
 		if(position.y < jumpLocation.y)
@@ -165,7 +163,7 @@ void Player::OnKnockDown()
 		//Landed. On the ground now...
 		else 
 		{
-			jumpState = JS_Ground;
+			jumpState = JumpState::Ground;
 			SetAngle(0.0);
 			xVel = 0, yVel = 0;
 			position.y = jumpLocation.y;
@@ -174,7 +172,7 @@ void Player::OnKnockDown()
 		}
 	}
 	//On-the-ground logic...
-	else if(jumpState == JS_Ground)
+	else if(jumpState == JumpState::Ground)
 	{
 		//Getting up...
 		if(GetHealth() > 0)
@@ -201,7 +199,7 @@ void Player::OnKnockDown()
 		//Player is dead..
 		else
 		{
-			pState = PS_Dead;
+			pState = PlayerState::Dead;
 			MIXER.Play(Mixer::SE_Grunt);
 		}
 	}
@@ -216,31 +214,31 @@ void Player::OnKnockDown()
 void Player::HandleJump()
 {
 	//Jump rotation...
-	if(jumpState == JS_Jumped || jumpState == JS_Landing) {
+	if(jumpState == JumpState::Jumped || jumpState == JumpState::Landing) {
 		SetAngle(GetAngle() + (GetDirection()==Direction::Right? 13: -13));
 	}
 	else {
 		SetAngle(0);
-		if(pState == PS_Jumping) {
-			Stop(); //jump complete set pState to PS_Idle
+		if(pState == PlayerState::Jumping) {
+			Stop(); //jump complete set pState to PlayerState::Idle
 		}
 	}
 
 	//Jump start..
 	//Shoot up (yVel acceleration)...
-	if(jumpState == JS_Jumped)
+	if(jumpState == JumpState::Jumped)
 	{
 		yVel += Gravity/(float)JumpHeight;
 		if(position.y > (jumpLocation.y - JumpHeight)){
 			Translate(false);
-			if(position.y <= jumpLocation.y) jumpState = JS_Landing;
+			if(position.y <= jumpLocation.y) jumpState = JumpState::Landing;
 		}
 		else{ 
-			jumpState = JS_Landing;
+			jumpState = JumpState::Landing;
 		}
 	}
 	//Landing (in the air)..
-	else if(jumpState == JS_Landing)
+	else if(jumpState == JumpState::Landing)
 	{
 		//Not landed yet..
 		if(position.y < jumpLocation.y)
@@ -252,7 +250,7 @@ void Player::HandleJump()
 		//On the ground now...
 		else 
 		{
-			jumpState = JS_Ground;
+			jumpState = JumpState::Ground;
 			xVel = 0, yVel = 0;
 			position.y = jumpLocation.y;
 			Translate(false);
@@ -264,17 +262,17 @@ void Player::HandleJump()
 void Player::Update()
 {
 	//Dead...
-	if(pState == PS_Dead) return;
+	if(pState == PlayerState::Dead) return;
 
 	//Knocked down.. get up or die...
-	if(pState == PS_KnockedDown)
+	if(pState == PlayerState::KnockedDown)
 	{
 		OnKnockDown();
 		return;
 	}
 
 	//Recovery (when hit)
-	if(pState == PS_Hit && SDL_GetTicks() > recoveryTimer)
+	if(pState == PlayerState::Hit && SDL_GetTicks() > recoveryTimer)
 	{
 		Stop();
 		recoveryTimer = 0;
@@ -282,19 +280,19 @@ void Player::Update()
 	}
 
 	//punching
-	if(pState == PS_Punching)
+	if(pState == PlayerState::Punching)
 	{
 		if(SDL_GetTicks() > punchTimeout) {
-			Stop(); //sets pState to PS_Idle
+			Stop(); //sets pState to PlayerState::Idle
 			punchTimeout = 0;
 		}
 	}
 
 	//kicking
-	if(pState == PS_Kicking)
+	if(pState == PlayerState::Kicking)
 	{
 		if(SDL_GetTicks() > kickTimeout) {
-			Stop(); //sets pState to PS_Idle
+			Stop(); //sets pState to PlayerState::Idle
 			kickTimeout = 0;
 		}
 	}
@@ -305,7 +303,7 @@ void Player::Update()
 	//Propagate to the underlying currently active sprite
 	//TODO: Sprite-specific positioning hack
 	//refactor to separate Propagate() function
-	if(pState == PS_Punching || pState == PS_Kicking){
+	if(pState == PlayerState::Punching || pState == PlayerState::Kicking){
 		current->Position().x = position.x - 10;
 		current->Position().y = position.y - 10;
 	}
@@ -344,10 +342,10 @@ void Player::Jump()
 	if(IsDown()) return;
 
 	//Can only jump whilst on the ground
-	if(jumpState != JS_Ground) return;
+	if(jumpState != JumpState::Ground) return;
 	
 	current = GetDirection() == Direction::Right? idleRight.get(): idleLeft.get();
-	pState = PS_Jumping;
+	pState = PlayerState::Jumping;
 	Jump(-1.0f, 25.0f);
 }
 
@@ -358,7 +356,7 @@ void Player::Jump(float xAccel, float yAccel)
 	jumpLocation.y = position.y;
 	xVel = GetDirection() == Direction::Right? -xAccel: xAccel;
 	yVel = -yAccel;
-	jumpState = JS_Jumped;
+	jumpState = JumpState::Jumped;
 }
 
 
@@ -366,7 +364,7 @@ void Player::Punch()
 {
 	if(IsDown()) return;
 
-	if(pState == PS_Punching)
+	if(pState == PlayerState::Punching)
 	{
 		punchTimeout += 250;
 	}
@@ -376,7 +374,7 @@ void Player::Punch()
 		current->SetAnimation(true);
 		current->SetCurrentFrame(0);
 		punchTimeout = SDL_GetTicks() + 250;
-		pState = PS_Punching;
+		pState = PlayerState::Punching;
 	}
 }
 
@@ -388,13 +386,13 @@ void Player::Kick()
 	current = GetDirection() == Direction::Right? kickRight.get(): kickLeft.get();
 	current->SetAnimation(true);
 	kickTimeout = SDL_GetTicks() + 250;
-	pState = PS_Kicking;
+	pState = PlayerState::Kicking;
 }
 
 
 void Player::Stop()
 {
-	if(pState == PS_Dead){
+	if(pState == PlayerState::Dead){
 		return;
 	}
 
@@ -403,26 +401,26 @@ void Player::Stop()
 	xVel = yVel = 0;
 	current = GetDirection() == Direction::Right? idleRight.get(): idleLeft.get();
 	current->SetAnimation(true);
-	pState = PS_Idle;
+	pState = PlayerState::Idle;
 }
 
 
 bool Player::IsDown() const
 {
 	return ( 
-		pState == PS_Dead ||
-		pState == PS_KnockedDown
+		pState == PlayerState::Dead ||
+		pState == PlayerState::KnockedDown
 	);
 }
 
 
 bool Player::CantMove() const
 {
-	return (jumpState != JS_Ground || 
-		pState == PS_Punching ||
-		pState == PS_Kicking ||
-		pState == PS_Hit ||
-		pState == PS_Jumping ||
+	return (jumpState != JumpState::Ground || 
+		pState == PlayerState::Punching ||
+		pState == PlayerState::Kicking ||
+		pState == PlayerState::Hit ||
+		pState == PlayerState::Jumping ||
 		IsDown()
 	);
 }
@@ -440,7 +438,7 @@ void Player::GoUp()
 		yVel = 0;
 	
 	Translate(true);
-	pState = PS_Walking;
+	pState = PlayerState::Walking;
 }
 
 
@@ -456,7 +454,7 @@ void Player::GoDown()
 		yVel = 0;
 	
 	Translate(true);        
-	pState = PS_Walking;
+	pState = PlayerState::Walking;
 }
 
 
@@ -473,7 +471,7 @@ void Player::GoRight()
 
 	SetDirection(Direction::Right);
 	Translate(true);
-	pState = PS_Walking;
+	pState = PlayerState::Walking;
 }
 
 
@@ -490,7 +488,7 @@ void Player::GoLeft()
 
 	SetDirection(Direction::Left);
 	Translate(true);
-	pState = PS_Walking;
+	pState = PlayerState::Walking;
 }
 
 
@@ -501,7 +499,7 @@ void Player::Translate(bool anim)
 	position.y += yVel;
 
 	//Jumping doesn't change z order
-	if(jumpState == JS_Ground)
+	if(jumpState == JumpState::Ground)
 	{
 		 AdjustZToGameDepth();
 	}

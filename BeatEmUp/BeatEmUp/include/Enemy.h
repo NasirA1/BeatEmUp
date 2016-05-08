@@ -27,6 +27,20 @@ private:
 
 
 
+enum class EnemyState
+{
+	Entry,
+	Idle,
+	Patrolling,
+	Visiting,
+	Chasing,
+	Attacking,
+	Hit,
+	KnockedDown,
+	Dead
+};
+
+
 class Enemy : public GameObject
 {
 public:
@@ -53,23 +67,11 @@ public:
 
 	void OnHit();
 
-	__forceinline bool IsDead() const { return state == ES_Dead; }
+	__forceinline bool IsDead() const { return state == EnemyState::Dead; }
 	__forceinline bool IsAttackable() const {
-		return state !=	ES_KnockedDown && state != ES_Dead;
+		return state !=	EnemyState::KnockedDown && state != EnemyState::Dead;
 	}
 	
-	enum EState
-	{
-		ES_Entry,
-		ES_Idle,
-		ES_Patrolling,
-		ES_Visiting,
-		ES_Chasing,
-		ES_Attacking,
-		ES_Hit,
-		ES_KnockedDown,
-		ES_Dead
-	};
 
 	//Chasing - alternate path info
 	queue<SDL_Point> visitPath;
@@ -92,7 +94,7 @@ private:
 	void OnChase();
 	void OnAttack();
 	void OnIdle();
-	void OnVisit(EState destState);
+	void OnVisit(EnemyState destState);
 
 protected:
 	Sprite::ptr idleRight;
@@ -107,7 +109,7 @@ protected:
 	Sprite::ptr attackLeft;
 	Sprite* current;
 
-	EState state;
+	EnemyState state;
 	Uint32 attackTimer;
 	Uint32 idleTimer;
 	Uint32 recoveryTimer;
@@ -122,14 +124,6 @@ protected:
 
 	const float MinDistX;
 	const float MinDistY;
-
-	//jumping
-	enum JumpState
-	{
-		JS_Ground,
-		JS_Jumped,
-		JS_Landing
-	};
 
 	JumpState jumpState;
 	VectF jumpLocation;
