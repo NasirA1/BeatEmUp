@@ -305,6 +305,15 @@ void Enemy::OnKnockDown()
 				if(SDL_GetTicks() > recoveryTimer) {
 					Stop();
 					state = EnemyState::Idle;
+					//////Quick fix for 'Andore/Axl mis-positioned during getting up when facing right' bug
+					//Readjusts sprite position so it appears right
+					//Proper fix would be to a better graphics job of readjusting the actual sprite graphics positions and then
+					//taking the below code out. But it was easier for me just to add the below rather than amend the graphics
+					//TODO refactor
+					if (GetDirection() == Direction::Right) {
+						position.x = position.x + 70;
+					}
+					//////End-of-quick-hack
 					recoveryTimer = 0;
 				}
 			}
