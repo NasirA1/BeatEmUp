@@ -125,7 +125,6 @@ void Game::ProcessEvent(const SDL_Event& e)
 }
 
 
-
 bool Game::LevelComplete() const
 {
 	//all enemies destroyed!
