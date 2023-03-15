@@ -3,6 +3,9 @@
 #include <algorithm>
 #include "Mixer.h"
 
+// This is required to get it linking in VS2019
+extern "C" { FILE __iob_func[3] = { *stdin, *stdout, *stderr }; }
+
 
 Game::Game() 
 	: SDLApp(SCREEN_WIDTH
