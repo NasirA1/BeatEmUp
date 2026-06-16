@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="Birgit/Birgit.vcxproj" Id="25b69bfa-3c88-4058-ac81-763660f534ce" />
+</Solution>

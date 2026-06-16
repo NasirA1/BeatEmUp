@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="gol/gol.vcxproj" Id="646af92f-4cdb-4074-adf3-65ffd2659b80" />
+</Solution>
