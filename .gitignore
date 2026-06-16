@@ -1,0 +1,57 @@
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Visual Studio databases
+*.VC.db
+*.VC.opendb
+*.db
+*.opendb
+
+# IntelliSense / precompiled headers
+ipch/
+*.ipch
+
+# Build outputs
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+# Intermediate files
+*.obj
+*.iobj
+*.pch
+*.idb
+*.ilk
+*.tlog
+
+# Debug symbols
+*.pdb
+
+# Executables
+*.exe
+
+# Logs
+*.log
+
+# Visual Studio generated files
+*.vsidx
+DocumentLayout.json
+DocumentLayout.backup.json
+
+# NuGet packages
+packages/
+
+# CMake (if used later)
+out/
+build/
+cmake-build-*/
+
+# Temporary files
+*.tmp
+*.cache
+*.bak
