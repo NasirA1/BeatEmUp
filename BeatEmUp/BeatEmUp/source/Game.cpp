@@ -178,6 +178,8 @@ bool Game::LoadNextLevel()
 			world->AddGameObject<Rock>("resources/rock.png", renderer());
 
 			//Add some enemies
+#if 1
+			enemies.push_back(world->AddGameObject<Joker>(renderer(), 800.0f, 400.0f));
 			enemies.push_back(world->AddGameObject<Andore>(renderer(), 1200.0f, 450.0f));
 			//enemies.push_back(world->AddGameObject<Andore>(renderer(), 1200.0f, 450.0f));
 			enemies.push_back(world->AddGameObject<Andore>(renderer(), 2400.0f, 450.0f));
@@ -186,7 +188,7 @@ bool Game::LoadNextLevel()
 			enemies.push_back(world->AddGameObject<Andore>(renderer(), 700.0f, 380.0f));
 			enemies.push_back(world->AddGameObject<Axl>(renderer(), -200.0f, 400.0f));
 			//enemies.push_back(world->AddGameObject<Joker>(renderer(), 1100.0f, 400.0f));
-			enemies.push_back(world->AddGameObject<Axl>(renderer(), 500.0f, 400.0f));
+#endif
 
 			//Add non-owned objects so then can be drawn
 			world->AddGameObject(*tbFps);
