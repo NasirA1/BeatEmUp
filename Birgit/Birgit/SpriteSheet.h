@@ -5,7 +5,7 @@
 class SpriteSheet
 {
 public:
-    SpriteSheet(const sf::Texture& texture, std::size_t tileWidth, std::size_t tileHeight);
+    SpriteSheet(const sf::Texture& texture, std::size_t tileWidth, std::size_t tileHeight, bool playReverse = false);
     void reset(const sf::Vector2f pos);
     void update(float dt);
     void draw(sf::RenderWindow& window);
@@ -25,5 +25,6 @@ private:
     size_t m_spriteCount;
     int m_spriteCol;
     int m_spriteRow;
+    bool m_playReverse;
     float m_animationTimer = 0.f;
 };

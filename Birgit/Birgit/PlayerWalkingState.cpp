@@ -8,7 +8,7 @@
 
 PlayerWalkingState::PlayerWalkingState()
     : m_spriteRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlWalkRight_PNG), tileWidth, tileHeight)
-    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlWalkLeft_PNG), tileWidth, tileHeight)
+    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlWalkLeft_PNG), tileWidth, tileHeight, true)
     , m_spriteCurrent(nullptr)
 {
 }

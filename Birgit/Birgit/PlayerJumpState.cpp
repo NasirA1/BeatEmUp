@@ -10,7 +10,7 @@
 
 PlayerJumpState::PlayerJumpState()
     : m_spriteRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlJumpRight_PNG), tileWidth, tileHeight)
-    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlJumpLeft_PNG), tileWidth, tileHeight)
+    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlJumpLeft_PNG), tileWidth, tileHeight, true)
     , m_spriteCurrent(nullptr)
     , m_groundPos {}
 {

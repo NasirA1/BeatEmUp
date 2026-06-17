@@ -10,7 +10,7 @@
 
 PlayerIdleState::PlayerIdleState()
     : m_spriteRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlIdleRight_PNG), tileWidth, tileHeight)
-    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlIdleLeft_PNG), tileWidth, tileHeight)
+    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlIdleLeft_PNG), tileWidth, tileHeight, true)
     , m_spriteCurrent(nullptr)
 {
 }
