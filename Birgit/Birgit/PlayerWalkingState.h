@@ -13,6 +13,7 @@ public:
     void exit(Player& owner) override;
     void update(Player& owner, float dt) override;
     void draw(Player& owner, sf::RenderWindow& window) override;
+    PlayerStateId stateId() const override;
 
 private:
     void setDirection(HorizontalDirection dir);
@@ -20,8 +21,8 @@ private:
     void applyFriction(Player& owner, float dt);
     void clampVelocity(Player& owner);
 
-    SpriteSheet m_sprite_left;
-    SpriteSheet m_sprite_right;
-    SpriteSheet* m_sprite_current;
+    SpriteSheet m_spriteLeft;
+    SpriteSheet m_spriteRight;
+    SpriteSheet* m_spriteCurrent;
 };
 

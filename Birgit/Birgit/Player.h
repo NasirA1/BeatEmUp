@@ -2,6 +2,12 @@
 #include "Core.h"
 #include <SFML/Graphics.hpp>
 
+enum class PlayerStateId
+{
+    Idle,
+    Walking,
+    Jumping
+};
 
 class Player
 {
@@ -12,14 +18,16 @@ public:
     void draw(sf::RenderWindow& window);
     sf::Vector2f position() const;
     void setPosition(sf::Vector2f pos);
+    PlayerStateId currentState() const;
 
 private:
-    StateMachine<Player> m_stateMachine;
+    StateMachine<Player, PlayerStateId> m_stateMachine;
     sf::Vector2f m_pos;
     HorizontalDirection m_direction;
     sf::Vector2f m_vel;
 
     friend class PlayerIdleState;
     friend class PlayerWalkingState;
+    friend class PlayerJumpState;
 };
 

@@ -1,29 +1,30 @@
+#include "PlayerIdleState.h"
+
 #include "Player.h"
 #include "ResourceManager.h"
 #include "PlayerWalkingState.h"
-#include "PlayerIdleState.h"
 #include "Constants.h"
 
 #include <iostream>
 
 
 PlayerIdleState::PlayerIdleState()
-    : m_sprite_right(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlIdleRight_PNG), tileWidth, tileHeight)
-    , m_sprite_left(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlIdleLeft_PNG), tileWidth, tileHeight)
-    , m_sprite_current(nullptr)
+    : m_spriteRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlIdleRight_PNG), tileWidth, tileHeight)
+    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlIdleLeft_PNG), tileWidth, tileHeight)
+    , m_spriteCurrent(nullptr)
 {
 }
 
 void PlayerIdleState::setDirection(HorizontalDirection dir)
 {
-    m_sprite_current = dir == HorizontalDirection::Right ? &m_sprite_right : &m_sprite_left;
+    m_spriteCurrent = dir == HorizontalDirection::Right ? &m_spriteRight : &m_spriteLeft;
 }
 
 void PlayerIdleState::enter(Player& owner)
 {
     std::cout << "PlayerIdleState::enter\n";
-    m_sprite_right.reset(owner.m_pos);
-    m_sprite_left.reset(owner.m_pos);
+    m_spriteRight.reset(owner.m_pos);
+    m_spriteLeft.reset(owner.m_pos);
     setDirection(owner.m_direction);
 }
 
@@ -34,7 +35,7 @@ void PlayerIdleState::exit(Player& owner)
 
 void PlayerIdleState::update(Player& owner, float dt)
 {
-    m_sprite_current->update(dt);
+    m_spriteCurrent->update(dt);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) ||
         sf::Keyboard::isKeyPressed(sf::Keyboard::Right) ||
@@ -47,5 +48,10 @@ void PlayerIdleState::update(Player& owner, float dt)
 
 void PlayerIdleState::draw(Player& owner, sf::RenderWindow& window)
 {
-    m_sprite_current->draw(window);
+    m_spriteCurrent->draw(window);
+}
+
+PlayerStateId PlayerIdleState::stateId() const
+{
+    return PlayerStateId::Idle;
 }

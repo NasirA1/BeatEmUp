@@ -7,22 +7,22 @@
 #include <iostream>
 
 PlayerWalkingState::PlayerWalkingState()
-    : m_sprite_right(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlJumpRight_PNG), tileWidth, tileHeight)
-    , m_sprite_left(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlJumpLeft_PNG), tileWidth, tileHeight)
-    , m_sprite_current(nullptr)
+    : m_spriteRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlWalkRight_PNG), tileWidth, tileHeight)
+    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlWalkLeft_PNG), tileWidth, tileHeight)
+    , m_spriteCurrent(nullptr)
 {
 }
 
 void PlayerWalkingState::setDirection(HorizontalDirection dir)
 {
-    m_sprite_current = dir == HorizontalDirection::Right ? &m_sprite_right : &m_sprite_left;
+    m_spriteCurrent = dir == HorizontalDirection::Right ? &m_spriteRight : &m_spriteLeft;
 }
 
 void PlayerWalkingState::enter(Player& owner)
 {
     std::cout << "PlayerWalkingState::enter\n";
-    m_sprite_right.reset(owner.m_pos);
-    m_sprite_left.reset(owner.m_pos);
+    m_spriteRight.reset(owner.m_pos);
+    m_spriteLeft.reset(owner.m_pos);
     setDirection(owner.m_direction);
 }
 
@@ -44,15 +44,20 @@ void PlayerWalkingState::update(Player& owner, float dt)
     }
     else
     {
-        m_sprite_current->update(dt);
+        m_spriteCurrent->update(dt);
         owner.m_pos += owner.m_vel * dt;
-        m_sprite_current->m_sprite.setPosition(owner.m_pos);
+        m_spriteCurrent->sprite().setPosition(owner.m_pos);
     }
 }
 
 void PlayerWalkingState::draw(Player& owner, sf::RenderWindow& window)
 {
-    m_sprite_current->draw(window);
+    m_spriteCurrent->draw(window);
+}
+
+PlayerStateId PlayerWalkingState::stateId() const
+{
+    return PlayerStateId::Walking;
 }
 
 void PlayerWalkingState::handleAcceleration(Player& owner, float dt)

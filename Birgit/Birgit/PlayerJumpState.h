@@ -2,13 +2,13 @@
 #include "Core.h"
 #include "SpriteSheet.h"
 
-class PlayerIdleState : public PlayerState
+class PlayerJumpState : public PlayerState
 {
 public:
-    constexpr static size_t tileWidth = 418;
-    constexpr static size_t tileHeight = 456;
+    constexpr static size_t tileWidth = 416u;
+    constexpr static size_t tileHeight = 454u;
 
-    PlayerIdleState();
+    PlayerJumpState();
     void enter(Player& owner) override;
     void exit(Player& owner) override;
     void update(Player& owner, float dt) override;
@@ -21,4 +21,5 @@ private:
     SpriteSheet m_spriteLeft;
     SpriteSheet m_spriteRight;
     SpriteSheet* m_spriteCurrent;
+    sf::Vector2f m_groundPos;
 };

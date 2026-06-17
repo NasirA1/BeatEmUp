@@ -39,3 +39,8 @@ void Player::setPosition(sf::Vector2f pos)
 {
     m_pos = pos;
 }
+
+PlayerStateId Player::currentState() const
+{
+    return m_stateMachine.currentState().stateId();
+}

@@ -132,6 +132,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
+    <ClCompile Include="PlayerJumpState.cpp" />
     <ClCompile Include="PlayerWalkingState.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="SpriteSheet.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerIdleState.h" />
+    <ClInclude Include="PlayerJumpState.h" />
     <ClInclude Include="PlayerWalkingState.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SpriteSheet.h" />

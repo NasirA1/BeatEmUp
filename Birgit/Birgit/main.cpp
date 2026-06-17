@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include "Constants.h"
+#include "PlayerJumpState.h"
 
 constexpr size_t SCREEN_WIDTH = 1280;
 constexpr size_t SCREEN_HEIGHT = 736;
@@ -56,16 +57,19 @@ int main(int argc, char* argv[])
 #endif
 #pragma endregion
 
-    auto clampCameraToWorld = [WORLD_WIDTH, WORLD_HEIGHT](sf::View& camera, sf::Vector2f target)
+    auto clampCameraToWorld = [WORLD_WIDTH, WORLD_HEIGHT, &player](sf::View& camera, sf::Vector2f target)
         {
             const float halfW = camera.getSize().x / 2.f;
             const float halfH = camera.getSize().y / 2.f;
 
             target.x = std::clamp(target.x, halfW, static_cast<float>(WORLD_WIDTH) - halfW);
-            target.y = std::clamp(target.y, halfH, static_cast<float>(WORLD_HEIGHT) - halfH);
-
             target.x = std::round(target.x);
-            target.y = std::round(target.y);
+
+            if (player.currentState() != PlayerStateId::Jumping)
+            {
+                target.y = std::clamp(target.y, halfH, static_cast<float>(WORLD_HEIGHT) - halfH);
+                target.y = std::round(target.y);
+            }
 
             camera.setCenter(target);
         };
@@ -93,6 +97,10 @@ int main(int argc, char* argv[])
 #endif
 #pragma endregion
                 }
+                if (event.key.code == sf::Keyboard::Space)
+                {
+                    player.changeState(std::make_unique<PlayerJumpState>());
+                }
             }
         }
 
@@ -113,12 +121,12 @@ int main(int argc, char* argv[])
         feet.y += 50;
         auto [col, row] = map.tileCoordsAt(feet);
         int tileId = map.tileIdAt(feet);
-        std::cout
-            << "Tile=(" << col << "," << row << ") "
-            << "TileId=" << tileId
-            << "Layer=" << map.layerNameAt(feet)
-            << "      \r";
-        std::cout.flush();
+        //std::cout
+        //    << "Tile=(" << col << "," << row << ") "
+        //    << "TileId=" << tileId
+        //    << "Layer=" << map.layerNameAt(feet)
+        //    << "      \r";
+        //std::cout.flush();
 #endif
 #pragma endregion
 

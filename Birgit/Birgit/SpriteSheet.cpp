@@ -1,10 +1,12 @@
 #include "SpriteSheet.h"
 #include <SFML/Graphics.hpp>
+#include <iostream>
 
 SpriteSheet::SpriteSheet(const sf::Texture& texture, size_t tileWidth, size_t tileHeight)
     : m_sprite(texture)
     , m_tileWidth(tileWidth)
     , m_tileHeight(tileHeight)
+    , m_spriteCount(m_sprite.getTexture()->getSize().x / m_tileWidth)
     , m_spriteCol(0)
     , m_spriteRow(0)
 {

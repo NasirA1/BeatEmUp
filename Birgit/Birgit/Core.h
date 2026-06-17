@@ -7,7 +7,7 @@ namespace sf
 	class RenderWindow;
 }
 
-template<typename Owner>
+template<typename Owner, typename StateId>
 class State
 {
 public:
@@ -16,14 +16,15 @@ public:
 	virtual void exit(Owner&) = 0;
 	virtual void update(Owner&, float dt) = 0;
 	virtual void draw(Owner&, sf::RenderWindow&) = 0;
+	virtual StateId stateId() const = 0;
 };
 
 
-template<typename Owner>
+template<typename Owner, typename StateId>
 class StateMachine
 {
 public:
-	using StateType = State<Owner>;
+	using StateType = State<Owner, StateId>;
 
 	void update(Owner& owner, float dt)
 	{
@@ -56,6 +57,11 @@ public:
 		}
 	}
 
+	StateType& currentState() const
+	{
+		return *m_currentState;
+	}
+
 private:
 	std::unique_ptr<StateType> m_currentState;
 };
@@ -80,7 +86,8 @@ protected:
 
 
 class Player;
-using PlayerState = State<Player>;
+enum class PlayerStateId;
+using PlayerState = State<Player, PlayerStateId>;
 
 enum class HorizontalDirection
 {
