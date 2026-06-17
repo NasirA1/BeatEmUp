@@ -128,6 +128,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="JsonTileMap.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
@@ -145,7 +146,15 @@
     <ClInclude Include="PlayerWalkingState.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="SpriteSheet.h" />
-    <ClInclude Include="TileMap.h" />
+    <ClInclude Include="JsonTileMap.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\sprites\cutegirl_idle_left.png" />
+    <Image Include="resources\sprites\cutegirl_idle_right.png" />
+    <Image Include="resources\sprites\cutegirl_walk_left.png" />
+    <Image Include="resources\sprites\cutegirl_walk_right.png" />
+    <Image Include="resources\tilesets\tsw_map.png" />
+    <Image Include="resources\tilesets\tsw_map_full.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

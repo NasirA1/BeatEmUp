@@ -10,8 +10,7 @@
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+      <UniqueIdentifier>{ab149a20-6824-4e04-b43b-0e7faf0af966}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +30,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlayerWalkingState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonTileMap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,8 +58,28 @@
     <ClInclude Include="PlayerWalkingState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TileMap.h">
+    <ClInclude Include="JsonTileMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\sprites\cutegirl_idle_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\sprites\cutegirl_idle_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\sprites\cutegirl_walk_left.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\sprites\cutegirl_walk_right.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\tilesets\tsw_map.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\tilesets\tsw_map_full.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

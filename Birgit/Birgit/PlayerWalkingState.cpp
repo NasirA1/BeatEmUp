@@ -6,8 +6,8 @@
 #include <iostream>
 
 PlayerWalkingState::PlayerWalkingState()
-    : m_sprite_right(ResourceManager::instance().getTexture("C:\\Users\\Nasir\\Desktop\\cutegirl_walk_right.png"), tileWidth, tileHeight)
-    , m_sprite_left(ResourceManager::instance().getTexture("C:\\Users\\Nasir\\Desktop\\cutegirl_walk_left.png"), tileWidth, tileHeight)
+    : m_sprite_right(ResourceManager::instance().getTexture("resources/sprites/cutegirl_walk_right.png"), tileWidth, tileHeight)
+    , m_sprite_left(ResourceManager::instance().getTexture("resources/sprites/cutegirl_walk_left.png"), tileWidth, tileHeight)
     , m_sprite_current(nullptr)
 {
 }

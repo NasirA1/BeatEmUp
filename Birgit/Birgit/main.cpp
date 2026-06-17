@@ -1,15 +1,12 @@
-#include <iostream>
-#include <SFML/Graphics.hpp>
 #include "Player.h"
-#include "TileMap.h"
-
+#include "JsonTileMap.h"
+#include <SFML/Graphics.hpp>
 #include <cassert>
 #include <fstream>
-
+#include <iostream>
 
 constexpr size_t SCREEN_WIDTH = 1280;
 constexpr size_t SCREEN_HEIGHT = 736;
-
 
 int main(int argc, char* argv[])
 {
@@ -24,8 +21,7 @@ int main(int argc, char* argv[])
     sf::Clock clock;
 
     JsonTileMap map;
-    if (!map.load("C:\\Users\\Nasir\\Desktop\\Tiny_Swords\\map.json", 
-        "C:\\Users\\Nasir\\Desktop\\Tiny_Swords\\spritesheet.png"))
+    if (!map.load("resources/tilesets/tsw_map.json", "resources/tilesets/tsw_map.png"))
     {
         return 1;
     }
@@ -37,6 +33,8 @@ int main(int argc, char* argv[])
     camera.setCenter({ SCREEN_WIDTH / 2.f, SCREEN_HEIGHT / 2.f });
     window.setView(camera);
 
+    #pragma region DEBUG
+#ifdef _DEBUG
     sf::RectangleShape tileHighlight;
     tileHighlight.setSize({
         static_cast<float>(map.tileSize()),
@@ -52,6 +50,8 @@ int main(int argc, char* argv[])
         return 1;
     }
     bool showDebugGrid = false;
+#endif
+#pragma endregion
 
     auto clampCameraToWorld = [WORLD_WIDTH, WORLD_HEIGHT](sf::View& camera, sf::Vector2f target)
         {
@@ -84,13 +84,19 @@ int main(int argc, char* argv[])
                 }
                 if (event.key.code == sf::Keyboard::F3)
                 {
+                    #pragma region DEBUG
+#ifdef _DEBUG
                     showDebugGrid = !showDebugGrid;
+#endif
+#pragma endregion
                 }
             }
         }
 
         sf::Vector2f oldPos = player.position();
         player.update(dt);
+
+        // Bounds handling
         auto feet = player.position();
         feet.y += 50;
         if (map.isBlockedAt(feet))
@@ -98,6 +104,8 @@ int main(int argc, char* argv[])
             player.setPosition(oldPos);
         }
 
+        #pragma region DEBUG
+#ifdef _DEBUG
         feet = player.position();
         feet.y += 50;
         auto [col, row] = map.tileCoordsAt(feet);
@@ -107,17 +115,20 @@ int main(int argc, char* argv[])
             << "TileId=" << tileId
             << "Layer=" << map.layerNameAt(feet)
             << "      \r";
-
         std::cout.flush();
+#endif
+#pragma endregion
 
         clampCameraToWorld(camera, player.position());
         window.setView(camera);
         window.clear();
         window.draw(map);
         
+        #pragma region DEBUG
+#ifdef _DEBUG
         if (showDebugGrid)
         {
-            drawTileDebugOverlay(window, map, camera, debugFont);
+            Debug::drawTileDebugOverlay(window, map, camera, debugFont);
             tileHighlight.setPosition({
                 static_cast<float>(col * map.tileSize()),
                 static_cast<float>(row * map.tileSize())
@@ -127,7 +138,9 @@ int main(int argc, char* argv[])
                 window.draw(tileHighlight);
             }
         }
-        
+#endif
+#pragma endregion
+
         player.draw(window);
 
         window.display();
