@@ -58,21 +58,17 @@ int main(int argc, char* argv[])
 #pragma endregion
 
     auto clampCameraToWorld = [WORLD_WIDTH, WORLD_HEIGHT, &player](sf::View& camera, sf::Vector2f target)
-        {
-            const float halfW = camera.getSize().x / 2.f;
-            const float halfH = camera.getSize().y / 2.f;
+    {
+        const float halfW = camera.getSize().x / 2.f;
+        const float halfH = camera.getSize().y / 2.f;
 
-            target.x = std::clamp(target.x, halfW, static_cast<float>(WORLD_WIDTH) - halfW);
-            target.x = std::round(target.x);
+        target.x = std::clamp(target.x, halfW, static_cast<float>(WORLD_WIDTH) - halfW);
+        target.x = std::round(target.x);
+        target.y = std::clamp(target.y, halfH, static_cast<float>(WORLD_HEIGHT) - halfH);
+        target.y = std::round(target.y);
 
-            if (player.currentState() != PlayerStateId::Jumping)
-            {
-                target.y = std::clamp(target.y, halfH, static_cast<float>(WORLD_HEIGHT) - halfH);
-                target.y = std::round(target.y);
-            }
-
-            camera.setCenter(target);
-        };
+        camera.setCenter(target);
+    };
 
     while (window.isOpen())
     {

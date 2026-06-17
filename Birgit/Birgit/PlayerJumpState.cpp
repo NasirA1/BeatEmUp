@@ -42,7 +42,7 @@ void PlayerJumpState::update(Player& owner, float dt)
     {
         setDirection(HorizontalDirection::Left);
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         setDirection(HorizontalDirection::Right);
     }
