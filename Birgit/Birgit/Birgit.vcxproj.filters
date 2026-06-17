@@ -90,5 +90,11 @@
     <Image Include="resources\tilesets\tsw_map_full.png">
       <Filter>Resource Files\Tilesets</Filter>
     </Image>
+    <Image Include="resources\sprites\cutegirl_jump_left.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="resources\sprites\cutegirl_jump_right.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
   </ItemGroup>
 </Project>
