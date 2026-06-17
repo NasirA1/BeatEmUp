@@ -2,13 +2,14 @@
 #include "ResourceManager.h"
 #include "PlayerWalkingState.h"
 #include "PlayerIdleState.h"
+#include "Constants.h"
 
 #include <iostream>
 
 
 PlayerIdleState::PlayerIdleState()
-    : m_sprite_right(ResourceManager::instance().getTexture("resources/sprites/cutegirl_idle_right.png"), tileWidth, tileHeight)
-    , m_sprite_left(ResourceManager::instance().getTexture("resources/sprites/cutegirl_idle_left.png"), tileWidth, tileHeight)
+    : m_sprite_right(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlIdleRight_PNG), tileWidth, tileHeight)
+    , m_sprite_left(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlIdleLeft_PNG), tileWidth, tileHeight)
     , m_sprite_current(nullptr)
 {
 }

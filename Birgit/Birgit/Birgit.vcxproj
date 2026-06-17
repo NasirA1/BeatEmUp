@@ -140,6 +140,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerIdleState.h" />

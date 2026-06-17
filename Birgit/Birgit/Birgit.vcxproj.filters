@@ -12,6 +12,12 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{ab149a20-6824-4e04-b43b-0e7faf0af966}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\Tilesets">
+      <UniqueIdentifier>{f3c7382d-7b92-48c1-a345-ab85c8dc5b3b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Sprites">
+      <UniqueIdentifier>{24065756-c519-4642-a6ed-597f46329a1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -61,25 +67,28 @@
     <ClInclude Include="JsonTileMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\sprites\cutegirl_idle_left.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Sprites</Filter>
     </Image>
     <Image Include="resources\sprites\cutegirl_idle_right.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Sprites</Filter>
     </Image>
     <Image Include="resources\sprites\cutegirl_walk_left.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Sprites</Filter>
     </Image>
     <Image Include="resources\sprites\cutegirl_walk_right.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Sprites</Filter>
     </Image>
     <Image Include="resources\tilesets\tsw_map.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Tilesets</Filter>
     </Image>
     <Image Include="resources\tilesets\tsw_map_full.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Tilesets</Filter>
     </Image>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 #include <cassert>
 #include <fstream>
 #include <iostream>
+#include "Constants.h"
 
 constexpr size_t SCREEN_WIDTH = 1280;
 constexpr size_t SCREEN_HEIGHT = 736;
@@ -21,10 +22,11 @@ int main(int argc, char* argv[])
     sf::Clock clock;
 
     JsonTileMap map;
-    if (!map.load("resources/tilesets/tsw_map.json", "resources/tilesets/tsw_map.png"))
+    if (!map.load(Constants::Tileset::TinySwordsMap_JSON, Constants::Tileset::TinySwordsMap_PNG))
     {
         return 1;
     }
+
     const int WORLD_WIDTH = map.pixelWidth();
     const int WORLD_HEIGHT = map.pixelHeight();
 
