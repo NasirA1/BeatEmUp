@@ -112,12 +112,9 @@ int main(int argc, char* argv[])
         {
             player.setPosition(oldPos);
         }
-        if (map.layerNameAt(feet) == "Background")
+        if (map.layerNameAt(feet) == "Background" && player.currentState() != PlayerStateId::Dead)
         {
             player.changeState(std::make_unique<PlayerDeadState>());
-            std::cout << "GAME OVER!" << std::endl;
-            std::cout << "GAME OVER!" << std::endl;
-            std::cout << "GAME OVER!" << std::endl;
         }
 
         #pragma region DEBUG
