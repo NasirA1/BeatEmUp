@@ -21,5 +21,10 @@ private:
     SpriteSheet m_spriteLeft;
     SpriteSheet m_spriteRight;
     SpriteSheet* m_spriteCurrent;
+    
     sf::Vector2f m_groundPos;
+    float m_velocityY = 0.f;
+    static constexpr float JumpVelocity = -400.f;
+    static constexpr float Gravity = 1000.f;
+    static constexpr float JumpMoveSpeed = 100.f;
 };
