@@ -6,7 +6,8 @@ enum class PlayerStateId
 {
     Idle,
     Walking,
-    Jumping
+    Jumping,
+    Dead
 };
 
 class Player
@@ -29,5 +30,6 @@ private:
     friend class PlayerIdleState;
     friend class PlayerWalkingState;
     friend class PlayerJumpState;
+    friend class PlayerDeadState;
 };
 

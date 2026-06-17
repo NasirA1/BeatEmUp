@@ -6,6 +6,8 @@
 #include <iostream>
 #include "Constants.h"
 #include "PlayerJumpState.h"
+#include "PlayerDeadState.h"
+
 
 constexpr size_t SCREEN_WIDTH = 1280;
 constexpr size_t SCREEN_HEIGHT = 736;
@@ -110,6 +112,13 @@ int main(int argc, char* argv[])
         {
             player.setPosition(oldPos);
         }
+        if (map.layerNameAt(feet) == "Background")
+        {
+            player.changeState(std::make_unique<PlayerDeadState>());
+            std::cout << "GAME OVER!" << std::endl;
+            std::cout << "GAME OVER!" << std::endl;
+            std::cout << "GAME OVER!" << std::endl;
+        }
 
         #pragma region DEBUG
 #ifdef _DEBUG
@@ -117,12 +126,12 @@ int main(int argc, char* argv[])
         feet.y += 50;
         auto [col, row] = map.tileCoordsAt(feet);
         int tileId = map.tileIdAt(feet);
-        //std::cout
-        //    << "Tile=(" << col << "," << row << ") "
-        //    << "TileId=" << tileId
-        //    << "Layer=" << map.layerNameAt(feet)
-        //    << "      \r";
-        //std::cout.flush();
+        std::cout
+            << "Tile=(" << col << "," << row << ") "
+            << "TileId=" << tileId
+            << "Layer=" << map.layerNameAt(feet)
+            << "      \r";
+        std::cout.flush();
 #endif
 #pragma endregion
 

@@ -27,7 +27,7 @@ void SpriteSheet::reset(const sf::Vector2f pos)
     {
         m_spriteCol = m_spriteRow = 0;
     }
-    //m_sprite.move(pos);
+
     m_sprite.setPosition(pos);
 }
 

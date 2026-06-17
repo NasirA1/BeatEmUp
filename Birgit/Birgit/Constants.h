@@ -10,6 +10,8 @@ namespace Constants
 		constexpr auto CuteGirlIdleLeft_PNG = "resources/sprites/cutegirl_idle_left.png";
 		constexpr auto CuteGirlJumpRight_PNG = "resources/sprites/cutegirl_jump_right.png";
 		constexpr auto CuteGirlJumpLeft_PNG = "resources/sprites/cutegirl_jump_left.png";
+		constexpr auto CuteGirlDeadRight_PNG = "resources/sprites/cutegirl_dead_right.png";
+		constexpr auto CuteGirlDeadLeft_PNG = "resources/sprites/cutegirl_dead_left.png";
 	}
 
 	namespace Tileset

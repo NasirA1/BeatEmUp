@@ -131,6 +131,7 @@
     <ClCompile Include="JsonTileMap.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerDeadState.cpp" />
     <ClCompile Include="PlayerIdleState.cpp" />
     <ClCompile Include="PlayerJumpState.cpp" />
     <ClCompile Include="PlayerWalkingState.cpp" />
@@ -144,6 +145,7 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerDeadState.h" />
     <ClInclude Include="PlayerIdleState.h" />
     <ClInclude Include="PlayerJumpState.h" />
     <ClInclude Include="PlayerWalkingState.h" />
@@ -152,6 +154,8 @@
     <ClInclude Include="JsonTileMap.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\sprites\cutegirl_dead_left.png" />
+    <Image Include="resources\sprites\cutegirl_dead_right.png" />
     <Image Include="resources\sprites\cutegirl_idle_left.png" />
     <Image Include="resources\sprites\cutegirl_idle_right.png" />
     <Image Include="resources\sprites\cutegirl_jump_left.png" />
