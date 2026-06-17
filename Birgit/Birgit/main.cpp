@@ -9,6 +9,7 @@
 constexpr size_t SCREEN_WIDTH = 1280;
 constexpr size_t SCREEN_HEIGHT = 736;
 
+
 int main(int argc, char* argv[])
 {
     // Enable antialiasing by requesting 8 levels (or 4, depending on GPU support)
