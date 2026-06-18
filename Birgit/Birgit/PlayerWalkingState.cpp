@@ -7,22 +7,34 @@
 #include <iostream>
 
 PlayerWalkingState::PlayerWalkingState()
-    : m_spriteRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlWalkRight_PNG), tileWidth, tileHeight)
-    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlWalkLeft_PNG), tileWidth, tileHeight, true)
+    : m_running(false)
+    , m_spriteWalkRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlWalkRight_PNG), tileWidth, tileHeight)
+    , m_spriteWalkLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlWalkLeft_PNG), tileWidth, tileHeight, true)
+    , m_spriteRunRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlRunRight_PNG), tileWidth, tileHeight)
+    , m_spriteRunLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlRunLeft_PNG), tileWidth, tileHeight, true)
     , m_spriteCurrent(nullptr)
 {
 }
 
 void PlayerWalkingState::setDirection(HorizontalDirection dir)
 {
-    m_spriteCurrent = dir == HorizontalDirection::Right ? &m_spriteRight : &m_spriteLeft;
+    if (m_running)
+    { 
+        m_spriteCurrent = dir == HorizontalDirection::Right ? &m_spriteRunRight : &m_spriteRunLeft;
+    }
+    else
+    {
+        m_spriteCurrent = dir == HorizontalDirection::Right ? &m_spriteWalkRight : &m_spriteWalkLeft;
+    }
 }
 
 void PlayerWalkingState::enter(Player& owner)
 {
     std::cout << "PlayerWalkingState::enter\n";
-    m_spriteRight.reset(owner.m_pos);
-    m_spriteLeft.reset(owner.m_pos);
+    m_spriteWalkRight.reset(owner.m_pos);
+    m_spriteWalkLeft.reset(owner.m_pos);
+    m_spriteRunRight.reset(owner.m_pos);
+    m_spriteRunLeft.reset(owner.m_pos);
     setDirection(owner.m_direction);
 }
 
@@ -57,12 +69,12 @@ void PlayerWalkingState::draw(Player& owner, sf::RenderWindow& window)
 
 PlayerStateId PlayerWalkingState::stateId() const
 {
-    return PlayerStateId::Walking;
+    return m_running? PlayerStateId::Running :PlayerStateId::Walking;
 }
 
 void PlayerWalkingState::handleAcceleration(Player& owner, float dt)
 {
-    constexpr float acceleration = 50000.f;
+    const auto acceleration = m_running ? runningAcceleration : walkingAcceleration;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
         owner.m_vel.x = -acceleration * dt;
@@ -75,11 +87,23 @@ void PlayerWalkingState::handleAcceleration(Player& owner, float dt)
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
         owner.m_vel.y = acceleration * dt;
+
+    if ( (std::abs(owner.m_vel.x) > 0 || std::abs(owner.m_vel.y) > 0) 
+        && sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    {
+        m_running = true;
+        setDirection(owner.m_direction);
+    }
+    else
+    {
+        m_running = false;
+        setDirection(owner.m_direction);
+    }
 }
 
 void PlayerWalkingState::applyFriction(Player& owner, float dt)
 {
-    constexpr float friction = 1000.f;
+    const auto friction = m_running ? runningFriction : walkingFriction;
 
     if (!sf::Keyboard::isKeyPressed(sf::Keyboard::Left) &&
         !sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
@@ -102,7 +126,7 @@ void PlayerWalkingState::applyFriction(Player& owner, float dt)
 
 void PlayerWalkingState::clampVelocity(Player& owner)
 {
-    constexpr float maxSpeed = 100.f;
+    const auto maxSpeed = m_running ? runningMaxSpeed : walkingMaxSpeed;
 
     owner.m_vel.x = std::clamp(owner.m_vel.x, -maxSpeed, maxSpeed);
     owner.m_vel.y = std::clamp(owner.m_vel.y, -maxSpeed, maxSpeed);

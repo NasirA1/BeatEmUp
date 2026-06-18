@@ -21,8 +21,18 @@ private:
     void applyFriction(Player& owner, float dt);
     void clampVelocity(Player& owner);
 
-    SpriteSheet m_spriteLeft;
-    SpriteSheet m_spriteRight;
+    bool m_running;
+    SpriteSheet m_spriteWalkLeft;
+    SpriteSheet m_spriteWalkRight;
+    SpriteSheet m_spriteRunLeft;
+    SpriteSheet m_spriteRunRight;
     SpriteSheet* m_spriteCurrent;
+    
+    static constexpr float walkingFriction = 1000.f;
+    static constexpr float walkingAcceleration = 5000.f;
+    static constexpr float walkingMaxSpeed = 50.f;
+    static constexpr float runningFriction = walkingFriction;
+    static constexpr float runningAcceleration = 3 * walkingAcceleration;
+    static constexpr float runningMaxSpeed = 3 * walkingMaxSpeed;
 };
 

@@ -160,6 +160,8 @@
     <Image Include="resources\sprites\cutegirl_idle_right.png" />
     <Image Include="resources\sprites\cutegirl_jump_left.png" />
     <Image Include="resources\sprites\cutegirl_jump_right.png" />
+    <Image Include="resources\sprites\cutegirl_run_left.png" />
+    <Image Include="resources\sprites\cutegirl_run_right.png" />
     <Image Include="resources\sprites\cutegirl_walk_left.png" />
     <Image Include="resources\sprites\cutegirl_walk_right.png" />
     <Image Include="resources\tilesets\tsw_map.png" />

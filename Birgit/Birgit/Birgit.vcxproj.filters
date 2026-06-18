@@ -114,5 +114,11 @@
     <Image Include="resources\sprites\cutegirl_dead_right.png">
       <Filter>Resource Files\Sprites</Filter>
     </Image>
+    <Image Include="resources\sprites\cutegirl_run_left.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
+    <Image Include="resources\sprites\cutegirl_run_right.png">
+      <Filter>Resource Files\Sprites</Filter>
+    </Image>
   </ItemGroup>
 </Project>

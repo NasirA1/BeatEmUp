@@ -6,6 +6,7 @@ enum class PlayerStateId
 {
     Idle,
     Walking,
+    Running,
     Jumping,
     Dead
 };
