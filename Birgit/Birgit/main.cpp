@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
     sf::ContextSettings settings;
     // note: slows down performance. set to 0 when fps too low!
     settings.antialiasingLevel = 8;
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Birgit", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Sara's Game", sf::Style::Default, settings);
 	window.setFramerateLimit(60);
     
     Player player({ 1280.f / 2.f, 350.f });
@@ -112,7 +112,8 @@ int main(int argc, char* argv[])
         {
             player.setPosition(oldPos);
         }
-        if (map.layerNameAt(feet) == "Background" && player.currentState() != PlayerStateId::Dead)
+        if (map.layerNameAt(feet) == "Background" 
+            && player.currentState() != PlayerStateId::Dead && player.currentState() != PlayerStateId::Jumping)
         {
             player.changeState(std::make_unique<PlayerDeadState>());
         }
