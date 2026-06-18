@@ -9,8 +9,8 @@
 
 
 PlayerDeadState::PlayerDeadState()
-    : m_spriteRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlDeadRight_PNG), tileWidth, tileHeight)
-    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlDeadLeft_PNG), tileWidth, tileHeight, true)
+    : m_spriteRight(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlDeadRight_PNG), tileWidth, tileHeight, false, false)
+    , m_spriteLeft(ResourceManager::instance().getTexture(Constants::Sprite::CuteGirlDeadLeft_PNG), tileWidth, tileHeight, true, false)
     , m_spriteCurrent(nullptr)
 {
 }
