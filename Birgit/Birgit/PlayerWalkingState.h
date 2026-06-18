@@ -5,8 +5,8 @@
 class PlayerWalkingState : public PlayerState
 {
 public:
-    constexpr static size_t tileWidth = 418u;
-    constexpr static size_t tileHeight = 456u;
+    constexpr static size_t tileWidth = 83;
+    constexpr static size_t tileHeight = 90;
 
     PlayerWalkingState();
     void enter(Player& owner) override;

@@ -13,7 +13,6 @@ SpriteSheet::SpriteSheet(const sf::Texture& texture, size_t tileWidth, size_t ti
 {
     m_sprite.setTextureRect(sf::IntRect(m_spriteCol * static_cast<int>(m_tileWidth), 
         m_spriteRow * static_cast<int>(m_tileHeight), static_cast<int>(m_tileWidth), static_cast<int>(m_tileHeight)));
-    m_sprite.setScale(0.2f, 0.2f);  // 20% size
     // TODO experiment with the below
     // TODO NEXT make all sprites much smaller!!!
     m_sprite.setOrigin(tileWidth / 2.f, tileHeight / 2.f);
