@@ -17,8 +17,7 @@ int main(int argc, char* argv[])
 {
     // Enable antialiasing by requesting 8 levels (or 4, depending on GPU support)
     sf::ContextSettings settings;
-    // note: slows down performance. set to 0 when fps too low!
-    settings.antialiasingLevel = 8;
+    settings.antialiasingLevel = 0;
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Sara's Game", sf::Style::Default, settings);
 	window.setFramerateLimit(60);
     
@@ -97,7 +96,8 @@ int main(int argc, char* argv[])
                 }
                 if (event.key.code == sf::Keyboard::Space)
                 {
-                    player.changeState(std::make_unique<PlayerJumpState>());
+                    if (player.currentState() != PlayerStateId::Dead)
+                        player.changeState(std::make_unique<PlayerJumpState>());
                 }
             }
         }
