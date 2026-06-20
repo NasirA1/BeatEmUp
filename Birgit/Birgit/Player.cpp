@@ -6,6 +6,7 @@ Player::Player(const sf::Vector2f& pos, HorizontalDirection direction)
     : m_pos(pos)
     , m_direction(direction)
     , m_vel(0, 0)
+    , m_previousState(PlayerStateId::Idle)
 {
     m_stateMachine.changeState(*this, std::make_unique<PlayerIdleState>());
 }
@@ -22,6 +23,7 @@ void Player::update(float dt)
 
 void Player::changeState(std::unique_ptr<PlayerState> state)
 {
+    m_previousState = currentState();
     m_stateMachine.changeState(*this, std::move(state));
 }
 
@@ -43,4 +45,9 @@ void Player::setPosition(sf::Vector2f pos)
 PlayerStateId Player::currentState() const
 {
     return m_stateMachine.currentState().stateId();
+}
+
+PlayerStateId Player::previousState() const
+{
+    return m_previousState;
 }

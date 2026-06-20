@@ -31,7 +31,8 @@ void PlayerJumpState::enter(Player& owner)
     setDirection(owner.m_direction);
     
     m_groundPos = owner.m_pos;
-    m_velocityY = JumpVelocity;
+
+    m_velocityY = owner.previousState() == PlayerStateId::Running ? (1.1f * JumpVelocity): JumpVelocity;
 }
 
 void PlayerJumpState::exit(Player& owner)
@@ -48,13 +49,13 @@ void PlayerJumpState::update(Player& owner, float dt)
     {
         setDirection(HorizontalDirection::Left);
         owner.m_direction = HorizontalDirection::Left;
-        moveX = -JumpMoveSpeed;
+        moveX = owner.previousState() == PlayerStateId::Running?  -(2 * JumpMoveSpeed): -JumpMoveSpeed;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
         setDirection(HorizontalDirection::Right);
         owner.m_direction = HorizontalDirection::Right;
-        moveX = JumpMoveSpeed;
+        moveX = owner.previousState() == PlayerStateId::Running ? (2 * JumpMoveSpeed) : JumpMoveSpeed;
     }
 
     owner.m_pos.x += moveX * dt;

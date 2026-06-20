@@ -21,12 +21,14 @@ public:
     sf::Vector2f position() const;
     void setPosition(sf::Vector2f pos);
     PlayerStateId currentState() const;
+    PlayerStateId previousState() const;
 
 private:
     StateMachine<Player, PlayerStateId> m_stateMachine;
     sf::Vector2f m_pos;
     HorizontalDirection m_direction;
     sf::Vector2f m_vel;
+    PlayerStateId m_previousState;
 
     friend class PlayerIdleState;
     friend class PlayerWalkingState;

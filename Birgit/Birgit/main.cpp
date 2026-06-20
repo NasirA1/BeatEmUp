@@ -108,7 +108,7 @@ int main(int argc, char* argv[])
         // Bounds handling
         auto feet = player.position();
         feet.y += 50;
-        if (map.isBlockedAt(feet))
+        if (map.isBlockedAt(feet) && player.currentState() != PlayerStateId::Jumping)
         {
             player.setPosition(oldPos);
         }
